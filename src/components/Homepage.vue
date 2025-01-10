@@ -1,12 +1,11 @@
 <script setup>
-import Card from './items/Card.vue';
-import SearchBar from './items/searchBar.vue';
-
+import Card from "./items/Card.vue";
+import header from "./items/Header.vue";
 </script>
 
 <template>
   <div>
-    <searchBar />
+    <Header />
     <Card />
   </div>
 </template>

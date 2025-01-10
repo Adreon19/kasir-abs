@@ -1,22 +1,35 @@
 <template>
   <div class="flex flex-row min-h-screen">
     <aside class="sidebar bg-white text-black">
-      <div class="logo flex items-center p-4">
-        <img src="" alt="ABS Logo" class="w-8 h-8 mr-4" />
-        <strong>Aritisan Beverage Studio</strong>
+      <div class="m-4">
+        <div class="logo flex items-center">
+          <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
+          <strong>Artisan Beverage Studio</strong>
+        </div>
       </div>
-      <ul class="m-5">
+
+      <ul class="flex flex-col justify-center">
         <RouterLink to="/"
-          ><li><i class="fa-solid fa-house"></i> Home Page</li></RouterLink
+          ><li>
+            <i class="fa-solid fa-house ease-in duration-300"></i> Home Page
+          </li></RouterLink
         >
         <RouterLink to="/history"
-          ><li><i class="fa-solid fa-scroll"></i> History Menu</li></RouterLink
+          ><li>
+            <i class="fa-solid fa-scroll ease-in duration-300"></i> History Menu
+          </li></RouterLink
         >
         <RouterLink to="/order">
-          <li><i class="fa-solid fa-cart-shopping"></i> Order</li></RouterLink
+          <li>
+            <i class="fa-solid fa-cart-shopping ease-in duration-300"></i>
+            Order
+          </li></RouterLink
         >
         <RouterLink to="/add"
-          ><li><i class="fa-solid fa-square-plus"></i> Add Menu</li></RouterLink
+          ><li>
+            <i class="fa-solid fa-square-plus ease-in duration-300"></i> Add
+            Menu
+          </li></RouterLink
         >
       </ul>
     </aside>
@@ -45,7 +58,8 @@
 .sidebar li:hover {
   color: #fff;
   background: #000;
-  width: calc(100% - 10px);
+  width: 100%;
+  transition: 0.5s;
 }
 
 .sidebar i {
