@@ -1,8 +1,12 @@
-<script setup></script>
+<script setup>
+import Card from './items/Card.vue';
+import SearchBar from './items/searchBar.vue';
+
+</script>
 
 <template>
   <div>
-    <h1>Ini Homepagenya</h1>
-    <p>Nanti bikin component baru, buat bikin card menu</p>
+    <searchBar />
+    <Card />
   </div>
 </template>
