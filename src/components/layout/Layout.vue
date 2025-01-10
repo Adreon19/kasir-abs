@@ -51,7 +51,7 @@
 }
 
 .sidebar li {
-  padding: 10px;
+  padding: 1rem;
   font-size: 20px;
 }
 

@@ -3,8 +3,8 @@ import Card from "primevue/card";
 </script>
 
 <template>
-  <section class="grid grid-cols-3 gap-4 m-4">
-    <Card style="width: 20rem; overflow: hidden">
+  <section class="grid grid-cols-4 gap-4 m-4">
+    <Card style="width: 18rem; overflow: hidden">
       <template #header>
         <img
           alt="user header"
@@ -27,7 +27,7 @@ import Card from "primevue/card";
         </div>
       </template>
     </Card>
-    <Card style="width: 20rem; overflow: hidden">
+    <Card style="width: 18rem; overflow: hidden">
       <template #header>
         <img
           alt="user header"
@@ -50,7 +50,7 @@ import Card from "primevue/card";
         </div>
       </template>
     </Card>
-    <Card style="width: 20rem; overflow: hidden">
+    <Card style="width: 18rem; overflow: hidden">
       <template #header>
         <img
           alt="user header"
@@ -73,7 +73,7 @@ import Card from "primevue/card";
         </div>
       </template>
     </Card>
-    <Card style="width: 20rem; overflow: hidden">
+    <Card style="width: 18rem; overflow: hidden">
       <template #header>
         <img
           alt="user header"
