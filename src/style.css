@@ -30,6 +30,11 @@ h1 {
   line-height: 1.1;
 }
 
+h2 {
+  color: rgb(224, 224, 224);
+  font-size: x-large;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -64,4 +69,8 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.main-section {
+  @apply p-6 bg-slate-100 bg-surface-700/50 rounded-lg border border-surface-200/80;
 }
