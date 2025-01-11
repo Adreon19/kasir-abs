@@ -1,9 +1,9 @@
 <script setup>
-import HelloWorld from "./components/HelloWorld.vue";
+import Layout from "./components/layout/Layout.vue";
 </script>
-
 <template>
-  <HelloWorld />
+  <Layout>
+    <router-view />
+  </Layout>
 </template>
-
 <style scoped></style>
