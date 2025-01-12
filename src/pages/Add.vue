@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { supabase } from "../../supabase";
+import { supabase } from "../supabase";
 import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
@@ -164,10 +164,6 @@ const initializeData = async () => {
 
 onMounted(initializeData);
 </script>
-<script setup>
-import InputText from "primevue/inputtext";
-</script>
-
 <template>
   <div class="flex flex-col gap-4 max-w-screen-2xl mx-auto p-4">
     <section class="main-section">
