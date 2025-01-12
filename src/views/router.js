@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../components/Homepage.vue";
-import Add from "../components/layout/Add.vue";
-import History from "../components/layout/History.vue";
-import Order from "../components/layout/Order.vue";
+import Add from "../pages/Add.vue";
+import History from "../pages/History.vue";
+import Order from "../pages/Order.vue";
+import Login from "../pages/login.vue";
 const routes = [
   {
     path: "/",
@@ -23,6 +24,11 @@ const routes = [
     path: "/order",
     name: "Order",
     component: Order,
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
   },
 ];
 
