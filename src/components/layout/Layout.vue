@@ -1,3 +1,19 @@
+<script setup>
+import { supabase } from "../../supabase";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const handleLogout = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error("Error logging out:", error.message);
+  } else {
+    router.push("/login");
+  }
+};
+</script>
+
 <template>
   <div class="flex flex-row min-h-screen">
     <aside class="sidebar bg-white text-black">
@@ -9,28 +25,36 @@
       </div>
 
       <ul class="flex flex-col justify-center">
-        <RouterLink to="/"
-          ><li>
+        <RouterLink to="/">
+          <li>
             <i class="fa-solid fa-house ease-in duration-300"></i> Home Page
-          </li></RouterLink
-        >
-        <RouterLink to="/history"
-          ><li>
+          </li>
+        </RouterLink>
+        <RouterLink to="/history">
+          <li>
             <i class="fa-solid fa-scroll ease-in duration-300"></i> History Menu
-          </li></RouterLink
-        >
+          </li>
+        </RouterLink>
         <RouterLink to="/order">
           <li>
-            <i class="fa-solid fa-cart-shopping ease-in duration-300"></i>
-            Order
-          </li></RouterLink
-        >
-        <RouterLink to="/add"
-          ><li>
+            <i class="fa-solid fa-cart-shopping ease-in duration-300"></i> Order
+          </li>
+        </RouterLink>
+        <RouterLink to="/add">
+          <li>
             <i class="fa-solid fa-square-plus ease-in duration-300"></i> Add
             Menu
-          </li></RouterLink
-        >
+          </li>
+        </RouterLink>
+
+        <li>
+          <Button
+            label="Log Out"
+            icon="fa-solid fa-sign-out-alt"
+            class=""
+            @click="handleLogout"
+          />
+        </li>
       </ul>
     </aside>
 
