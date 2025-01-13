@@ -1,13 +1,13 @@
 <script setup>
-import { useRoute } from "vue-router";
 import Layout from "./components/layout/Layout.vue";
+import { useRoute } from "vue-router";
 
 const route = useRoute();
 </script>
 
 <template>
   <div>
-    <Layout v-if="!['/login', '/register'].includes(route.path)">
+    <Layout v-if="route.meta.layout">
       <router-view />
     </Layout>
     <router-view v-else />
