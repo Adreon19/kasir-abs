@@ -22,8 +22,12 @@ const handleLogin = async () => {
       return;
     }
 
-    if (data.user) {
+    const session = await supabase.auth.getSession();
+
+    if (session?.data?.session) {
       router.push("/");
+    } else {
+      errorMessage.value = "Failed to establish a session.";
     }
   } catch (err) {
     errorMessage.value = "An unexpected error occurred. Please try again.";

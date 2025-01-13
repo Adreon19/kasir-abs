@@ -49,6 +49,9 @@ router.beforeEach(async (to, from, next) => {
     data: { session },
   } = await supabase.auth.getSession();
 
+  if (to.name === "login" && session) {
+    return next({ name: "Home" });
+  }
   if (to.meta.requiresAuth && !session) {
     return next({ name: "login" });
   }
