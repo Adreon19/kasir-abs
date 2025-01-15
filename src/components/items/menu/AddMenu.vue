@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { supabase } from "../../../supabase";
 import { useToast } from "primevue/usetoast";
 
@@ -8,6 +8,24 @@ const menuName = ref("");
 const src = ref(null);
 const selectedFile = ref(null);
 const toast = useToast();
+const selectedCategory = ref([]);
+const categories = ref([]);
+
+const fetchCategories = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("kategori_menu")
+      .select("id, kategori");
+
+    if (error) {
+      throw error;
+    }
+    categories.value = data;
+    console.log("Fetched categories:", categories.value);
+  } catch (error) {
+    console.error("Error fetching categories:", error.message);
+  }
+};
 
 function onFileSelect(event) {
   const file = event.files[0];
@@ -54,6 +72,7 @@ const uploadImageAndSaveMenu = async () => {
         {
           name: menuName.value,
           image: imageUrl,
+          kategori_id: selectedCategory.value,
         },
       ]);
 
@@ -81,6 +100,7 @@ const uploadImageAndSaveMenu = async () => {
     isLoading.value = false;
   }
 };
+onMounted(fetchCategories);
 </script>
 
 <template>
@@ -107,13 +127,14 @@ const uploadImageAndSaveMenu = async () => {
         <InputText id="menu name" v-model="menuName" class="p-3" />
         <label for="menu name">Nama menu</label>
       </FloatLabel>
-      <!-- <Select
-        v-model="selectedCategories"
+      <Select
+        v-model="selectedCategory"
         :options="categories"
         optionLabel="kategori"
+        optionValue="id"
         placeholder="Select Categories"
         class="w-full md:w-56"
-      /> -->
+      />
       <Button
         label="Save"
         icon="fa fa-check"

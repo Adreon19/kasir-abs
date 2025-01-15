@@ -2,31 +2,31 @@
 import { Card } from "primevue";
 import { ref, onMounted } from "vue";
 import { supabase } from "../../supabase";
-const categories = ref([]);
+import { formatCurrency } from "../../utils/formatter/currency";
+
 const menuList = ref([]);
-
-const fetchCategories = async () => {
-  try {
-    const { data, error } = await supabase
-      .from("kategori_menu")
-      .select("kategori");
-
-    if (error) {
-      throw error;
-    }
-
-    categories.value = data;
-    console.log("Fetched categories:", categories.value);
-  } catch (error) {
-    console.error("Error fetching categories:", error.message);
-  }
-};
 
 const fetchMenuList = async () => {
   try {
-    const { data, error } = await supabase.from("menu_list").select("*");
+    const { data, error } = await supabase.from("menu_detail").select(`
+        price,
+        hot_price,
+        cold_price,
+        menu_id (
+          name,
+          image
+        )
+      `);
+
     if (error) throw error;
-    menuList.value = data;
+
+    menuList.value = data.map((menu) => ({
+      price: menu.price || null,
+      hotWater: menu.hot_price || false,
+      coldWater: menu.cold_price || false,
+      name: menu.menu_id?.name || "Unnamed",
+      image: menu.menu_id?.image || "placeholder.jpg",
+    }));
   } catch (err) {
     console.error("Error fetching menu list:", err.message);
   }
@@ -34,12 +34,9 @@ const fetchMenuList = async () => {
 
 const initializeData = async () => {
   try {
-    await fetchCategories();
     await fetchMenuList();
   } catch (error) {
     console.error("Error during initialization:", error.message);
-  } finally {
-    isLoading.value = false;
   }
 };
 
@@ -50,7 +47,7 @@ onMounted(initializeData);
   <section class="grid grid-cols-4 gap-4 m-4">
     <Card
       v-for="menu in menuList"
-      :key="menu.id"
+      :key="menu.name"
       style="width: 18rem; overflow: hidden"
     >
       <template #header>
@@ -61,6 +58,15 @@ onMounted(initializeData);
         />
       </template>
       <template #title>{{ menu.name }}</template>
+      <template #content>
+        <h4 v-if="menu.price !== null">
+          Price: {{ formatCurrency(menu.price) }}
+        </h4>
+        <div v-if="menu.hotWater || menu.coldWater" class="text-sm mt-2">
+          <p v-if="menu.hotWater">✔ Hot Water Available</p>
+          <p v-if="menu.coldWater">✔ Cold Water Available</p>
+        </div>
+      </template>
       <template #footer>
         <div class="flex gap-4 mt-1">
           <Button label="Pesan" class="w-full" />
