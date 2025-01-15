@@ -40,31 +40,34 @@ const handleLogin = async () => {
     <img src="/images/logoABS.png" alt="ABS Logo" class="w-36" />
     <form class="flex flex-col" @submit.prevent="handleLogin">
       <div
-        class="input-container flex flex-col gap-6 p-8 rounded-t-lg shadow-md"
+        class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md"
       >
-        <FloatLabel>
+        <FloatLabel class="bg-white p-3 min-w-64">
           <InputText
             type="text"
             v-model="email"
-            class="p-3 text-lg rounded-md"
+            class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none min-w-64"
           />
           <label>email</label>
         </FloatLabel>
-        <FloatLabel>
+        <FloatLabel class="bg-black p-3 min-w-64">
           <Password
             v-model="password"
             toggleMask
-            class="p-4 text-lg rounded-md"
+            class="text-lg rounded-md min-w-64"
           />
           <label>Password</label>
         </FloatLabel>
+        <div class="flex gap-3 items-center mt-3">
+          <a href="#">forgot password</a>
+        </div>
       </div>
       <div class="btn-login flex justify-center">
         <Button
           severity="secondary"
           label="Login"
           type="submit"
-          class="p-button p-3 text-lg bg-black hover:bg-white hover:text-black"
+          class="p-button p-3 text-lg bg-white text-black hover:bg-black hover:text-white transition hover:duration-700 min-w-48"
         />
       </div>
     </form>
@@ -73,15 +76,15 @@ const handleLogin = async () => {
 
 <style>
 .input-container {
-  background-color: rgba(202, 141, 27, 0.9);
+  background-color: #c8a241;
   border-radius: 10px 10px 0 0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .btn-login {
-  background-color: blanchedalmond;
+  background-color: #f5f5dc;
   border-radius: 0 0 10px 10px;
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 </style>
