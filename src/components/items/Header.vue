@@ -30,15 +30,15 @@ onMounted(fetchCategories);
     style="display: flex; justify-content: space-between"
   >
     <h1 style="font-size: 30px" class="text-white font-bold">Menu</h1>
-    <div class="flex relative">
+    <div class="search flex relative">
       <InputText
         style="width: 250px"
         placeholder="Search..."
-        class="p-3 bg-white text-black rounded-none focus:outline-none"
+        class="search p-3 bg-white text-black rounded-none focus:outline-none"
       /><Button
         icon="fas fa-search"
         iconPos="top"
-        class="hover:border-none text-black bg-white rounded-none"
+        class="button-search hover:border-none text-black bg-white rounded-none"
       />
     </div>
     <Select
@@ -46,7 +46,13 @@ onMounted(fetchCategories);
       :options="categories"
       optionLabel="kategori"
       placeholder="Select Categories"
-      class="w-full md:w-56 bg-white"
+      class="w-full md:w-56 bg-white text-black"
     />
   </div>
 </template>
+
+<style scopped>
+.search {
+  border-radius: 10px;
+}
+</style>
