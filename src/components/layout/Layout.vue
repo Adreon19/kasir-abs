@@ -16,11 +16,13 @@ const handleLogout = async () => {
 
 <template>
   <div class="flex flex-row min-h-screen">
-    <aside class="sidebar bg-white text-black">
+    <aside class="sidebar text-black">
       <div class="m-4">
         <div class="logo flex items-center">
           <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <strong>Artisan Beverage Studio</strong>
+          <h1 class="text-xl font-semibold text-white">
+            Artisan Beverage Studio
+          </h1>
         </div>
       </div>
 
@@ -51,7 +53,7 @@ const handleLogout = async () => {
           <Button
             label="Log Out"
             icon="fa-solid fa-sign-out-alt"
-            class=""
+            class="shadow-lg"
             @click="handleLogout"
           />
         </li>
@@ -72,6 +74,7 @@ const handleLogout = async () => {
   height: 100vh;
   position: sticky;
   top: 0;
+  background-color: var(--sidebar-color);
 }
 
 .sidebar li {
@@ -88,5 +91,13 @@ const handleLogout = async () => {
 
 .sidebar i {
   margin-right: 15px;
+}
+
+li {
+  color: var(--primary-text);
+}
+
+button {
+  background: var(--sidebar-color);
 }
 </style>

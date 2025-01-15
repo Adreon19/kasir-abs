@@ -8,12 +8,15 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #000000;
-  /* background: linear-gradient(#964b00, #301800); */
+  /* background-color: #ffffff; */
+  background: linear-gradient(#964b00, #301800);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --sidebar-color: #c8a241;
+  --primary-text: #ffffff;
+  --bg-card: rgb(0, 0, 0, 0.5);
 }
 
 a {
