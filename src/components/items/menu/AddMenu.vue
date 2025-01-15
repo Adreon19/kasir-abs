@@ -105,26 +105,28 @@ onMounted(fetchCategories);
 
 <template>
   <section class="main-section">
-    <h2>Tambah nama menu</h2>
-    <div class="flex card">
-      <img
-        v-if="src"
-        :src="src"
-        alt="Preview"
-        class="shadow-md rounded-xl w-full sm:w-64"
-      />
-      <FileUpload
-        mode="basic"
-        @select="onFileSelect"
-        customUpload
-        auto
-        severity="secondary"
-        class="p-button-outlined"
-      />
+    <h2 class="font-bold text-2xl m capitalize">Tambah nama menu</h2>
+    <div class="flex flex-row gap-20 mt-5 items-center">
+      <div class="flex flex-row items-center gap-5">
+        <img
+          v-if="src"
+          :src="src"
+          alt="Preview"
+          class="img-menu shadow-md max-w-64 rounded-xl z-10"
+        />
+        <FileUpload
+          mode="basic"
+          @select="onFileSelect"
+          customUpload
+          auto
+          severity="secondary"
+          class="p-button-outlined p-10 z-0"
+        />
+      </div>
     </div>
-    <div class="card flex gap-5">
+    <div class="flex flex-row gap-5 p-0 mt-8">
       <FloatLabel>
-        <InputText id="menu name" v-model="menuName" class="p-3" />
+        <InputText id="menu name" v-model="menuName" class="p-4 w-96" />
         <label for="menu name">Nama menu</label>
       </FloatLabel>
       <Select
@@ -133,15 +135,29 @@ onMounted(fetchCategories);
         optionLabel="kategori"
         optionValue="id"
         placeholder="Select Categories"
-        class="w-full md:w-56"
+        class="w-full p-2"
       />
+    </div>
+
+    <div>
       <Button
         label="Save"
         icon="fa fa-check"
         iconPos="left"
         @click="uploadImageAndSaveMenu"
         :loading="isLoading"
+        class="p-4 mt-4 w-full"
       />
     </div>
   </section>
 </template>
+
+<style>
+.main-section {
+  background: var(--bg-card);
+}
+
+.img-menu {
+  border: 2px solid;
+}
+</style>

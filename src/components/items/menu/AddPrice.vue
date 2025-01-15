@@ -69,7 +69,7 @@ onMounted(() => {
 
 <template>
   <section class="main-section">
-    <h2>Tambah nama menu</h2>
+    <h2 class="capitalize font-bold">Tambah harga menu</h2>
     <div class="flex flex-col card">
       <!-- Select Menu -->
       <div class="field">
@@ -80,7 +80,7 @@ onMounted(() => {
           optionLabel="name"
           optionValue="id"
           placeholder="Select Menu"
-          class="w-full md:w-56"
+          class="w-full p-3"
         />
       </div>
 
@@ -90,7 +90,7 @@ onMounted(() => {
         <InputNumber
           v-model="price"
           placeholder="Enter price"
-          class="w-full md:w-56"
+          class="price w-full"
           mode="currency"
           currency="IDR"
           locale="id-ID"
@@ -104,7 +104,7 @@ onMounted(() => {
           id="coldPrice"
           v-model="coldPrice"
           placeholder="Enter cold price"
-          class="w-full md:w-56"
+          class="cold w-full"
           mode="currency"
           currency="IDR"
           locale="id-ID"
@@ -117,7 +117,7 @@ onMounted(() => {
           id="hotPrice"
           v-model="hotPrice"
           placeholder="Enter hot price"
-          class="w-full md:w-56"
+          class="hot w-full"
           mode="currency"
           currency="IDR"
           locale="id-ID"
@@ -138,7 +138,7 @@ onMounted(() => {
 .field {
   margin-bottom: 10px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
 }
 </style>
