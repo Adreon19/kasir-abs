@@ -1,6 +1,6 @@
 <script setup>
 import Card from "./items/Card.vue";
-import header from "./items/Header.vue";
+import Header from "./items/Header.vue";
 </script>
 
 <template>
