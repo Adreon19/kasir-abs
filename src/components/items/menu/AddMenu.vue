@@ -10,6 +10,7 @@ const selectedFile = ref(null);
 const toast = useToast();
 const selectedCategory = ref([]);
 const categories = ref([]);
+const descriptionForm = ref("");
 
 const fetchCategories = async () => {
   try {
@@ -73,6 +74,7 @@ const uploadImageAndSaveMenu = async () => {
           name: menuName.value,
           image: imageUrl,
           kategori_id: selectedCategory.value,
+          description: descriptionForm.value,
         },
       ]);
 
@@ -89,6 +91,7 @@ const uploadImageAndSaveMenu = async () => {
     menuName.value = "";
     src.value = null;
     selectedFile.value = null;
+    descriptionForm.value = "";
   } catch (error) {
     toast.add({
       severity: "error",
@@ -136,6 +139,13 @@ onMounted(fetchCategories);
         optionValue="id"
         placeholder="Select Categories"
         class="w-full p-2"
+      />
+
+      <Textarea
+        v-model="descriptionForm"
+        rows="1"
+        cols="30"
+        placeholder="Masukkan Deskripsi menu "
       />
     </div>
 
