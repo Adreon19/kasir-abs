@@ -12,28 +12,26 @@ const fetchMenu = async () => {
     const { data, error } = await supabase.from("menu_detail").select(`
         id,
         price,
-        cold_price,
         hot_price,
-        menu_list (name),
-        kategori_menu (kategori)
+        cold_price,
+        menu_id (name, kategori_id (kategori))
+        ),
       `);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
+    // Update the 'menu' variable with the fetched data
     menu.value = data.map((item) => ({
       id: item.id,
-      name: item.menu_list.name,
-      kategori: item.kategori_menu.kategori,
-      price: item.price,
-      cold_price: item.cold_price,
-      hot_price: item.hot_price,
+      price: item.price || item.cold_price,
+      hotWater: item.hot_price || `ini ${item.menu_id?.kategori_id?.kategori}`,
+      coldWater:
+        item.cold_price || `ini ${item.menu_id?.kategori_id?.kategori}`,
+      name: item.menu_id?.name || "gak ada",
+      kategori: item.menu_id?.kategori_id?.kategori || "gak ada",
     }));
-
-    console.log("Fetched menu with details:", menu.value);
-  } catch (error) {
-    console.error("Error fetching menu:", error.message);
+  } catch (err) {
+    console.error("Error fetching menu list:", err.message);
   }
 };
 
@@ -44,9 +42,7 @@ const deleteMenu = async (menuId) => {
       .delete()
       .eq("id", menuId);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     toast.add({
       severity: "success",
@@ -54,7 +50,8 @@ const deleteMenu = async (menuId) => {
       detail: "Menu deleted successfully",
       life: 3000,
     });
-    await fetchMenu();
+
+    await fetchMenu(); // Refresh the menu list after deletion
   } catch (error) {
     toast.add({
       severity: "error",
@@ -65,6 +62,7 @@ const deleteMenu = async (menuId) => {
     console.error("Error deleting menu:", error.message);
   }
 };
+
 const initializeData = async () => {
   try {
     await fetchMenu();
@@ -77,6 +75,7 @@ const initializeData = async () => {
 
 onMounted(initializeData);
 </script>
+
 <template>
   <section class="main-section">
     <h2>List Menu</h2>
@@ -85,8 +84,8 @@ onMounted(initializeData);
         <Column field="name" header="Nama Menu"> </Column>
         <Column field="kategori" header="Kategori"> </Column>
         <Column field="price" header="Harga"> </Column>
-        <Column field="cold_price" header="Harga Dingin"> </Column>
-        <Column field="hot_price" header="Harga Panas"> </Column>
+        <Column field="coldWater" header="Harga Dingin"> </Column>
+        <Column field="hotWater" header="Harga Panas"> </Column>
         <Column header="Aksi" class="flex justify-center">
           <template #body="slotProps">
             <div class="flex justify-center gap-2">
@@ -100,7 +99,7 @@ onMounted(initializeData);
                 label="Delete"
                 icon="fa fa-trash"
                 class="p-button-rounded p-button-danger"
-                @click="deleteMenu(slotProps.data.id)"
+                @click="deleteMenu(slotProps.data?.id)"
               />
             </div>
           </template>
