@@ -42,7 +42,7 @@ const handleLogin = async () => {
       <div
         class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md"
       >
-        <FloatLabel class="bg-white p-3 min-w-64">
+        <FloatLabel>
           <InputText
             type="text"
             v-model="email"
@@ -50,7 +50,7 @@ const handleLogin = async () => {
           />
           <label>email</label>
         </FloatLabel>
-        <FloatLabel class="bg-black p-3 min-w-64">
+        <FloatLabel>
           <Password
             v-model="password"
             toggleMask
@@ -59,7 +59,12 @@ const handleLogin = async () => {
           <label>Password</label>
         </FloatLabel>
         <div class="flex gap-3 items-center mt-3">
-          <a href="#">forgot password</a>
+          <Button
+            as="router-link"
+            label="Forgot Password?"
+            to="/"
+            class="p.button bg-transparent border-none text-white"
+          />
         </div>
       </div>
       <div class="btn-login flex justify-center">
