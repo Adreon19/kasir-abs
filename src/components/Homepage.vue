@@ -6,7 +6,6 @@ import { supabase } from "../supabase";
 const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
-const description = ref();
 const isLoading = ref(true);
 
 const fetchCategories = async () => {
@@ -19,15 +18,17 @@ const fetchCategories = async () => {
       throw error;
     }
 
-    categories.value = data;
+    // Add an "All Categories" option
+    categories.value = [{ id: null, kategori: "All Categories" }, ...data];
   } catch (error) {
     console.error("Error fetching categories:", error.message);
   }
 };
 
 watch(selectedCategory, async (newCategory) => {
+  isLoading.value = true;
   menuList.value = await fetchMenuList(newCategory);
-  console.log(newCategory);
+  isLoading.value = false;
 });
 
 const fetchMenuList = async (categoryId = null) => {
@@ -44,7 +45,7 @@ const fetchMenuList = async (categoryId = null) => {
           )
       `);
 
-    if (categoryId) {
+    if (categoryId !== null) {
       query = query.eq("kategori_id", categoryId);
     }
 
@@ -101,6 +102,14 @@ onMounted(initializeData);
         class="p-select w-full md:w-56 font-bold"
       />
     </div>
-    <Card :menu-list="menuList" />
+    <div v-if="isLoading">Loading...</div>
+    <div v-else>
+      <div v-if="menuList.length === 0" class="text-white text-center">
+        Tidak ada menu
+      </div>
+      <div v-else>
+        <Card :menu-list="menuList" />
+      </div>
+    </div>
   </div>
 </template>
