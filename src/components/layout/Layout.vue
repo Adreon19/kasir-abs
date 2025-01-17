@@ -44,6 +44,12 @@ const handleLogout = async () => {
                 Order
               </li>
             </RouterLink>
+            <RouterLink to="/money">
+              <li>
+                <i class="fa-solid fa-money-bill ease-in duration-300"></i>
+                Money History
+              </li>
+            </RouterLink>
             <RouterLink to="/add">
               <li>
                 <i class="fa-solid fa-square-plus ease-in duration-300"></i> Add

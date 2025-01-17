@@ -4,6 +4,7 @@ import Add from "../pages/Add.vue";
 import History from "../pages/History.vue";
 import Order from "../pages/Order.vue";
 import Login from "../pages/login.vue";
+import Money from "../pages/Money.vue";
 import { supabase } from "../supabase"; // Import your Supabase instance
 
 const routes = [
@@ -29,6 +30,13 @@ const routes = [
     path: "/order",
     name: "Order",
     component: Order,
+    meta: { requiresAuth: true, layout: true },
+  },
+
+  {
+    path: "/money",
+    name: "Money",
+    component: Money,
     meta: { requiresAuth: true, layout: true },
   },
   {
