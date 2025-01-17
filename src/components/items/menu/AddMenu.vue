@@ -146,6 +146,7 @@ onMounted(fetchCategories);
         rows="1"
         cols="30"
         placeholder="Masukkan Deskripsi menu "
+        style="resize: none"
       />
     </div>
 
