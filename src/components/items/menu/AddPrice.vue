@@ -5,10 +5,9 @@ import { useToast } from "primevue";
 
 const toast = useToast();
 const menus = ref([]);
-const selectedMenu = ref([]);
-const price = ref(null);
-const coldPrice = ref(null);
-const hotPrice = ref(null);
+const selectedMenu = ref(null);
+const variantDetails = ref([{ variant_id: null, price: null }]);
+const variants = ref([]);
 
 const fetchMenus = async () => {
   try {
@@ -26,31 +25,52 @@ const fetchMenus = async () => {
   }
 };
 
+const fetchVariants = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("menu_variants")
+      .select(`id, name`);
+    if (error) {
+      throw error;
+    }
+    variants.value = data;
+  } catch (error) {
+    console.error("Error fetching menu variants:", error.message);
+  }
+};
+
+const addVariantField = () => {
+  variantDetails.value.push({ variant_id: null, price: null });
+};
+
+const removeVariantField = (index) => {
+  variantDetails.value.splice(index, 1);
+};
+
 const insertMenuDetail = async () => {
   try {
-    const { error } = await supabase.from("menu_detail").insert([
-      {
-        menu_id: selectedMenu.value,
-        price: price.value,
-        cold_price: coldPrice.value,
-        hot_price: hotPrice.value,
-      },
-    ]);
+    const payload = variantDetails.value.map((detail) => ({
+      menu_id: selectedMenu.value,
+      variant_id: detail.variant_id,
+      price: detail.price,
+    }));
+
+    const { error } = await supabase.from("menu_detail").insert(payload);
 
     if (error) {
       throw error;
     }
+
     toast.add({
       severity: "success",
       summary: "Success",
-      detail: "Menu saved successfully!",
+      detail: "Menu details saved successfully!",
       life: 3000,
     });
-    alert("Menu detail added successfully!");
-    selectedMenu.value = "";
-    price.value = null;
-    coldPrice.value = null;
-    hotPrice.value = null;
+
+    // Reset form
+    selectedMenu.value = null;
+    variantDetails.value = [{ variant_id: null, price: null }];
   } catch (error) {
     toast.add({
       severity: "error",
@@ -64,6 +84,7 @@ const insertMenuDetail = async () => {
 
 onMounted(() => {
   fetchMenus();
+  fetchVariants();
 });
 </script>
 
@@ -84,48 +105,55 @@ onMounted(() => {
         />
       </div>
 
-      <!-- Input Price -->
-      <div class="field">
-        <label for="price">Price</label>
-        <InputNumber
-          v-model="price"
-          placeholder="Enter price"
-          class="price w-full"
-          mode="currency"
-          currency="IDR"
-          locale="id-ID"
-          fluid
-        />
+      <!-- Dynamic Variant and Price Fields -->
+      <div
+        v-for="(detail, index) in variantDetails"
+        :key="index"
+        class="field-group"
+      >
+        <div class="field">
+          <label for="variant">Variant</label>
+          <Select
+            v-model="detail.variant_id"
+            :options="variants"
+            optionLabel="name"
+            optionValue="id"
+            placeholder="Select Variant"
+            class="w-full p-3"
+          />
+        </div>
+
+        <div class="field">
+          <label for="price">Price</label>
+          <InputNumber
+            v-model="detail.price"
+            placeholder="Enter Price"
+            class="price w-full"
+            mode="currency"
+            currency="IDR"
+            locale="id-ID"
+            fluid
+          />
+        </div>
+
+        <!-- Remove Variant Field -->
+        <Button
+          v-if="variantDetails.length > 1"
+          class="btn btn-danger mt-2"
+          @click="removeVariantField(index)"
+        >
+          Remove Variant
+        </Button>
       </div>
 
-      <div class="field">
-        <label for="coldPrice">Cold Price</label>
-        <InputNumber
-          id="coldPrice"
-          v-model="coldPrice"
-          placeholder="Enter cold price"
-          class="cold w-full"
-          mode="currency"
-          currency="IDR"
-          locale="id-ID"
-        />
-      </div>
+      <!-- Add Another Variant Field -->
+      <Button class="btn btn-secondary mt-4" @click="addVariantField">
+        Tambah Variant Lainnya
+      </Button>
 
-      <div class="field">
-        <label for="hotPrice">Hot Price</label>
-        <InputNumber
-          id="hotPrice"
-          v-model="hotPrice"
-          placeholder="Enter hot price"
-          class="hot w-full"
-          mode="currency"
-          currency="IDR"
-          locale="id-ID"
-        />
-      </div>
-
+      <!-- Submit Button -->
       <Button class="btn btn-primary mt-4" @click="insertMenuDetail">
-        Add Menu Detail
+        Tambah Detail Menu
       </Button>
     </div>
   </section>
@@ -140,5 +168,9 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.field-group {
+  margin-bottom: 1rem;
+  border-radius: 4px;
 }
 </style>
