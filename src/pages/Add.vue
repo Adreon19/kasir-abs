@@ -10,8 +10,8 @@ import AddPrice from "../components/items/menu/AddPrice.vue";
     <Add />
     <AddPrice />
     <AddCategory />
-    <ListCategory />
     <ListMenu />
+    <ListCategory />
   </div>
   <Toast />
 </template>
