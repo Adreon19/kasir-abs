@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "../src/assets/primevue/tailwind.css";
+@import "tailwindcss/utilities";
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -8,12 +9,16 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #000000;
-
+  /* background-color: #ffffff; */
+  background: linear-gradient(#964b00, #301800);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --sidebar-color: #c8a241;
+  --primary-text: #ffffff;
+  --second-text: #000000;
+  --bg-card: rgb(0, 0, 0, 0.4);
 }
 
 a {
@@ -28,6 +33,11 @@ a:hover {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+h2 {
+  color: rgb(224, 224, 224);
+  font-size: x-large;
 }
 
 button {
@@ -64,4 +74,8 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.main-section {
+  @apply p-6 bg-slate-100 bg-surface-700/50 rounded-lg border border-surface-200/80;
 }

@@ -1,37 +1,73 @@
+<script setup>
+import { supabase } from "../../supabase";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const handleLogout = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error("Error logging out:", error.message);
+  } else {
+    router.push("/login");
+  }
+};
+</script>
+
 <template>
   <div class="flex flex-row min-h-screen">
-    <aside class="sidebar bg-white text-black">
-      <div class="m-4">
-        <div class="logo flex items-center">
+    <aside class="sidebar text-black max-w-64 flex flex-col justify-between">
+      <div class="">
+        <div class="logo flex items-center m-4">
           <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <strong>Artisan Beverage Studio</strong>
+          <h1 class="text-sm font-semibold text-white">
+            Artisan Beverage Studio
+          </h1>
+        </div>
+
+        <div class="flex flex-col justify-between">
+          <ul class="flex flex-col">
+            <RouterLink to="/">
+              <li>
+                <i class="fa-solid fa-house ease-in duration-300"></i> Home Page
+              </li>
+            </RouterLink>
+            <RouterLink to="/history">
+              <li>
+                <i class="fa-solid fa-scroll ease-in duration-300"></i> History
+                Menu
+              </li>
+            </RouterLink>
+            <RouterLink to="/order">
+              <li>
+                <i class="fa-solid fa-cart-shopping ease-in duration-300"></i>
+                Order
+              </li>
+            </RouterLink>
+            <RouterLink to="/money">
+              <li>
+                <i class="fa-solid fa-money-bill ease-in duration-300"></i>
+                Money History
+              </li>
+            </RouterLink>
+            <RouterLink to="/add">
+              <li>
+                <i class="fa-solid fa-square-plus ease-in duration-300"></i> Add
+                Menu
+              </li>
+            </RouterLink>
+          </ul>
         </div>
       </div>
 
-      <ul class="flex flex-col justify-center">
-        <RouterLink to="/"
-          ><li>
-            <i class="fa-solid fa-house ease-in duration-300"></i> Home Page
-          </li></RouterLink
-        >
-        <RouterLink to="/history"
-          ><li>
-            <i class="fa-solid fa-scroll ease-in duration-300"></i> History Menu
-          </li></RouterLink
-        >
-        <RouterLink to="/order">
-          <li>
-            <i class="fa-solid fa-cart-shopping ease-in duration-300"></i>
-            Order
-          </li></RouterLink
-        >
-        <RouterLink to="/add"
-          ><li>
-            <i class="fa-solid fa-square-plus ease-in duration-300"></i> Add
-            Menu
-          </li></RouterLink
-        >
-      </ul>
+      <div class="m-4">
+        <Button
+          label="Log Out"
+          icon="fa-solid fa-sign-out-alt"
+          class="shadow-lg text-white"
+          @click="handleLogout"
+        />
+      </div>
     </aside>
 
     <div class="flex-grow flex flex-col">
@@ -48,6 +84,7 @@
   height: 100vh;
   position: sticky;
   top: 0;
+  background-color: var(--sidebar-color);
 }
 
 .sidebar li {
@@ -64,5 +101,13 @@
 
 .sidebar i {
   margin-right: 15px;
+}
+
+li {
+  color: var(--primary-text);
+}
+
+button {
+  background: var(--sidebar-color);
 }
 </style>
