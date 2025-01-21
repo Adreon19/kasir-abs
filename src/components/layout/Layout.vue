@@ -34,8 +34,8 @@ const handleLogout = async () => {
             </RouterLink>
             <RouterLink to="/history">
               <li>
-                <i class="fa-solid fa-scroll ease-in duration-300"></i> History
-                Menu
+                <i class="fa-solid fa-scroll ease-in duration-300"></i> Order
+                History
               </li>
             </RouterLink>
             <RouterLink to="/order">
