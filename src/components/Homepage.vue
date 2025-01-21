@@ -39,6 +39,7 @@ const fetchMenuList = async (categoryId = null) => {
           description,
           kategori_id,
           menu_detail (
+            id,
             price,
             variant_id,
             menu_variants(name)
@@ -112,4 +113,5 @@ onMounted(initializeData);
       </div>
     </div>
   </div>
+  <Toast />
 </template>
