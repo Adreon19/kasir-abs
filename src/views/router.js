@@ -5,6 +5,7 @@ import History from "../pages/History.vue";
 import Order from "../pages/Order.vue";
 import Login from "../pages/login.vue";
 import Money from "../pages/Money.vue";
+import EditMenu from "../components/items/menu/edit/[id].vue";
 import { supabase } from "../supabase"; // Import your Supabase instance
 
 const routes = [
@@ -44,6 +45,13 @@ const routes = [
     name: "login",
     component: Login,
     meta: { requiresAuth: false, layout: false },
+  },
+  {
+    path: "/menu/edit/:id",
+    name: "EditMenu",
+    component: EditMenu,
+    props: true,
+    meta: { layout: true },
   },
 ];
 
