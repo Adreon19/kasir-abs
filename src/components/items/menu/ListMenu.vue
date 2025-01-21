@@ -13,7 +13,7 @@ const fetchMenu = async () => {
     const { data, error } = await supabase.from("menu_detail").select(`
         id,
         price,
-        menu_id (name, kategori_id (kategori)),
+        menu_id (id, name, kategori_id (kategori)),
         variant_id (name)
       `);
 
@@ -25,19 +25,20 @@ const fetchMenu = async () => {
   }
 };
 
-const deleteMenu = async (menuId) => {
+const deleteMenuByMenuId = async (menuId) => {
   try {
+    // Delete from the menu table by menu_id
     const { error } = await supabase
-      .from("menu_detail")
+      .from("menu_list")
       .delete()
-      .eq("id", menuId);
+      .eq("id", menuId); // `menu_id` corresponds to the `menu` table's `id`
 
     if (error) throw error;
 
     toast.add({
       severity: "success",
       summary: "Success",
-      detail: "Menu deleted successfully",
+      detail: "Menu and its details deleted successfully",
       life: 3000,
     });
 
@@ -49,7 +50,7 @@ const deleteMenu = async (menuId) => {
       detail: "Error deleting menu",
       life: 3000,
     });
-    console.error("Error deleting menu:", error.message);
+    console.error("Error deleting menu by menu_id:", error.message);
   }
 };
 
@@ -121,15 +122,20 @@ onMounted(initializeData);
             <div class="flex justify-center gap-2">
               <Button
                 label="Edit"
+                as="router-link"
                 icon="fa fa-pencil"
                 class="p-button-rounded p-button-info"
-                @click="editMenu(slotProps.data)"
+                :to="{
+                  name: 'EditMenu',
+                  params: { id: slotProps.data.menu_id.id },
+                }"
               />
+
               <Button
                 label="Delete"
                 icon="fa fa-trash"
                 class="p-button-rounded p-button-danger"
-                @click="deleteMenu(slotProps.data?.id)"
+                @click="deleteMenuByMenuId(slotProps.data?.menu_id?.id)"
               />
             </div>
           </template>
