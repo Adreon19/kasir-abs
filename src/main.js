@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import PrimeVue from "primevue/config";
 import App from "./App.vue";
 import Aura from "@primevue/themes/aura";
+import { ConfirmationService } from "primevue";
 import router from "./views/router";
 import "./style.css";
 import ToastService from "primevue/toastservice";
@@ -19,4 +20,5 @@ app.use(PrimeVue, {
 });
 app.use(router);
 app.use(ToastService);
+app.use(ConfirmationService);
 app.mount("#app");
