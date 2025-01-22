@@ -166,7 +166,7 @@ onMounted(() => {
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover h-48 w-full"
+            class="img-menu object-cover h-48 w-full rounded-t-lg"
           />
         </template>
         <template #title>
@@ -262,7 +262,7 @@ onMounted(() => {
             {{ item.menu_detail.menu_id.name }}
           </h3>
           <template v-if="item.menu_detail">
-            <h4 class="mb-2 text-sm text-slate-400 m-4">
+            <h4 class="mb-2 text-sm text-slate-400">
               {{ item.menu_detail.variant_id.name || "No Variant" }}:
               {{ formatCurrency(item.menu_detail.price) || "N/A" }}
             </h4>
@@ -271,7 +271,7 @@ onMounted(() => {
           <template v-else>
             <h4 class="mb-2 text-sm text-slate-400">No Variant: N/A</h4>
           </template>
-          <div class="button-container flex flex-row gap-6 float-end">
+          <div class="button-container flex justify-between gap-6">
             <p>Quantity : {{ item.quantity }}</p>
             <Button
               label="Delete"
@@ -287,7 +287,7 @@ onMounted(() => {
               @click="closeDrawerAndOpenAddVariantDialog(menuList[0])"
             />
           </div>
-          <div class="m-4 mb-9">
+          <div class="mb-2">
             <p>Note : {{ item.note || "No note" }}</p>
           </div>
           <hr />
