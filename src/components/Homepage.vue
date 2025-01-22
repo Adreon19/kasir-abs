@@ -103,7 +103,9 @@ onMounted(initializeData);
         class="p-select w-full md:w-56 font-bold"
       />
     </div>
-    <div v-if="isLoading">Loading...</div>
+    <div v-if="isLoading" class="flex justify-center">
+      <ProgressSpinner />
+    </div>
     <div v-else>
       <div v-if="menuList.length === 0" class="text-white text-center">
         Tidak ada menu
