@@ -251,9 +251,9 @@ onMounted(() => {
   <!-- Drawer for Cart -->
   <Drawer
     v-model:visible="drawerVisible"
-    position="bottom"
+    position="right"
     header="Your Order"
-    :style="{ height: '75%' }"
+    :style="{ 'min-width': '45vw' }"
   >
     <div v-if="cartItems.length" class="p-4">
       <ul>
@@ -262,7 +262,7 @@ onMounted(() => {
             {{ item.menu_detail.menu_id.name }}
           </h3>
           <template v-if="item.menu_detail">
-            <h4 class="mb-2 text-sm text-slate-400">
+            <h4 class="mb-2 text-sm text-slate-400 m-4">
               {{ item.menu_detail.variant_id.name || "No Variant" }}:
               {{ formatCurrency(item.menu_detail.price) || "N/A" }}
             </h4>
@@ -271,9 +271,8 @@ onMounted(() => {
           <template v-else>
             <h4 class="mb-2 text-sm text-slate-400">No Variant: N/A</h4>
           </template>
-          <p>Quantity: {{ item.quantity }}</p>
-          <p>Note: {{ item.note || "No note" }}</p>
-          <div class="button-container flex flex-row gap-6">
+          <div class="button-container flex flex-row gap-6 float-end">
+            <p>Quantity : {{ item.quantity }}</p>
             <Button
               label="Delete"
               icon="fa-solid fa-trash"
@@ -288,16 +287,20 @@ onMounted(() => {
               @click="closeDrawerAndOpenAddVariantDialog(menuList[0])"
             />
           </div>
+          <div class="m-4 mb-9">
+            <p>Note : {{ item.note || "No note" }}</p>
+          </div>
+          <hr />
         </li>
       </ul>
     </div>
 
     <div v-else class="p-4 text-center text-gray-500">No orders yet.</div>
-    <div class="button-container flex flex-col gap-8">
+    <div class="button-container flex justify-end gap-8 mt-16">
       <RouterLink to="/order">
         <Button
           type="button"
-          class="button w-full"
+          class="button w-fit"
           label="Check Out"
           severity="success"
         />

@@ -123,7 +123,7 @@ onMounted(fetchCategories);
           customUpload
           auto
           accept="image/*"
-          :maxFileSize="10"
+          :maxFileSize="150000"
           severity="secondary"
           class="p-button-outlined p-10 z-0"
         />
