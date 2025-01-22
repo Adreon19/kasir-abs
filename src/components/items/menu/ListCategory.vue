@@ -10,7 +10,7 @@ const fetchCategories = async () => {
   try {
     const { data, error } = await supabase
       .from("kategori_menu")
-      .select("kategori");
+      .select("id, kategori");
 
     if (error) {
       throw error;
@@ -77,7 +77,11 @@ onMounted(initializeData);
                 label="Edit"
                 icon="fa fa-pencil"
                 class="p-button-rounded p-button-info"
-                @click="edit(slotProps.data)"
+                as="router-link"
+                :to="{
+                  name: 'EditCategory',
+                  params: { id: slotProps.data.id },
+                }"
               />
               <Button
                 label="Delete"
