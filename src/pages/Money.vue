@@ -3,12 +3,14 @@ import { ref, onMounted, computed } from "vue";
 import { supabase } from "../supabase";
 import { formatCurrency } from "../utils/formatter/currency";
 
+const isLoading = ref(false);
 const finance = ref([]);
 
 const fetchFinance = async () => {
   try {
+    isLoading.value = true;
     let { data: order_detail, error } = await supabase.from("order").select(`
-      id, 
+      id,
       paid,
       total_price,
       change
@@ -17,6 +19,8 @@ const fetchFinance = async () => {
     finance.value = order_detail;
   } catch (error) {
     console.log("error fetching order:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -32,32 +36,47 @@ const totalFinance = computed(() => {
   return totalPaid - totalChange;
 });
 
-onMounted(fetchFinance);
+const initializeData = async () => {
+  try {
+    await fetchFinance();
+  } catch (error) {
+    console.error("Error during initialization:", error.message);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+onMounted(initializeData);
 </script>
 
 <template>
   <div class="p-6 flex flex-col gap-6">
     <h1 style="font-size: 30px">Riwayat Keuangan</h1>
-    <section class="main-section">
-      <h1 class="text-4xl">
-        Total keuangan: {{ formatCurrency(totalFinance) }}
-      </h1>
-    </section>
-    <section class="main-section">
-      <div class="container flex flex-col gap-4">
-        <DataTable :value="finance" stripedRows tableStyle="min-width: 50rem">
-          <Column header="Total Masuk">
-            <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.paid) }}
-            </template>
-          </Column>
-          <Column header="Kembalian">
-            <template #body="slotProps">
-              {{ formatCurrency(slotProps.data.change) }}
-            </template>
-          </Column>
-        </DataTable>
-      </div>
-    </section>
+    <div v-if="isLoading" class="flex justify-center">
+      <ProgressSpinner />
+    </div>
+    <div v-else>
+      <section class="main-section">
+        <h1 class="text-4xl">
+          Total keuangan: {{ formatCurrency(totalFinance) }}
+        </h1>
+      </section>
+      <section class="main-section">
+        <div class="container flex flex-col gap-4">
+          <DataTable :value="finance" stripedRows tableStyle="min-width: 50rem">
+            <Column header="Total Masuk">
+              <template #body="slotProps">
+                {{ formatCurrency(slotProps.data.paid) }}
+              </template>
+            </Column>
+            <Column header="Kembalian">
+              <template #body="slotProps">
+                {{ formatCurrency(slotProps.data.change) }}
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
