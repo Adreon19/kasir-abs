@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
 import { supabase } from "../supabase";
-import { useToast } from "primevue";
+import { ProgressSpinner, useToast } from "primevue";
 import { formatCurrency } from "../utils/formatter/currency";
 
 const toast = useToast();
@@ -11,6 +11,7 @@ const paymethod = ref([]);
 const selectedPaymentMethod = ref(null);
 const paidAmount = ref(0);
 const customer = ref("");
+const isLoading = ref(false);
 
 const totalAmount = computed(() => {
   return cartItems.value.reduce((sum, item) => {
@@ -29,6 +30,7 @@ const changeAmount = computed(() => {
 
 const fetchCarts = async () => {
   try {
+    isLoading.value = true;
     const { data, error } = await supabase.from("cart").select(`
         id,
         menu_detail_id,
@@ -52,13 +54,17 @@ const fetchCarts = async () => {
 
     orderedMenuIds.value = data.map((item) => item.menu_detail_id);
     cartItems.value = data;
+    isLoading.value = false;
   } catch (error) {
     console.error("Error fetching cart:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
 const fetchPay = async () => {
   try {
+    isLoading.value = true;
     const { data, error } = await supabase.from("payment_method").select("*");
     if (error) throw error;
     paymethod.value = data.map((method) => ({
@@ -67,6 +73,8 @@ const fetchPay = async () => {
     }));
   } catch (error) {
     console.error("Error fetching payment method:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -184,114 +192,121 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="p-5">
-    <section class="main-section">
-      <h1 class="text-xl font-bold text-white mb-4">Order Details</h1>
-      <div class="flex flex-col gap-10">
-        <InputText
-          v-model="customer"
-          placeholder="Nama Customer"
-          class="max-w-fit"
+  <div v-if="isLoading">
+    <ProgressSpinner />
+  </div>
+  <div v-else>
+    <section class="p-5">
+      <section class="main-section">
+        <h1 class="text-xl font-bold text-white mb-4">Order Details</h1>
+        <div class="flex flex-col gap-10">
+          <InputText
+            v-model="customer"
+            placeholder="Nama Customer"
+            class="max-w-fit"
+          />
+          <table class="w-full bg-white text-black rounded-lg overflow-hidden">
+            <thead class="bg-gray-200">
+              <tr>
+                <th class="p-3">Menu</th>
+                <th class="p-3">Variant</th>
+                <th class="p-3">Price</th>
+                <th class="p-3">Quantity</th>
+                <th class="p-3">Note</th>
+                <th class="p-3">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in cartItems" :key="index">
+                <td class="p-3">{{ item.menu_detail.menu_id.name }}</td>
+                <td class="p-3">{{ item.menu_detail.variant_id.name }}</td>
+                <td class="p-3">
+                  {{ formatCurrency(item.menu_detail.price) }}
+                </td>
+                <td class="p-3">{{ item.quantity }}</td>
+                <td class="p-3">{{ item.note || "-" }}</td>
+                <td class="p-3 flex flex-row gap-2">
+                  <Button
+                    label="Edit"
+                    icon="fa-solid fa-pencil"
+                    severity="edit"
+                  />
+                  <Button
+                    label="Delete"
+                    icon="fa-solid fa-trash"
+                    severity="danger"
+                    @click="deleteCartItem(item.id)"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="container mt-2">
+          <RouterLink to="/">
+            <Button
+              label="Tambah menu lainnya"
+              icon="fa-solid fa-plus"
+              class="button"
+              severity="save"
+            />
+          </RouterLink>
+          <div class="flex gap-2 justify-between mt-2">
+            <Select
+              id="payment-method"
+              v-model="selectedPaymentMethod"
+              :options="paymethod"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select Payment Method"
+            />
+            <div class="flex gap-2">
+              <h2>Total:</h2>
+              <h2 class="text-black">{{ formatCurrency(totalAmount) }}</h2>
+            </div>
+          </div>
+          <!-- Show input number and calculated change if 'Cash' is selected -->
+          <div
+            v-if="selectedPaymentMethod === 1 || selectedPaymentMethod === 2"
+            class="mt-4 flex justify-between"
+          >
+            <!-- Show InputNumber for 'Cash' (selectedPaymentMethod === 1) and 'QRIS' (selectedPaymentMethod === 2) -->
+
+            <InputNumber
+              v-model="paidAmount"
+              placeholder="Enter Paid Amount"
+              :min="totalAmount"
+              :value="selectedPaymentMethod === 2 ? totalAmount : paidAmount"
+              :disabled="selectedPaymentMethod === 2"
+              mode="currency"
+              currency="IDR"
+            />
+
+            <div v-if="paidAmount > 0 && selectedPaymentMethod === 1">
+              <h2 class="text-black mt-2">
+                Change: {{ formatCurrency(changeAmount) }}
+              </h2>
+            </div>
+
+            <!-- No change for QRIS -->
+            <div v-if="selectedPaymentMethod === 2">
+              <h2 class="text-black mt-2">Change: {{ formatCurrency(0) }}</h2>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="flex justify-end mt-5">
+        <Button
+          label="Finish Order"
+          icon="fa-solid fa-check"
+          class="button"
+          severity="save"
+          @click="finishOrder"
         />
-        <table class="w-full bg-white text-black rounded-lg overflow-hidden">
-          <thead class="bg-gray-200">
-            <tr>
-              <th class="p-3">Menu</th>
-              <th class="p-3">Variant</th>
-              <th class="p-3">Price</th>
-              <th class="p-3">Quantity</th>
-              <th class="p-3">Note</th>
-              <th class="p-3">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in cartItems" :key="index">
-              <td class="p-3">{{ item.menu_detail.menu_id.name }}</td>
-              <td class="p-3">{{ item.menu_detail.variant_id.name }}</td>
-              <td class="p-3">{{ formatCurrency(item.menu_detail.price) }}</td>
-              <td class="p-3">{{ item.quantity }}</td>
-              <td class="p-3">{{ item.note || "-" }}</td>
-              <td class="p-3 flex flex-row gap-2">
-                <Button
-                  label="Edit"
-                  icon="fa-solid fa-pencil"
-                  severity="edit"
-                />
-                <Button
-                  label="Delete"
-                  icon="fa-solid fa-trash"
-                  severity="danger"
-                  @click="deleteCartItem(item.id)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="container mt-2">
-        <RouterLink to="/">
-          <Button
-            label="Tambah menu lainnya"
-            icon="fa-solid fa-plus"
-            class="button"
-            severity="save"
-          />
-        </RouterLink>
-        <div class="flex gap-2 justify-between mt-2">
-          <Select
-            id="payment-method"
-            v-model="selectedPaymentMethod"
-            :options="paymethod"
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select Payment Method"
-          />
-          <div class="flex gap-2">
-            <h2>Total:</h2>
-            <h2 class="text-black">{{ formatCurrency(totalAmount) }}</h2>
-          </div>
-        </div>
-        <!-- Show input number and calculated change if 'Cash' is selected -->
-        <div
-          v-if="selectedPaymentMethod === 1 || selectedPaymentMethod === 2"
-          class="mt-4 flex justify-between"
-        >
-          <!-- Show InputNumber for 'Cash' (selectedPaymentMethod === 1) and 'QRIS' (selectedPaymentMethod === 2) -->
-
-          <InputNumber
-            v-model="paidAmount"
-            placeholder="Enter Paid Amount"
-            :min="totalAmount"
-            :value="selectedPaymentMethod === 2 ? totalAmount : paidAmount"
-            :disabled="selectedPaymentMethod === 2"
-            mode="currency"
-            currency="IDR"
-          />
-
-          <div v-if="paidAmount > 0 && selectedPaymentMethod === 1">
-            <h2 class="text-black mt-2">
-              Change: {{ formatCurrency(changeAmount) }}
-            </h2>
-          </div>
-
-          <!-- No change for QRIS -->
-          <div v-if="selectedPaymentMethod === 2">
-            <h2 class="text-black mt-2">Change: {{ formatCurrency(0) }}</h2>
-          </div>
-        </div>
+        <Toast />
       </div>
     </section>
-    <div class="flex justify-end mt-5">
-      <Button
-        label="Finish Order"
-        icon="fa-solid fa-check"
-        class="button"
-        severity="save"
-        @click="finishOrder"
-      />
-      <Toast />
-    </div>
-  </section>
+  </div>
 </template>
 
 <style scoped>
