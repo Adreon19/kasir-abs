@@ -205,8 +205,8 @@ onMounted(() => {
             placeholder="Nama Customer"
             class="max-w-fit"
           />
-          <table class="w-full bg-white text-black rounded-lg overflow-hidden">
-            <thead class="bg-gray-200">
+          <table class="w-full bg-black text-white rounded-lg overflow-hidden">
+            <thead class="bg-gray-800">
               <tr>
                 <th class="p-3">Menu</th>
                 <th class="p-3">Variant</th>
@@ -321,16 +321,13 @@ td {
 }
 
 th {
-  background-color: #f4f4f4;
+  background-color: #393939;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #454545;
 }
 
-tbody tr:hover {
-  background-color: #f1f1f1;
-}
 .button {
   background-color: transparent;
   border: 2px solid var(--sidebar-color);
