@@ -5,6 +5,7 @@ import Aura from "@primevue/themes/aura";
 import { ConfirmationService } from "primevue";
 import router from "./views/router";
 import "./style.css";
+import "primeicons/primeicons.css";
 import ToastService from "primevue/toastservice";
 const app = createApp(App);
 
