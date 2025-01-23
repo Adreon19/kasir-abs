@@ -122,6 +122,8 @@ onMounted(fetchCategories);
           @select="onFileSelect"
           customUpload
           auto
+          accept="image/*"
+          :maxFileSize="150000"
           severity="secondary"
           class="p-button-outlined p-10 z-0"
         />

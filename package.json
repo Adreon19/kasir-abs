@@ -11,6 +11,7 @@
   "dependencies": {
     "@primevue/themes": "^4.2.5",
     "@supabase/supabase-js": "^2.47.12",
+    "primeicons": "^7.0.0",
     "primevue": "^4.2.5",
     "tailwindcss-primeui": "^0.4.0",
     "vue": "^3.5.13",
