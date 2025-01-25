@@ -54,7 +54,7 @@ const handleLogin = async () => {
           <Password
             v-model="password"
             toggleMask
-            class="text-lg rounded-md min-w-64"
+            class="password text-lg rounded-md min-w-64 border-none focus:outline-none"
           />
           <label>Password</label>
         </FloatLabel>
@@ -91,5 +91,9 @@ const handleLogin = async () => {
   border-radius: 0 0 10px 10px;
   padding: 1rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.password {
+  border: none;
 }
 </style>
