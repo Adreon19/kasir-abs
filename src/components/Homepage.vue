@@ -6,6 +6,7 @@ import { supabase } from "../supabase";
 const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
+const searchQuery = ref("");
 const isLoading = ref(true);
 
 const fetchCategories = async () => {
@@ -72,6 +73,9 @@ const initializeData = async () => {
 };
 
 onMounted(initializeData);
+function toggleDarkMode() {
+  document.documentElement.classList.toggle("my-app-dark");
+}
 </script>
 
 <template>
@@ -81,8 +85,10 @@ onMounted(initializeData);
       style="display: flex; justify-content: space-between"
     >
       <h1 style="font-size: 30px" class="text-white font-bold">Menu</h1>
+      <Button label="Toggle Dark Mode" @click="toggleDarkMode()" />
       <div class="search flex relative">
         <InputText
+          v-model="searchQuery"
           style="width: 400px; border-radius: 10px 0 0 10px"
           placeholder="Search..."
           class="search p-3 bg-white text-black font-bold rounded-none focus:outline-none"
