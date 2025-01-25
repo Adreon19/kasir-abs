@@ -3,6 +3,7 @@ import { ref, onMounted, computed, watch } from "vue";
 import { supabase } from "../supabase";
 import { ProgressSpinner, useToast } from "primevue";
 import { formatCurrency } from "../utils/formatter/currency";
+import { jsPDF } from "jspdf";
 
 const toast = useToast();
 const orderedMenuIds = ref([]);
@@ -106,6 +107,15 @@ const deleteCartItem = async (cartItemId) => {
 
 const finishOrder = async () => {
   try {
+    if (!customer.value) {
+      toast.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Please enter the customer's name!",
+        life: 3000,
+      });
+      return; // Prevent order creation if customer name is not entered
+    }
     const generatedOrderId = Date.now(); // Example of a unique numeric ID
 
     // Step 1: Insert a new order record into the 'order' table with the generated ID
@@ -134,6 +144,127 @@ const finishOrder = async () => {
       quantity: item.quantity,
       note: item.note,
     }));
+
+    const pageWidth = 80; // 80mm width
+    const marginLeft = 8;
+    let currentY = 8;
+    let estimatedHeight = 100; // Initial height, adjust as needed
+
+    // Estimate height based on the number of cart items
+    cartItems.value.forEach((item) => {
+      estimatedHeight += 6; // Each item roughly takes 6mm
+      if (item.note && item.note.trim()) {
+        estimatedHeight += 3; // Extra space for notes
+      }
+    });
+
+    estimatedHeight += 30; // Add extra space for headers, totals, etc.
+
+    // Create a jsPDF instance with the dynamically calculated height
+    const doc = new jsPDF({
+      unit: "mm",
+      format: [pageWidth, estimatedHeight],
+    });
+
+    // Title
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text("Payment Receipt", marginLeft, currentY);
+    currentY += 6;
+
+    // Separator line
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.2);
+    doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
+    currentY += 4;
+
+    // Customer details
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Customer: ${customer.value}`, marginLeft, currentY);
+    currentY += 4;
+    doc.text(`Order ID: ${generatedOrderId}`, marginLeft, currentY);
+    currentY += 4;
+    doc.text(
+      `Payment Method: ${
+        paymethod.value.find(
+          (method) => method.value === selectedPaymentMethod.value
+        )?.label || "Unknown"
+      }`,
+      marginLeft,
+      currentY
+    );
+    currentY += 8;
+
+    // Order items table header
+    doc.setFont("helvetica", "bold");
+    doc.text("No", marginLeft, currentY);
+    doc.text("Menu", marginLeft + 10, currentY);
+    doc.text("Qty", marginLeft + 40, currentY, { align: "right" });
+    doc.text("Subtotal", marginLeft + 60, currentY, { align: "right" });
+    currentY += 5;
+
+    // Order items table rows
+    cartItems.value.forEach((item, index) => {
+      const subtotal = item.quantity * item.menu_detail.price;
+
+      // Main item details
+      doc.setFont("helvetica", "normal");
+      doc.text(`${index + 1}`, marginLeft, currentY);
+      doc.text(`${item.menu_detail.menu_id.name}`, marginLeft + 10, currentY);
+      doc.text(`${item.quantity}`, marginLeft + 40, currentY, {
+        align: "right",
+      });
+      doc.text(`${formatCurrency(subtotal)}`, marginLeft + 60, currentY, {
+        align: "right",
+      });
+      currentY += 4;
+
+      // Optional note under the menu name
+      if (item.note && item.note.trim()) {
+        doc.setFontSize(6);
+        doc.setFont("helvetica", "italic");
+        doc.text(`*${item.note}`, marginLeft + 10, currentY);
+        currentY += 3; // Adjust spacing for the note
+        doc.setFontSize(8); // Reset font size to default after the note
+        doc.setFont("helvetica", "normal"); // Reset font style to normal
+      }
+    });
+
+    // Separator line after cart items
+    currentY += 4;
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.2);
+    doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
+    currentY += 6;
+
+    // Total amount and payment details
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "bold");
+    doc.text(
+      `Total: ${formatCurrency(totalAmount.value)}`,
+      marginLeft,
+      currentY
+    );
+    currentY += 4;
+    doc.text(`Paid: ${formatCurrency(paidAmount.value)}`, marginLeft, currentY);
+    currentY += 4;
+    doc.text(
+      `Change: ${formatCurrency(changeAmount.value)}`,
+      marginLeft,
+      currentY
+    );
+    currentY += 8;
+
+    // Footer (optional)
+    doc.setFontSize(8);
+    doc.setFont("helvetica", "normal");
+    doc.text("Thank you for your purchase!", marginLeft, currentY);
+    currentY += 4;
+    doc.text("Visit us again!", marginLeft, currentY);
+
+    // Save the PDF
+    doc.save(`order_${generatedOrderId}.pdf`);
 
     const { error: orderDetailsError } = await supabase
       .from("order_detail")
@@ -164,8 +295,6 @@ const finishOrder = async () => {
       detail: "Your order has been successfully placed!",
       life: 3000,
     });
-
-    cartItems.value = [];
   } catch (error) {
     toast.add({
       severity: "error",
