@@ -7,6 +7,7 @@ const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
 const isLoading = ref(true);
+const darkMode = ref(false);
 
 const fetchCategories = async () => {
   try {
@@ -24,12 +25,6 @@ const fetchCategories = async () => {
     console.error("Error fetching categories:", error.message);
   }
 };
-
-watch(selectedCategory, async (newCategory) => {
-  isLoading.value = true;
-  menuList.value = await fetchMenuList(newCategory);
-  isLoading.value = false;
-});
 
 const fetchMenuList = async (categoryId = null) => {
   try {
@@ -73,6 +68,7 @@ const initializeData = async () => {
 
 onMounted(initializeData);
 function toggleDarkMode() {
+  darkMode.value = !darkMode.value;
   document.documentElement.classList.toggle("my-app-dark");
 }
 </script>
@@ -83,8 +79,7 @@ function toggleDarkMode() {
       class="searchBar m-5"
       style="display: flex; justify-content: space-between"
     >
-      <div class="flex gap-2">
-        s
+      <div class="flex justify-center gap-2">
         <h1
           style="font-size: 30px"
           class="text-[var(--text-primary)] font-bold"
@@ -93,8 +88,9 @@ function toggleDarkMode() {
         </h1>
         <Button
           :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
+          :class="darkMode ? 'text-yellow-500' : 'text-black'"
           @click="toggleDarkMode()"
-          class="bg-transparant"
+          class="bg-transparent hover:border-none active:border-none"
         />
       </div>
       <div class="search flex relative">
