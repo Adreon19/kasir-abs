@@ -262,7 +262,7 @@ onMounted(() => {
             />
             <div class="flex gap-2">
               <h2>Total:</h2>
-              <h2 class="text-black">{{ formatCurrency(totalAmount) }}</h2>
+              <h2 class="text-white">{{ formatCurrency(totalAmount) }}</h2>
             </div>
           </div>
           <!-- Show input number and calculated change if 'Cash' is selected -->
@@ -299,7 +299,7 @@ onMounted(() => {
         <Button
           label="Finish Order"
           icon="fa-solid fa-check"
-          class="button"
+          class="button33"
           severity="save"
           @click="finishOrder"
         />

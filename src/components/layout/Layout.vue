@@ -64,7 +64,7 @@ const handleLogout = async () => {
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
-          class="bg-[var(--component-secondary] text-[var(--text-secondary)]"
+          class="btn"
           @click="handleLogout"
         />
       </div>

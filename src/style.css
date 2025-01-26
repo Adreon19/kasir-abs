@@ -150,9 +150,10 @@
   background-color: #020101;
 }
 /* done asset login */
+
 /* alt logout*/
 .btn {
-  --color: #43e063;
+  --color: #cba35c;
   --color2: rgb(10, 25, 30);
   margin-left: 40px;
   padding: 0.8em 1.75em;

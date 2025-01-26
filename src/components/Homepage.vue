@@ -103,7 +103,7 @@ function toggleDarkMode() {
           style="border-radius: 0 10px 10px 0"
           icon="fas fa-search"
           iconPos="top"
-          class="button-search hover:border-none text-[var(--text-primary)] bg-[var(--components-bg)] rounded-none"
+          class="button-search color-white bg-[var(--components-bg)] rounded-none"
         />
       </div>
       <Select
