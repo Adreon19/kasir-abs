@@ -160,7 +160,7 @@ onMounted(() => {
       <Card
         v-for="menu in menuList"
         :key="menu.name"
-        class="menu flex flex-col h-full p-0 rounded-lg"
+        class="menu flex flex-col p-0 rounded-lg"
       >
         <template #header>
           <img
@@ -255,6 +255,7 @@ onMounted(() => {
     v-model:visible="drawerVisible"
     position="right"
     header="Your Order"
+    class="bg-[var(--bg-drawer)]"
     :style="{ 'min-width': '45vw' }"
   >
     <div v-if="cartItems.length" class="p-4">
@@ -353,13 +354,7 @@ onMounted(() => {
 <style scoped>
 .button {
   background-color: transparent;
-  border: 2px solid var(--sidebar-color);
-  color: var(--sidebar-color);
-}
-
-.button:hover {
-  background-color: var(--sidebar-color);
-  color: #fff;
-  transition: 0.3s;
+  border: 2px solid var(--border-btn);
+  color: var(--text-order);
 }
 </style>

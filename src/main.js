@@ -8,6 +8,7 @@ import "./style.css";
 import "primeicons/primeicons.css";
 import { definePreset } from "@primevue/themes";
 import ToastService from "primevue/toastservice";
+import { root } from "postcss/lib/postcss";
 
 const app = createApp(App);
 
@@ -44,7 +45,6 @@ const MyPreset = definePreset(Aura, {
           800: "{slate.800}",
           900: "{slate.900}",
           950: "{slate.950}",
-          background: "#000000",
         },
       },
     },

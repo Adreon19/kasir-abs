@@ -6,7 +6,6 @@ import { supabase } from "../supabase";
 const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
-const searchQuery = ref("");
 const isLoading = ref(true);
 
 const fetchCategories = async () => {
@@ -84,20 +83,31 @@ function toggleDarkMode() {
       class="searchBar m-5"
       style="display: flex; justify-content: space-between"
     >
-      <h1 style="font-size: 30px" class="blck1">Menu</h1>
-      <Button label="Dark Mode" @click="toggleDarkMode()" />
+      <div class="flex gap-2">
+        s
+        <h1
+          style="font-size: 30px"
+          class="text-[var(--text-primary)] font-bold"
+        >
+          Menu
+        </h1>
+        <Button
+          :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
+          @click="toggleDarkMode()"
+          class="bg-transparant"
+        />
+      </div>
       <div class="search flex relative">
         <InputText
-          v-model="searchQuery"
           style="width: 400px; border-radius: 10px 0 0 10px"
-          placeholder="Search.."
-          class="placeholder-white search p-3 bg-brown text-white font-bold rounded-none focus:outline-none"
+          placeholder="Search..."
+          class="search p-3 font-bold rounded-none focus:outline-none"
         />
         <Button
           style="border-radius: 0 10px 10px 0"
           icon="fas fa-search"
           iconPos="top"
-          class="button-search hover:border-none text-white bg-brown rounded-none"
+          class="button-search hover:border-none text-[var(--text-primary)] bg-[var(--components-bg)] rounded-none"
         />
       </div>
       <Select
@@ -106,7 +116,7 @@ function toggleDarkMode() {
         option-value="id"
         option-label="kategori"
         placeholder="Select Categories"
-        class="p-select w-full md:w-56 bg-brown"
+        class="p-select w-full md:w-56"
       />
     </div>
     <div v-if="isLoading" class="flex justify-center">

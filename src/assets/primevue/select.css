@@ -4,8 +4,8 @@
 
 .p-select {
   @apply inline-flex cursor-pointer relative select-none rounded-md
-        bg-surface-0 dark:bg-surface-950
-        border border-surface-300 dark:border-surface-700
+        bg-[var(--components-bg)]
+        placeholder-[var(--text-primary)]
         shadow-[0_1px_2px_0_rgba(18,18,23,0.05)]
         transition-colors duration-200 text-black;
 }

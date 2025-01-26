@@ -15,7 +15,7 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <div class="flex flex-row min-h-screen">
+  <div class="flex flex-row min-h-screen bg-[var(--body-bg)]">
     <aside class="sidebar text-black max-w-64 flex flex-col justify-between">
       <div class="">
         <div class="logo flex items-center m-4">
@@ -64,7 +64,7 @@ const handleLogout = async () => {
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
-          class="btn"
+          class="bg-[var(--component-secondary] text-[var(--text-secondary)]"
           @click="handleLogout"
         />
       </div>
@@ -84,30 +84,23 @@ const handleLogout = async () => {
   height: 100vh;
   position: sticky;
   top: 0;
-  background-color: var(--sidebar-color);
+  background-color: var(--sidebar-bg);
 }
 
 .sidebar li {
   padding: 1rem;
   font-size: 20px;
+  color: var(--text-primary);
 }
 
 .sidebar li:hover {
   color: #fff;
-  background: #634f2b;
+  background: var(--hover-primary);
   width: 100%;
   transition: 0.5s;
 }
 
 .sidebar i {
   margin-right: 15px;
-}
-
-li {
-  color: var(--primary-text);
-}
-
-button {
-  background: var(--sidebar-color);
 }
 </style>

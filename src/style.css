@@ -18,14 +18,30 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --sidebar-color: #e5d0ac;
-  --primary-text: #000000;
-  --second-text: #000000;
+  --sidebar-bg: #f5f5dc;
+  --components-bg: #634f2b;
+  --component-secondary: #634f2b;
+  --text-primary: #000000;
+  --text-secondary: #ffffff;
+  --hover-primary: #634f2b;
   --bg-card: rgb(0, 0, 0, 0.4);
+  --border-btn: #ffffff;
+  --text-order: #ffffff;
+  --bg-drawer: rgba(0, 0, 0, 0.5);
 }
 
-.my-app-dark {
-  --surface-ground: #000000;
+:root[class="my-app-dark"] {
+  --body-bg: #000000;
+  --sidebar-bg: #634f2b;
+  --components-bg: #453721;
+  --component-secondary: #c8a241;
+  --text-primary: #ffffff;
+  --text-secondary: #ffffff;
+  --hover-primary: #c8a241;
+  --view-order: #957836;
+  --border-btn: #c8a241;
+  --text-order: #c8a241;
+  --bg-drawer: rgba(149, 120, 54, 0.5);
 }
 
 .waves {

@@ -321,7 +321,7 @@ td {
 }
 
 th {
-  background-color: #393939;
+  /* background-color: #393939; */
 }
 
 tbody tr:nth-child(even) {
