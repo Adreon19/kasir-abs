@@ -183,7 +183,9 @@ onMounted(() => {
               </h4>
             </template>
           </template>
-          <p>{{ menu.description || "No description available." }}</p>
+          <p class="desc">
+            {{ menu.description || "No description available." }}
+          </p>
         </template>
         <template #footer>
           <Button

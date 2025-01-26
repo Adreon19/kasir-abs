@@ -5,8 +5,10 @@ export default {
   theme: {
     extend: {
       colors: {
+        brown: "#634F2B",
         surface: {
           700: "#374151",
+          500: "#817457",
           200: "#E5E7EB",
         },
       },
