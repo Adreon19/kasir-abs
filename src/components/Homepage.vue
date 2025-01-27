@@ -8,6 +8,8 @@ const categories = ref([]);
 const selectedCategory = ref(null);
 const isLoading = ref(true);
 const darkMode = ref(false);
+const filteredMenuList = ref([]);
+const searchQuery = ref("");
 
 const fetchCategories = async () => {
   try {
@@ -24,6 +26,34 @@ const fetchCategories = async () => {
   } catch (error) {
     console.error("Error fetching categories:", error.message);
   }
+};
+
+watch(selectedCategory, async (newCategory) => {
+  isLoading.value = true;
+  menuList.value = await fetchMenuList(newCategory);
+  isLoading.value = false;
+});
+
+watch(searchQuery, async (newQuery, oldQuery) => {
+  if (oldQuery.trim() !== "" && newQuery.trim() === "") {
+    menuList.value = await fetchMenuList(selectedCategory.value);
+  }
+});
+
+const handleSearch = () => {
+  const normalizedQuery = searchQuery.value.trim().toLowerCase();
+
+  if (normalizedQuery === "") {
+    fetchMenuList(selectedCategory.value).then((data) => {
+      menuList.value = data;
+    });
+  } else {
+    menuList.value = menuList.value.filter((menu) =>
+      menu.name.toLowerCase().includes(normalizedQuery)
+    );
+  }
+
+  console.log("Filtered Menu List:", menuList.value);
 };
 
 const fetchMenuList = async (categoryId = null) => {
@@ -58,6 +88,8 @@ const fetchMenuList = async (categoryId = null) => {
 const initializeData = async () => {
   try {
     menuList.value = await fetchMenuList();
+    console.log(menuList.value); // Log menuList untuk memverifikasi isinya
+    filteredMenuList.value = menuList.value;
     await fetchCategories();
   } catch (error) {
     console.error("Error during initialization:", error.message);
@@ -65,17 +97,15 @@ const initializeData = async () => {
     isLoading.value = false;
   }
 };
-
 onMounted(initializeData);
+
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
 
-  // Simpan ke localStorage
   localStorage.setItem("darkMode", darkMode.value);
 }
 
-// Saat halaman dimuat, periksa localStorage
 onMounted(() => {
   const savedDarkMode = localStorage.getItem("darkMode");
 
@@ -85,7 +115,6 @@ onMounted(() => {
   }
 });
 
-// Hapus localStorage saat halaman di-refresh
 window.addEventListener("beforeunload", () => {
   localStorage.removeItem("darkMode");
 });
@@ -113,15 +142,18 @@ window.addEventListener("beforeunload", () => {
       </div>
       <div class="search flex relative">
         <InputText
+          v-model="searchQuery"
           style="width: 400px; border-radius: 10px 0 0 10px"
           placeholder="Search..."
           class="search p-3 font-bold rounded-none focus:outline-none"
+          @keydown.enter="handleSearch"
         />
         <Button
           style="border-radius: 0 10px 10px 0"
           icon="fas fa-search"
           iconPos="top"
           class="button-search color-white bg-[var(--components-bg)] rounded-none"
+          @click="handleSearch"
         />
       </div>
       <Select
