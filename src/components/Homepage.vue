@@ -69,8 +69,26 @@ const initializeData = async () => {
 onMounted(initializeData);
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
-  document.documentElement.classList.toggle("my-app-dark");
+  document.documentElement.classList.toggle("my-app-dark", darkMode.value);
+
+  // Simpan ke localStorage
+  localStorage.setItem("darkMode", darkMode.value);
 }
+
+// Saat halaman dimuat, periksa localStorage
+onMounted(() => {
+  const savedDarkMode = localStorage.getItem("darkMode");
+
+  if (savedDarkMode === "true") {
+    darkMode.value = true;
+    document.documentElement.classList.add("my-app-dark");
+  }
+});
+
+// Hapus localStorage saat halaman di-refresh
+window.addEventListener("beforeunload", () => {
+  localStorage.removeItem("darkMode");
+});
 </script>
 
 <template>
