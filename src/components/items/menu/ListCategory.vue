@@ -67,8 +67,8 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>List Kategori</h2>
-    <div class="card flex gap-5">
-      <DataTable :value="categories" tableStyle="min-width: 50rem">
+    <div class="flex gap-5">
+      <DataTable :value="categories" class="w-ful">
         <Column field="kategori" header="Nama Kategori"> </Column>
         <Column header="Aksi" class="flex justify-center">
           <template #body="slotProps">

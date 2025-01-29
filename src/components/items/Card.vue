@@ -333,7 +333,7 @@ onMounted(() => {
       />
     </div>
 
-    <div class="flex justify-end mt-4 gap-2">
+    <div class="button flex justify-end mt-4 gap-2">
       <Button
         type="button"
         label="Cancel"
@@ -355,6 +355,7 @@ onMounted(() => {
 .button {
   background-color: transparent;
   border: 2px solid var(--border-btn);
-  color: var(--text-order);
+  color: var(--text-secondary);
+  margin-top: 0;
 }
 </style>

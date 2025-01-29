@@ -15,7 +15,7 @@ const handleLogout = async () => {
 </script>
 
 <template>
-  <div class="flex flex-row min-h-screen bg-[var(--body-bg)]">
+  <div class="flex flex-row min-h-screen">
     <aside class="sidebar text-black max-w-64 flex flex-col justify-between">
       <div class="">
         <div class="logo flex items-center m-4">
