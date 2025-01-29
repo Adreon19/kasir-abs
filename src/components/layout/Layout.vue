@@ -20,12 +20,12 @@ const handleLogout = async () => {
       <div class="">
         <div class="logo flex items-center m-4">
           <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <h1 class="text-sm font-semibold text-white">
+          <h1 class="text-sm font-semibold text-black">
             Artisan Beverage Studio
           </h1>
         </div>
 
-        <div class="flex flex-col justify-between">
+        <div class="flex flex-col justify-between relative top-10">
           <ul class="flex flex-col">
             <RouterLink to="/">
               <li>
@@ -52,8 +52,8 @@ const handleLogout = async () => {
             </RouterLink>
             <RouterLink to="/add">
               <li>
-                <i class="fa-solid fa-square-plus ease-in duration-300"></i> Add
-                Menu
+                <i class="fa-solid fa-square-plus ease-in duration-300"></i>
+                Add Menu
               </li>
             </RouterLink>
           </ul>
@@ -64,7 +64,7 @@ const handleLogout = async () => {
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
-          class="shadow-lg text-white"
+          class="btn"
           @click="handleLogout"
         />
       </div>
@@ -84,30 +84,23 @@ const handleLogout = async () => {
   height: 100vh;
   position: sticky;
   top: 0;
-  background-color: var(--sidebar-color);
+  background-color: var(--sidebar-bg);
 }
 
 .sidebar li {
   padding: 1rem;
   font-size: 20px;
+  color: var(--text-primary);
 }
 
 .sidebar li:hover {
   color: #fff;
-  background: #000;
+  background: var(--hover-primary);
   width: 100%;
   transition: 0.5s;
 }
 
 .sidebar i {
   margin-right: 15px;
-}
-
-li {
-  color: var(--primary-text);
-}
-
-button {
-  background: var(--sidebar-color);
 }
 </style>

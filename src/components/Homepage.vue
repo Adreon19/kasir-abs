@@ -7,6 +7,10 @@ const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
 const isLoading = ref(true);
+const darkMode = ref(false);
+const filteredMenuList = ref([]);
+const originalMenuList = ref([]);
+const searchQuery = ref("");
 
 const fetchCategories = async () => {
   try {
@@ -30,6 +34,32 @@ watch(selectedCategory, async (newCategory) => {
   menuList.value = await fetchMenuList(newCategory);
   isLoading.value = false;
 });
+
+watch(searchQuery, async (newQuery, oldQuery) => {
+  if (oldQuery.trim() !== "" && newQuery.trim() === "") {
+    menuList.value = [...originalMenuList.value]; // Kembalikan ke data asli
+  }
+});
+
+const handleSearch = async () => {
+  const normalizedQuery = searchQuery.value.trim().toLowerCase();
+
+  if (normalizedQuery === "") {
+    menuList.value = [...originalMenuList.value]; // Kembalikan ke data asli
+  } else {
+    menuList.value = originalMenuList.value.filter((menu) =>
+      menu.name.toLowerCase().includes(normalizedQuery)
+    );
+  }
+};
+
+// Ambil data awal saat komponen dimuat
+const fetchInitialData = async () => {
+  originalMenuList.value = await fetchMenuList(selectedCategory.value);
+  menuList.value = [...originalMenuList.value]; // Duplikat untuk pencarian
+};
+
+onMounted(fetchInitialData);
 
 const fetchMenuList = async (categoryId = null) => {
   try {
@@ -63,6 +93,8 @@ const fetchMenuList = async (categoryId = null) => {
 const initializeData = async () => {
   try {
     menuList.value = await fetchMenuList();
+    console.log(menuList.value); // Log menuList untuk memverifikasi isinya
+    filteredMenuList.value = menuList.value;
     await fetchCategories();
   } catch (error) {
     console.error("Error during initialization:", error.message);
@@ -70,8 +102,23 @@ const initializeData = async () => {
     isLoading.value = false;
   }
 };
-
 onMounted(initializeData);
+
+function toggleDarkMode() {
+  darkMode.value = !darkMode.value;
+  document.documentElement.classList.toggle("my-app-dark", darkMode.value);
+
+  localStorage.setItem("darkMode", darkMode.value);
+}
+
+onMounted(() => {
+  const savedDarkMode = localStorage.getItem("darkMode");
+
+  if (savedDarkMode === "true") {
+    darkMode.value = true;
+    document.documentElement.classList.add("my-app-dark");
+  }
+});
 </script>
 
 <template>
@@ -80,18 +127,34 @@ onMounted(initializeData);
       class="searchBar m-5"
       style="display: flex; justify-content: space-between"
     >
-      <h1 style="font-size: 30px" class="text-white font-bold">Menu</h1>
+      <div class="flex justify-center gap-2">
+        <h1
+          style="font-size: 30px"
+          class="text-[var(--text-primary)] font-bold"
+        >
+          Menu
+        </h1>
+        <Button
+          :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
+          :class="darkMode ? 'text-yellow-500' : 'text-black'"
+          @click="toggleDarkMode()"
+          class="bg-transparent hover:border-none active:border-none"
+        />
+      </div>
       <div class="search flex relative">
         <InputText
+          v-model="searchQuery"
           style="width: 400px; border-radius: 10px 0 0 10px"
           placeholder="Search..."
-          class="search p-3 bg-white text-black font-bold rounded-none focus:outline-none"
+          class="search p-3 font-bold rounded-none focus:outline-none"
+          @keydown.enter="handleSearch"
         />
         <Button
           style="border-radius: 0 10px 10px 0"
           icon="fas fa-search"
           iconPos="top"
-          class="button-search hover:border-none text-black bg-white rounded-none"
+          class="button-search color-white bg-[var(--components-bg)] rounded-none"
+          @click="handleSearch"
         />
       </div>
       <Select
@@ -100,7 +163,7 @@ onMounted(initializeData);
         option-value="id"
         option-label="kategori"
         placeholder="Select Categories"
-        class="p-select w-full md:w-56 font-bold"
+        class="p-select w-full md:w-56"
       />
     </div>
     <div v-if="isLoading" class="flex justify-center">

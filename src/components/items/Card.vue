@@ -160,7 +160,7 @@ onMounted(() => {
       <Card
         v-for="menu in menuList"
         :key="menu.name"
-        class="menu flex flex-col h-full p-0 rounded-lg"
+        class="menu flex flex-col p-0 rounded-lg"
       >
         <template #header>
           <img
@@ -183,7 +183,9 @@ onMounted(() => {
               </h4>
             </template>
           </template>
-          <p>{{ menu.description || "No description available." }}</p>
+          <p class="desc">
+            {{ menu.description || "No description available." }}
+          </p>
         </template>
         <template #footer>
           <Button
@@ -253,6 +255,7 @@ onMounted(() => {
     v-model:visible="drawerVisible"
     position="right"
     header="Your Order"
+    class="bg-[var(--bg-drawer)]"
     :style="{ 'min-width': '45vw' }"
   >
     <div v-if="cartItems.length" class="p-4">
@@ -330,7 +333,7 @@ onMounted(() => {
       />
     </div>
 
-    <div class="flex justify-end mt-4 gap-2">
+    <div class="button flex justify-end mt-4 gap-2">
       <Button
         type="button"
         label="Cancel"
@@ -351,13 +354,8 @@ onMounted(() => {
 <style scoped>
 .button {
   background-color: transparent;
-  border: 2px solid var(--sidebar-color);
-  color: var(--sidebar-color);
-}
-
-.button:hover {
-  background-color: var(--sidebar-color);
-  color: #fff;
-  transition: 0.3s;
+  border: 2px solid var(--border-btn);
+  color: var(--text-secondary);
+  margin-top: 0;
 }
 </style>
