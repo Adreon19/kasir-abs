@@ -29,31 +29,31 @@ const handleLogout = async () => {
           <ul class="flex flex-col">
             <RouterLink to="/">
               <li>
-                <i class="fa-solid fa-house ease-in duration-300"></i> Home Page
+                <i class="fa-solid fa-book-open ease-in duration-300"></i> Menu
               </li>
             </RouterLink>
             <RouterLink to="/history">
               <li>
-                <i class="fa-solid fa-scroll ease-in duration-300"></i> Order
-                History
+                <i class="fa-solid fa-scroll ease-in duration-300"></i> Riwayat
+                Pesanan
               </li>
             </RouterLink>
             <RouterLink to="/order">
               <li>
                 <i class="fa-solid fa-cart-shopping ease-in duration-300"></i>
-                Order
+                Pesanan
               </li>
             </RouterLink>
             <RouterLink to="/money">
               <li>
                 <i class="fa-solid fa-money-bill ease-in duration-300"></i>
-                Money History
+                Keuangan
               </li>
             </RouterLink>
             <RouterLink to="/add">
               <li>
                 <i class="fa-solid fa-square-plus ease-in duration-300"></i>
-                Add Menu
+                Tambah Menu
               </li>
             </RouterLink>
           </ul>
@@ -80,7 +80,7 @@ const handleLogout = async () => {
 
 <style scoped>
 .sidebar {
-  width: 350px;
+  width: 550px;
   height: 100vh;
   position: sticky;
   top: 0;

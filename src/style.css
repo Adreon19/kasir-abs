@@ -31,7 +31,8 @@
 }
 
 :root[class="my-app-dark"] {
-  --body-bg: #000000;
+  /* --body-bg: #000000; */
+  --body-bg: conic-gradient(#000, #634f2b, #000);
   --sidebar-bg: #634f2b;
   --components-bg: #453721;
   --component-secondary: #c8a241;
@@ -42,6 +43,10 @@
   --border-btn: #c8a241;
   --text-order: #c8a241;
   --bg-drawer: rgba(149, 120, 54, 0.5);
+}
+
+body {
+  background: var(--body-bg);
 }
 
 .waves {

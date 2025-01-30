@@ -115,9 +115,9 @@ onMounted(() => {
   }
 });
 
-window.addEventListener("beforeunload", () => {
-  localStorage.removeItem("darkMode");
-});
+// window.addEventListener("beforeunload", () => {
+//   localStorage.removeItem("darkMode");
+// });
 </script>
 
 <template>

@@ -166,7 +166,7 @@ onMounted(() => {
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover h-48 w-full rounded-t-lg"
+            class="img-menu object-cover h-48 w-full rounded-t-lg border-none"
           />
         </template>
         <template #title>
@@ -182,28 +182,30 @@ onMounted(() => {
                 {{ formatCurrency(detail.price) || "N/A" }}
               </h4>
             </template>
+            <p class="desc">
+              {{ menu.description || "No description available." }}
+            </p>
           </template>
-          <p class="desc">
-            {{ menu.description || "No description available." }}
-          </p>
         </template>
         <template #footer>
-          <Button
-            v-if="
-              menu.menu_detail.some((detail) =>
-                orderedMenuIds.includes(detail.id)
-              )
-            "
-            label="View Order"
-            class="button w-full"
-            @click="drawerVisible = true"
-          />
-          <Button
-            v-else
-            label="Pesan"
-            class="button w-full"
-            @click="openDialog(menu)"
-          />
+          <div class="flex items-center">
+            <Button
+              v-if="
+                menu.menu_detail.some((detail) =>
+                  orderedMenuIds.includes(detail.id)
+                )
+              "
+              label="Lihat Pesanan"
+              class="button w-full"
+              @click="drawerVisible = true"
+            />
+            <Button
+              v-else
+              label="Pesan"
+              class="button w-full"
+              @click="openDialog(menu)"
+            />
+          </div>
         </template>
       </Card>
     </div>
@@ -356,5 +358,10 @@ onMounted(() => {
   background-color: transparent;
   border: 2px solid var(--border-btn);
   color: var(--text-order);
+}
+
+.footer-buttons .button {
+  min-height: 2.5rem;
+  /* Menyamakan tinggi tombol */
 }
 </style>
