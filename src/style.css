@@ -12,19 +12,19 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  /* background-color: #ffffff; */
   background: #eaeaea;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --body-bg: #ffffff;
   --sidebar-bg: #f5f5dc;
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
   --text-primary: #000000;
   --text-secondary: #ffffff;
   --hover-primary: #634f2b;
-  --bg-card: rgb(0, 0, 0, 0.4);
+  --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
@@ -36,13 +36,14 @@
   --sidebar-bg: #634f2b;
   --components-bg: #453721;
   --component-secondary: #c8a241;
+  --card-bg: rgba(0, 0, 0, 0.5);
   --text-primary: #ffffff;
   --text-secondary: #ffffff;
   --hover-primary: #c8a241;
   --view-order: #957836;
-  --border-btn: #c8a241;
+  --border-btn: #ffffff;
   --text-order: #c8a241;
-  --bg-drawer: rgba(149, 120, 54, 0.5);
+  --bg-drawer: rgba(149, 120, 54, 0.2);
 }
 
 body {
@@ -51,10 +52,6 @@ body {
 
 .waves {
   margin-top: -150px;
-}
-.p-card {
-  background-color: #634f2b;
-  margin-top: 50px;
 }
 .text-xl {
   color: white;

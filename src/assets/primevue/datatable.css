@@ -1,7 +1,7 @@
 @import "./paginator";
 
 .p-datatable {
-  @apply relative;
+  @apply relative bg-black;
 }
 
 .p-datatable-table {

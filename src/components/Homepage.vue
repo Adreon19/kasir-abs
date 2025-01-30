@@ -9,6 +9,7 @@ const selectedCategory = ref(null);
 const isLoading = ref(true);
 const darkMode = ref(false);
 const filteredMenuList = ref([]);
+const originalMenuList = ref([]);
 const searchQuery = ref("");
 
 const fetchCategories = async () => {
@@ -36,25 +37,29 @@ watch(selectedCategory, async (newCategory) => {
 
 watch(searchQuery, async (newQuery, oldQuery) => {
   if (oldQuery.trim() !== "" && newQuery.trim() === "") {
-    menuList.value = await fetchMenuList(selectedCategory.value);
+    menuList.value = [...originalMenuList.value]; // Kembalikan ke data asli
   }
 });
 
-const handleSearch = () => {
+const handleSearch = async () => {
   const normalizedQuery = searchQuery.value.trim().toLowerCase();
 
   if (normalizedQuery === "") {
-    fetchMenuList(selectedCategory.value).then((data) => {
-      menuList.value = data;
-    });
+    menuList.value = [...originalMenuList.value]; // Kembalikan ke data asli
   } else {
-    menuList.value = menuList.value.filter((menu) =>
+    menuList.value = originalMenuList.value.filter((menu) =>
       menu.name.toLowerCase().includes(normalizedQuery)
     );
   }
-
-  console.log("Filtered Menu List:", menuList.value);
 };
+
+// Ambil data awal saat komponen dimuat
+const fetchInitialData = async () => {
+  originalMenuList.value = await fetchMenuList(selectedCategory.value);
+  menuList.value = [...originalMenuList.value]; // Duplikat untuk pencarian
+};
+
+onMounted(fetchInitialData);
 
 const fetchMenuList = async (categoryId = null) => {
   try {
@@ -114,10 +119,6 @@ onMounted(() => {
     document.documentElement.classList.add("my-app-dark");
   }
 });
-
-// window.addEventListener("beforeunload", () => {
-//   localStorage.removeItem("darkMode");
-// });
 </script>
 
 <template>
