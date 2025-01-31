@@ -125,12 +125,16 @@ onMounted(initializeData);
           <DataTable :value="finance" stripedRows tableStyle="min-width: 50rem">
             <Column header="Total Masuk">
               <template #body="slotProps">
-                {{ formatCurrency(slotProps.data.paid) }}
+                <div class="text-[var(--text-secondary)]">
+                  {{ formatCurrency(slotProps.data.paid) }}
+                </div>
               </template>
             </Column>
             <Column header="Kembalian">
               <template #body="slotProps">
-                {{ formatCurrency(slotProps.data.change) }}
+                <div class="text-[var(--text-secondary)]">
+                  {{ formatCurrency(slotProps.data.change) }}
+                </div>
               </template>
             </Column>
           </DataTable>
