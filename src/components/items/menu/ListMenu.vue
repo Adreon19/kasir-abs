@@ -72,7 +72,7 @@ onMounted(initializeData);
     <h2>List Menu</h2>
     <div class="flex gap-5">
       <!-- Updated DataTable -->
-      <DataTable :value="menu" class="w-full">
+      <DataTable :value="menu" stripedRows class="w-full">
         <!-- Menu Name -->
         <Column
           field="menu_id.name"

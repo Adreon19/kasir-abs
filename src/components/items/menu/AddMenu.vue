@@ -109,7 +109,7 @@ onMounted(fetchCategories);
 <template>
   <section class="main-section">
     <h2 class="font-bold text-2xl m capitalize">Tambah nama menu</h2>
-    <div class="flex flex-row gap-20 mt-5 items-center">
+    <div class="flex flex-row gap-20 mt-5 items-center bg[var(--section-bg)]">
       <div class="flex flex-row items-center gap-5">
         <img
           v-if="src"
@@ -166,10 +166,6 @@ onMounted(fetchCategories);
 </template>
 
 <style>
-.main-section {
-  background: var(--bg-card);
-}
-
 .img-menu {
   border: 2px solid;
 }

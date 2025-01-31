@@ -134,12 +134,14 @@ onMounted(() => {
         >
           Menu
         </h1>
-        <Button
-          :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
-          :class="darkMode ? 'text-yellow-500' : 'text-black'"
-          @click="toggleDarkMode()"
-          class="bg-transparent hover:border-none active:border-none"
-        />
+        <div class="flex items-center">
+          <Button
+            :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
+            :class="darkMode ? 'text-yellow-500' : 'text-black'"
+            @click="toggleDarkMode()"
+            class="bg-transparent hover:border-none active:border-none p-0"
+          />
+        </div>
       </div>
       <div class="search flex relative">
         <InputText

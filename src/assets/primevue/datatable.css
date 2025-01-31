@@ -1,7 +1,7 @@
 @import "./paginator";
 
 .p-datatable {
-  @apply relative bg-black;
+  @apply relative;
 }
 
 .p-datatable-table {
@@ -229,8 +229,8 @@
 .p-datatable-header-cell {
   @apply py-3 px-4 font-normal text-start transition-colors duration-200
         border-b border-surface-200 dark:border-surface-700
-        bg-surface-0 dark:bg-surface-900
-        text-surface-700 dark:text-surface-0;
+        bg-surface-900 dark:bg-surface-900
+         dark:text-surface-0;
 }
 
 .p-datatable-column-title {
@@ -238,7 +238,7 @@
 }
 
 .p-datatable-tbody > tr {
-  @apply bg-surface-0 dark:bg-surface-900 text-surface-700 dark:text-surface-0 transition-colors duration-200;
+  @apply bg-surface-900 dark:bg-surface-900 text-[var(--text-primary)] dark:text-surface-0 transition-colors duration-200;
 }
 
 .p-datatable-tbody > tr > td {
@@ -384,7 +384,7 @@
 }
 
 .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
-  @apply bg-surface-50 dark:bg-surface-950;
+  @apply bg-surface-950 dark:bg-surface-950 text-[var(--text-primary)];
 }
 
 .p-datatable.p-datatable-striped

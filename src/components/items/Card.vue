@@ -160,13 +160,13 @@ onMounted(() => {
       <Card
         v-for="menu in menuList"
         :key="menu.name"
-        class="menu flex flex-col p-0 rounded-lg"
+        class="menu flex flex-col p-0 rounded-lg drop-shadow-xl"
       >
         <template #header>
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover h-48 w-full rounded-t-lg border-none"
+            class="img-menu object-cover w-full rounded-t-lg border-none"
           />
         </template>
         <template #title>
@@ -326,12 +326,14 @@ onMounted(() => {
         :options="selectedMenu?.menu_detail"
         optionLabel="menu_variants.name"
         placeholder="Choose a variant"
+        style="Select"
       />
       <InputNumber
         v-model="quantity"
         min="1"
         placeholder="Quantity"
         label="Quantity"
+        style="Input"
       />
     </div>
 
@@ -356,8 +358,8 @@ onMounted(() => {
 <style scoped>
 .button {
   background-color: transparent;
-  border: 2px solid var(--border-btn);
-  color: var(--text-secondary);
+  border: 2px solid var(--btn-secondary);
+  color: var(--btn-secondary);
   margin-top: 0;
 }
 

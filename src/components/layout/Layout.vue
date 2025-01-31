@@ -20,7 +20,7 @@ const handleLogout = async () => {
       <div class="">
         <div class="logo flex items-center m-4">
           <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <h1 class="text-sm font-semibold text-black">
+          <h1 class="text-sm font-semibold text-[var(--text-primary)]">
             Artisan Beverage Studio
           </h1>
         </div>
@@ -64,7 +64,7 @@ const handleLogout = async () => {
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
-          class="btn"
+          class="bg-var[--btn-secondary] text-[var(--text-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
           @click="handleLogout"
         />
       </div>
@@ -83,6 +83,7 @@ const handleLogout = async () => {
   width: 550px;
   height: 100vh;
   position: sticky;
+  overflow: hidden;
   top: 0;
   background-color: var(--sidebar-bg);
 }

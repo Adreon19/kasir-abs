@@ -26,8 +26,10 @@
   --hover-primary: #634f2b;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
+  --btn-secondary: #c8a241;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
+  --section-bg: rgb(0, 0, 0, 0.5);
 }
 
 :root[class="my-app-dark"] {
@@ -36,14 +38,16 @@
   --sidebar-bg: #634f2b;
   --components-bg: #453721;
   --component-secondary: #c8a241;
-  --card-bg: rgba(0, 0, 0, 0.5);
+  --card-bg: rgba(0, 0, 0, 0.7);
   --text-primary: #ffffff;
   --text-secondary: #ffffff;
   --hover-primary: #c8a241;
   --view-order: #957836;
   --border-btn: #ffffff;
+  --btn-secondary: #c8a241;
   --text-order: #c8a241;
   --bg-drawer: rgba(149, 120, 54, 0.2);
+  --section-bg: rgb(0, 0, 0, 0.5);
 }
 
 body {
@@ -54,10 +58,6 @@ body {
   margin-top: -150px;
 }
 .text-xl {
-  color: white;
-}
-.mb-2 {
-  margin-top: 10px;
   color: white;
 }
 .desc {
@@ -271,5 +271,5 @@ button:focus-visible {
 }
 
 .main-section {
-  @apply p-6 bg-slate-100 bg-surface-500/50 rounded-lg border border-surface-200/80;
+  @apply p-6 bg-[var(--section-bg)] rounded-lg border border-surface-200/80;
 }

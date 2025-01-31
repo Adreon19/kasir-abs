@@ -1,7 +1,7 @@
 .p-inputtext {
   @apply appearance-none rounded-md
         /* enabled:hover:border-surface-400 dark:enabled:hover:border-surface-600 */
-        bg-[var(--components-bg)]
+        bg-[var(--components-bg)] 
         text-[var(--text-primary)]
         placeholder-white
         /* disabled:bg-surface-200 disabled:text-surface-500 dark:disabled:bg-surface-700 dark:disabled:text-surface-400 disabled:opacity-100 */

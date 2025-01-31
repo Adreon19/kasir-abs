@@ -108,7 +108,9 @@ onMounted(initializeData);
 
 <template>
   <div class="p-6 flex flex-col gap-6">
-    <h1 class="blck" style="font-size: 30px">Riwayat Keuangan</h1>
+    <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
+      Riwayat Keuangan
+    </h1>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
