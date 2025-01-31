@@ -127,14 +127,14 @@ onMounted(() => {
       class="searchBar m-5"
       style="display: flex; justify-content: space-between"
     >
-      <div class="flex justify-center gap-2">
+      <div class="flex items-center gap-2">
         <h1
           style="font-size: 30px"
           class="text-[var(--text-primary)] font-bold"
         >
           Menu
         </h1>
-        <div class="flex items-center">
+        <div class="mt-2">
           <Button
             :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
             :class="darkMode ? 'text-yellow-500' : 'text-black'"

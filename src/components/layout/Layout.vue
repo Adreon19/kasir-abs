@@ -60,7 +60,7 @@ const handleLogout = async () => {
         </div>
       </div>
 
-      <div class="m-4">
+      <div class="flex justify-center m-4">
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
@@ -80,7 +80,7 @@ const handleLogout = async () => {
 
 <style scoped>
 .sidebar {
-  width: 550px;
+  width: 650px;
   height: 100vh;
   position: sticky;
   overflow: hidden;

@@ -12,13 +12,14 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background: #eaeaea;
+  /* background: #eaeaea; */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --body-bg: #ffffff;
+  --body-bg: conic-gradient(#fff, #96724d, #fff);
   --sidebar-bg: #f5f5dc;
+  /* #81684f */
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
   --text-primary: #000000;
