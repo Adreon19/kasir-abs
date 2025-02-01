@@ -10,7 +10,7 @@ const visible = ref(false);
 const drawerVisible = ref(false);
 const addVariantDialogVisible = ref(false);
 const selectedMenu = ref(null);
-const quantity = ref(1);
+const quantity = ref();
 const selectedvariant = ref(null);
 const note = ref("");
 const orderedMenuIds = ref([]);
@@ -58,7 +58,6 @@ const fetchCart = async () => {
 const openDialog = (menu) => {
   selectedMenu.value = menu;
   selectedvariant.value = null;
-  quantity.value = 1;
   note.value = "";
   visible.value = true;
 };
@@ -79,8 +78,8 @@ const deleteCartItem = async (cartItemId) => {
 
     toast.add({
       severity: "success",
-      summary: "Success",
-      detail: "Item deleted from cart successfully!",
+      summary: "Sukses",
+      detail: "Berhasil dihapus!",
       life: 3000,
     });
 
@@ -221,12 +220,7 @@ onMounted(() => {
         optionLabel="menu_variants.name"
         placeholder="Choose a variant"
       />
-      <InputNumber
-        v-model="quantity"
-        min="1"
-        placeholder="Quantity"
-        label="Quantity"
-      />
+      <InputNumber v-model="quantity" placeholder="Quantity" label="Quantity" />
       <Textarea v-model="note" rows="3" cols="30" placeholder="Add a note" />
     </div>
 
