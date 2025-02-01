@@ -166,7 +166,7 @@ onMounted(() => {
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover w-full rounded-t-lg border-none"
+            class="img-menu object-cover w-full h-48 rounded-t-lg border-none"
           />
         </template>
         <template #title>

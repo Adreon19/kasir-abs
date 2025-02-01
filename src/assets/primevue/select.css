@@ -144,3 +144,7 @@ input.p-select-label {
 .p-select-lg .p-select-dropdown .p-icon {
   @apply text-lg w-[1.125rem] h-[1.125rem];
 }
+
+.custom-select {
+  @apply bg-[var(--input-primary)] text-[var(--text-secondary)];
+}

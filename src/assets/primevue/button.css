@@ -329,3 +329,10 @@
 .p-button-link:not(:disabled):hover .p-button-label {
   @apply underline;
 }
+
+.custom-button {
+  @apply bg-[var(--input-primary)];
+}
+.remove-btn {
+  @apply bg-red-600;
+}

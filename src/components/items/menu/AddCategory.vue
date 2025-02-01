@@ -78,15 +78,20 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>Tambah Kategori</h2>
-    <div class="card flex gap-5">
+    <div class="card flex flex-col gap-5">
       <FloatLabel>
-        <InputText id="category-name" v-model="newCategory" class="p-3" />
+        <InputText
+          id="category-name"
+          v-model="newCategory"
+          class="custom-input p-4 w-full"
+        />
         <label for="category-name">Nama Kategori</label>
       </FloatLabel>
       <Button
         label="Save"
         icon="fa fa-check"
         iconPos="left"
+        class="custom-button p-4"
         @click="addCategory"
       />
     </div>

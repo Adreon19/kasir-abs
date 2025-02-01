@@ -141,8 +141,10 @@ onMounted(initializeData);
         </div>
       </section>
 
-      <section class="main-section flex flex-col gap-4">
-        <div class="flex justify-between item-center gap-3">
+      <section class="main-section flex flex-col gap-10">
+        <div
+          class="flex flex-col bg-[var(--striped-row)] justify-between item-center gap-3 p-5"
+        >
           <div class="flex flex-col gap-3">
             <label for="outcome"> Pengeluaran </label>
             <InputNumber
@@ -151,7 +153,7 @@ onMounted(initializeData);
               mode="currency"
               currency="IDR"
               locale="id-ID"
-              class="h-full text-l max-w-fit"
+              class="text-l w-full"
             />
           </div>
           <div class="flex flex-col gap-2">
@@ -160,6 +162,7 @@ onMounted(initializeData);
               v-model="detail"
               row="5"
               cols="30"
+              class="custom-textarea"
               placeholder="Masukkan detail pengeluaranmu!"
             />
           </div>
@@ -170,10 +173,11 @@ onMounted(initializeData);
               iconPos="left"
               @click="insertOutcome"
               :loading="isLoading"
-              class="w-fit h-fit"
+              class="custom-button w-full h-fit p-4 mt-4"
             />
           </div>
         </div>
+        <div class="border-b-2"></div>
         <div class="container flex flex-col gap-4">
           <DataTable
             :value="outcomeData"

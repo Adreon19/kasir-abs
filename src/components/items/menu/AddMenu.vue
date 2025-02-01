@@ -125,14 +125,18 @@ onMounted(fetchCategories);
           accept="image/*"
           :maxFileSize="150000"
           severity="secondary"
-          class="p-button-outlined p-10 z-0"
+          class="bg-[var(--input-primary)] text-[var(--text-secondary)] border border-white p-button-outlined p-10 z-0"
         />
       </div>
     </div>
     <div class="flex flex-row gap-5 p-0 mt-8">
       <FloatLabel>
-        <InputText id="menu name" v-model="menuName" class="p-4 w-96" />
-        <label for="menu name">Nama menu</label>
+        <InputText
+          id="menu name"
+          v-model="menuName"
+          class="custom-input p-4 w-96"
+        />
+        <label for="menu name" class="custom-label">Nama menu</label>
       </FloatLabel>
       <Select
         v-model="selectedCategory"
@@ -140,7 +144,7 @@ onMounted(fetchCategories);
         optionLabel="kategori"
         optionValue="id"
         placeholder="Select Categories"
-        class="w-full p-2"
+        class="custom-select w-full p-2"
       />
 
       <Textarea
@@ -149,6 +153,7 @@ onMounted(fetchCategories);
         cols="30"
         placeholder="Masukkan Deskripsi menu "
         style="resize: none"
+        class="custom-textarea"
       />
     </div>
 
@@ -159,7 +164,7 @@ onMounted(fetchCategories);
         iconPos="left"
         @click="uploadImageAndSaveMenu"
         :loading="isLoading"
-        class="p-4 mt-4 w-full"
+        class="custom-button p-4 mt-4 w-full"
       />
     </div>
   </section>

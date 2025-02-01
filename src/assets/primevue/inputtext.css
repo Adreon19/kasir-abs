@@ -31,3 +31,11 @@
 .p-inputtext-fluid {
   @apply w-full;
 }
+
+.custom-input {
+  @apply bg-[var(--input-primary)] text-[var(--text-secondary)];
+}
+
+.custom-label {
+  @apply text-[var(--text-secondary)];
+}
