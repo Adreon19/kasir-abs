@@ -1,8 +1,11 @@
 <script setup>
+import { ref, onMounted } from "vue";
 import { supabase } from "../../supabase";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const darkMode = ref(false);
+const checked = ref(false);
 
 const handleLogout = async () => {
   const { error } = await supabase.auth.signOut();
@@ -12,6 +15,20 @@ const handleLogout = async () => {
     router.push("/login");
   }
 };
+function toggleDarkMode() {
+  darkMode.value = !darkMode.value;
+  document.documentElement.classList.toggle("my-app-dark", darkMode.value);
+
+  localStorage.setItem("darkMode", darkMode.value);
+}
+onMounted(() => {
+  const savedDarkMode = localStorage.getItem("darkMode");
+
+  if (savedDarkMode === "true") {
+    darkMode.value = true;
+    document.documentElement.classList.add("my-app-dark");
+  }
+});
 </script>
 
 <template>
@@ -27,6 +44,18 @@ const handleLogout = async () => {
 
         <div class="flex flex-col justify-between relative top-10">
           <ul class="flex flex-col">
+            <div class="m-3">
+              <ToggleSwitch v-model="checked" @click="toggleDarkMode()">
+                <template #handle="{ checked }">
+                  <i
+                    :class="[
+                      '!text-xs pi',
+                      { 'pi-sun': checked, 'pi-moon': !checked },
+                    ]"
+                  />
+                </template>
+              </ToggleSwitch>
+            </div>
             <RouterLink to="/">
               <li>
                 <i class="fa-solid fa-book-open ease-in duration-300"></i> Menu
@@ -59,7 +88,6 @@ const handleLogout = async () => {
           </ul>
         </div>
       </div>
-
       <div class="flex justify-center m-4">
         <Button
           label="Log Out"
@@ -102,6 +130,6 @@ const handleLogout = async () => {
 }
 
 .sidebar i {
-  margin-right: 15px;
+  /* margin-right: 15px; */
 }
 </style>

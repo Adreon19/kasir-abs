@@ -104,21 +104,21 @@ const initializeData = async () => {
 };
 onMounted(initializeData);
 
-function toggleDarkMode() {
-  darkMode.value = !darkMode.value;
-  document.documentElement.classList.toggle("my-app-dark", darkMode.value);
+// function toggleDarkMode() {
+//   darkMode.value = !darkMode.value;
+//   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
 
-  localStorage.setItem("darkMode", darkMode.value);
-}
+//   localStorage.setItem("darkMode", darkMode.value);
+// }
 
-onMounted(() => {
-  const savedDarkMode = localStorage.getItem("darkMode");
+// onMounted(() => {
+//   const savedDarkMode = localStorage.getItem("darkMode");
 
-  if (savedDarkMode === "true") {
-    darkMode.value = true;
-    document.documentElement.classList.add("my-app-dark");
-  }
-});
+//   if (savedDarkMode === "true") {
+//     darkMode.value = true;
+//     document.documentElement.classList.add("my-app-dark");
+//   }
+// });
 </script>
 
 <template>
@@ -134,14 +134,14 @@ onMounted(() => {
         >
           Menu
         </h1>
-        <div class="mt-2">
+        <!-- <div class="mt-2">
           <Button
             :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
             :class="darkMode ? 'text-yellow-500' : 'text-black'"
             @click="toggleDarkMode()"
             class="bg-transparent hover:border-none active:border-none p-0"
           />
-        </div>
+        </div> -->
       </div>
       <div class="search flex relative">
         <InputText
