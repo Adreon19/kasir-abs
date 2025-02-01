@@ -9,8 +9,9 @@ const toast = useToast();
 const orderedMenuIds = ref([]);
 const cartItems = ref([]);
 const paymethod = ref([]);
+const visble = ref(false);
 const selectedPaymentMethod = ref(null);
-const paidAmount = ref(0);
+const paidAmount = ref();
 const customer = ref("");
 const isLoading = ref(false);
 
@@ -110,12 +111,32 @@ const finishOrder = async () => {
     if (!customer.value) {
       toast.add({
         severity: "warn",
-        summary: "Warning",
-        detail: "Please enter the customer's name!",
-        life: 3000,
+        summary: "Peringatan",
+        detail: "Tolong masukkan nama pelanggan!",
+        life: 9000,
       });
-      return; // Prevent order creation if customer name is not entered
+      return;
     }
+
+    if (!paidAmount.value) {
+      toast.add({
+        severity: "warn",
+        summary: "Peringatan",
+        detail: "Tolong masukkan jumlah uang yang dibayar",
+        life: 9000,
+      });
+      return;
+    }
+    if (paidAmount.value < totalAmount.value) {
+      toast.add({
+        severity: "warn",
+        summary: "Peringatan",
+        detail: "Uang pembayaran harus pas atau lebih dari total harga",
+        life: 9000,
+      });
+      return;
+    }
+
     const generatedOrderId = Date.now(); // Example of a unique numeric ID
 
     // Step 1: Insert a new order record into the 'order' table with the generated ID
@@ -137,9 +158,8 @@ const finishOrder = async () => {
 
     console.log("Order inserted successfully with ID:", generatedOrderId);
 
-    // Step 2: Insert order details for each cart item using the same generatedOrderId
     const orderDetails = cartItems.value.map((item) => ({
-      order_id: generatedOrderId, // Use the same numeric ID
+      order_id: generatedOrderId,
       menu_detail_id: item.menu_detail_id,
       quantity: item.quantity,
       note: item.note,
@@ -150,27 +170,38 @@ const finishOrder = async () => {
     let currentY = 8;
     let estimatedHeight = 100; // Initial height, adjust as needed
 
-    // Estimate height based on the number of cart items
     cartItems.value.forEach((item) => {
-      estimatedHeight += 6; // Each item roughly takes 6mm
+      estimatedHeight += 6;
       if (item.note && item.note.trim()) {
-        estimatedHeight += 3; // Extra space for notes
+        estimatedHeight += 3;
       }
     });
 
-    estimatedHeight += 30; // Add extra space for headers, totals, etc.
-
-    // Create a jsPDF instance with the dynamically calculated height
+    estimatedHeight += 30;
     const doc = new jsPDF({
       unit: "mm",
       format: [pageWidth, estimatedHeight],
     });
 
+    const centerX = pageWidth / 2;
     // Title
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
-    doc.text("Payment Receipt", marginLeft, currentY);
-    currentY += 6;
+    doc.text("Artisan Beverage Studio", centerX, currentY, {
+      align: "center",
+    });
+    currentY += 3;
+    doc.setFontSize(5);
+    doc.setFont("helvetica", "bold");
+
+    const addressText =
+      "Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
+    const addressLines = doc.splitTextToSize(
+      addressText,
+      pageWidth - marginLeft * 2
+    );
+    doc.text(addressLines, centerX, currentY, { align: "center" });
+    currentY += addressLines.length * 2;
 
     // Separator line
     doc.setDrawColor(0);
@@ -179,32 +210,34 @@ const finishOrder = async () => {
     currentY += 4;
 
     // Customer details
+    const now = new Date();
+    const formattedDate = new Intl.DateTimeFormat("id-ID", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZone: "Asia/Jakarta",
+    }).format(now);
+
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.text(`Customer: ${customer.value}`, marginLeft, currentY);
     currentY += 4;
     doc.text(`Order ID: ${generatedOrderId}`, marginLeft, currentY);
     currentY += 4;
-    doc.text(
-      `Payment Method: ${
-        paymethod.value.find(
-          (method) => method.value === selectedPaymentMethod.value
-        )?.label || "Unknown"
-      }`,
-      marginLeft,
-      currentY
-    );
+    doc.text(`Date: ${formattedDate}`, marginLeft, currentY);
+
     currentY += 8;
 
-    // Order items table header
     doc.setFont("helvetica", "bold");
     doc.text("No", marginLeft, currentY);
     doc.text("Menu", marginLeft + 10, currentY);
-    doc.text("Qty", marginLeft + 40, currentY, { align: "right" });
-    doc.text("Subtotal", marginLeft + 60, currentY, { align: "right" });
+    doc.text("Price", marginLeft + 30, currentY);
+    doc.text("Qty", marginLeft + 60, currentY, { align: "right" });
     currentY += 5;
 
-    // Order items table rows
     cartItems.value.forEach((item, index) => {
       const subtotal = item.quantity * item.menu_detail.price;
 
@@ -212,26 +245,31 @@ const finishOrder = async () => {
       doc.setFont("helvetica", "normal");
       doc.text(`${index + 1}`, marginLeft, currentY);
       doc.text(`${item.menu_detail.menu_id.name}`, marginLeft + 10, currentY);
-      doc.text(`${item.quantity}`, marginLeft + 40, currentY, {
+      doc.text(
+        `${formatCurrency(item.menu_detail.price)}`,
+        marginLeft + 30,
+        currentY
+      );
+      doc.text(`${item.quantity}`, marginLeft + 60, currentY, {
         align: "right",
       });
-      doc.text(`${formatCurrency(subtotal)}`, marginLeft + 60, currentY, {
-        align: "right",
-      });
+      // doc.text(`${formatCurrency(subtotal)}`, marginLeft + 60, currentY, {
+      //   align: "right",
+      // });
       currentY += 4;
 
-      // Optional note under the menu name
+      // note pesanan
       if (item.note && item.note.trim()) {
         doc.setFontSize(6);
         doc.setFont("helvetica", "italic");
         doc.text(`*${item.note}`, marginLeft + 10, currentY);
-        currentY += 3; // Adjust spacing for the note
-        doc.setFontSize(8); // Reset font size to default after the note
-        doc.setFont("helvetica", "normal"); // Reset font style to normal
+        currentY += 3;
+        doc.setFontSize(8);
+        doc.setFont("helvetica", "normal");
       }
     });
 
-    // Separator line after cart items
+    // Garis pembatas
     currentY += 4;
     doc.setDrawColor(0);
     doc.setLineWidth(0.2);
@@ -247,6 +285,16 @@ const finishOrder = async () => {
       currentY
     );
     currentY += 4;
+    doc.text(
+      `Payment Method: ${
+        paymethod.value.find(
+          (method) => method.value === selectedPaymentMethod.value
+        )?.label || "Unknown"
+      }`,
+      marginLeft,
+      currentY
+    );
+    currentY += 4;
     doc.text(`Paid: ${formatCurrency(paidAmount.value)}`, marginLeft, currentY);
     currentY += 4;
     doc.text(
@@ -256,16 +304,31 @@ const finishOrder = async () => {
     );
     currentY += 8;
 
-    // Footer (optional)
-    doc.setFontSize(8);
+    // Footer
+    doc.setFontSize(6);
     doc.setFont("helvetica", "normal");
-    doc.text("Thank you for your purchase!", marginLeft, currentY);
+    doc.text(
+      "Thank you for your purchase!  We truly appreciate your support",
+      centerX,
+      currentY,
+      {
+        align: "center",
+      }
+    );
     currentY += 4;
-    doc.text("Visit us again!", marginLeft, currentY);
+    doc.text(
+      "We hope you enjoy your product and have a great experience!",
+      centerX,
+      currentY,
+      {
+        align: "center",
+      }
+    );
+    currentY += 4;
+    doc.text("Visit us again!", centerX, currentY, { align: "center" });
 
-    // Save the PDF
+    //SAVE PDF
     doc.save(`order_${generatedOrderId}.pdf`);
-
     const { error: orderDetailsError } = await supabase
       .from("order_detail")
       .insert(orderDetails);
@@ -275,7 +338,7 @@ const finishOrder = async () => {
       throw new Error(orderDetailsError.message);
     }
 
-    // Step 3: Delete all cart items after successful order creation
+    // Delete all cart items after successful order creation and PDF
     const { error: deleteError } = await supabase
       .from("cart")
       .delete()
@@ -308,9 +371,9 @@ const finishOrder = async () => {
 
 watch(selectedPaymentMethod, (newValue) => {
   if (newValue === 2) {
-    paidAmount.value = totalAmount.value; // Set paidAmount to totalAmount for QRIS
+    paidAmount.value = totalAmount.value; // QRIS
   } else if (newValue !== 2) {
-    paidAmount.value = 0;
+    paidAmount.value;
   }
 });
 
@@ -403,8 +466,7 @@ onMounted(() => {
 
             <InputNumber
               v-model="paidAmount"
-              placeholder="Enter Paid Amount"
-              :min="totalAmount"
+              placeholder="Masukkan Nominal Uang"
               :value="selectedPaymentMethod === 2 ? totalAmount : paidAmount"
               :disabled="selectedPaymentMethod === 2"
               mode="currency"
