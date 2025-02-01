@@ -2,13 +2,14 @@
 import { ref, onMounted, computed } from "vue";
 import { supabase } from "../supabase";
 import { formatCurrency } from "../utils/formatter/currency";
-import { DataTable, Toast, useToast } from "primevue";
+import { DataTable, Toast } from "primevue";
+import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 const isLoading = ref(false);
 const finance = ref([]);
 const outcomeData = ref([]);
-const outcomeDetail = ref("");
+const outcomeDetail = ref();
 const detail = ref("");
 
 const fetchFinance = async () => {
@@ -61,7 +62,6 @@ const insertOutcome = async () => {
       detail: "Pengeluaran berhasil dicatat!",
       life: 3000,
     });
-    outcomeDetail.value = "";
     await fetchOutcome();
     outcomeDetail.value = "";
     detail.value = "";
@@ -120,7 +120,14 @@ onMounted(initializeData);
       </section>
       <section class="main-section">
         <div class="container flex flex-col gap-4">
-          <DataTable :value="finance" stripedRows tableStyle="min-width: 50rem">
+          <DataTable
+            :value="finance"
+            stripedRows
+            paginator
+            :rows="5"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+            tableStyle="min-width: 50rem"
+          >
             <Column header="Total Masuk">
               <template #body="slotProps">
                 {{ formatCurrency(slotProps.data.paid) }}
@@ -145,7 +152,8 @@ onMounted(initializeData);
               mode="currency"
               currency="IDR"
               locale="id-ID"
-              class="h-full text-l max-w-fit"
+              class="h-full text-lg max-w-fit"
+              placeholder="Masukkan pengeluaran"
             />
           </div>
           <div class="flex flex-col gap-2">
@@ -172,6 +180,9 @@ onMounted(initializeData);
           <DataTable
             :value="outcomeData"
             stripedRows
+            paginator
+            :rows="5"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
             tableStyle="min-width: 50rem"
           >
             <Column header="Pengeluaran">
