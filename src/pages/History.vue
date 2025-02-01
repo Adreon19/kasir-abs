@@ -33,14 +33,21 @@ const fetchOrder = async () => {
       quantity
       `);
     if (error) throw error;
+
     order.value = order_detail.reduce((acc, item) => {
       const existingOrder = acc.find((o) => o.id === item.order_id.id);
+      const menuName = item.menu_detail_id
+        ? item.menu_detail_id.menu_id.name
+        : "Menu sudah dihapus";
+      const menuPrice = item.menu_detail_id ? item.menu_detail_id.price : 0;
+      const totalPrice = item.quantity * menuPrice; // Perhitungan total harga
+
       if (existingOrder) {
         existingOrder.details.push({
-          menu_name: item.menu_detail_id.menu_id.name,
-          menu_price: item.menu_detail_id.price,
+          menu_name: menuName,
+          menu_price: menuPrice,
           quantity: item.quantity,
-          total_price: item.order_id.total_price,
+          total_price: totalPrice, // Gunakan hasil perhitungan
         });
       } else {
         acc.push({
@@ -50,10 +57,10 @@ const fetchOrder = async () => {
           payment_method: item.order_id.payment.name,
           details: [
             {
-              menu_name: item.menu_detail_id.menu_id.name,
-              menu_price: item.menu_detail_id.price,
+              menu_name: menuName,
+              menu_price: menuPrice,
               quantity: item.quantity,
-              total_price: item.order_id.total_price,
+              total_price: totalPrice, // Gunakan hasil perhitungan
             },
           ],
         });
@@ -93,6 +100,9 @@ onMounted(fetchOrder);
         <DataTable
           :value="order"
           :expandedRows="expandedRows"
+          paginator
+          :rows="5"
+          :rowsPerPageOptions="[5, 10, 20, 50]"
           @update:expandedRows="expandedRows = $event"
           dataKey="id"
           stripedRows
