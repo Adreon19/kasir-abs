@@ -53,8 +53,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="flex flex-col items-center gap-8 mb-10">
-    <img src="/images/logoABS.png" alt="ABS Logo" class="w-36" />
+  <section class="flex flex-col items-center gap-8 mb-10 mt-10">
+    <img src="/images/logoABS.png" alt="ABS Logo" class="w-36 mb-10" />
     <form class="flex flex-col" @submit.prevent="handleLogin">
       <div
         class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md"
@@ -65,7 +65,7 @@ onMounted(() => {
             v-model="email"
             class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none min-w-64"
           />
-          <label>Email</label>
+          <label style="color: black">Email</label>
         </FloatLabel>
         <FloatLabel>
           <Password
@@ -73,7 +73,7 @@ onMounted(() => {
             toggleMask
             class="password text-lg rounded-md min-w-64 border-none focus:outline-none"
           />
-          <label>Password</label>
+          <label style="color: black">Password</label>
         </FloatLabel>
         <div class="flex gap-3 items-center mt-3 justify-between">
           <Button
