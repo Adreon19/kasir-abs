@@ -1,32 +1,37 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useToast, Toast } from "primevue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { supabase } from "../../../../supabase"; // Replace with your actual Supabase config
 
 const router = useRouter();
+const route = useRoute();
 const toast = useToast();
 const menuDetails = ref([]);
 const menu = ref([]);
 const isLoading = ref(false);
 
-// Reactive objects to store changes
 const updatedMenu = reactive({});
 const updatedMenuDetails = reactive({});
 const imageFiles = reactive({});
-const imagePreviews = reactive({}); // Stores previews for selected images
+const imagePreviews = reactive({});
+const menuId = route.params.id;
 
 const fetchMenuDetails = async () => {
   try {
     isLoading.value = true;
-    let { data: menu_detail, error } = await supabase.from("menu_detail")
-      .select(`
-        id, 
+    let { data: menu_detail, error } = await supabase
+      .from("menu_detail")
+      .select(
+        `
+        id,
         price,
         variant_id(
           id,
           name
-        )`);
+        )`
+      )
+      .eq("menu_id", menuId);
     if (error) throw error;
     menuDetails.value = menu_detail;
   } catch (error) {
@@ -41,7 +46,8 @@ const fetchMenu = async () => {
     isLoading.value = true;
     let { data: menu_list, error } = await supabase
       .from("menu_list")
-      .select("*");
+      .select("*")
+      .eq("id", menuId);
     if (error) throw error;
     menu.value = menu_list;
   } catch (error) {
@@ -186,7 +192,7 @@ onMounted(() => {
             <FileUpload
               mode="basic"
               accept="image/*"
-              :maxFileSize="150000"
+              :maxFileSize="9000000"
               auto
               @select="(e) => handleFileSelect(menuItem, e.files[0])"
             />
