@@ -85,8 +85,8 @@ const uploadImageAndSaveMenu = async () => {
     toast.add({
       severity: "success",
       summary: "Success",
-      detail: "Menu saved successfully!",
-      life: 3000,
+      detail: "Menu berhasil ditambah!",
+      life: 5000,
     });
     menuName.value = "";
     src.value = null;
