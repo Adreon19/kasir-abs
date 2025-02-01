@@ -17,6 +17,7 @@ const handleLogout = async () => {
 };
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
+  checked.value = !darkMode.value;
   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
 
   localStorage.setItem("darkMode", darkMode.value);
@@ -26,6 +27,7 @@ onMounted(() => {
 
   if (savedDarkMode === "true") {
     darkMode.value = true;
+    checked.value = true;
     document.documentElement.classList.add("my-app-dark");
   }
 });
@@ -50,7 +52,7 @@ onMounted(() => {
                   <i
                     :class="[
                       '!text-xs pi',
-                      { 'pi-sun': checked, 'pi-moon': !checked },
+                      { 'pi-moon': checked, 'pi-sun': !checked },
                     ]"
                   />
                 </template>
