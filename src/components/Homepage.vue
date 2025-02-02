@@ -146,9 +146,9 @@ onMounted(initializeData);
       <div class="search flex relative">
         <InputText
           v-model="searchQuery"
-          style="width: 400px; border-radius: 10px 0 0 10px"
+          style="border-radius: 10px 0 0 10px"
           placeholder="Search..."
-          class="search p-3 font-bold rounded-none focus:outline-none"
+          class="search p-3 font-bold rounded-none focus:outline-none lg:w-64 xl:w-96"
           @keydown.enter="handleSearch"
         />
         <Button

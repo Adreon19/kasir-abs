@@ -107,7 +107,7 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <div class="p-6 flex flex-col gap-6">
+  <div class="p-6 flex flex-col gap-6 max-w-screen">
     <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
       Riwayat Keuangan
     </h1>

@@ -35,7 +35,9 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-row min-h-screen">
-    <aside class="sidebar text-black max-w-64 flex flex-col justify-between">
+    <aside
+      class="sidebar text-black xl:max-w-64 xl:min-w-64 lg:max-w-64 lg:min-w-64 flex flex-col justify-between"
+    >
       <div class="">
         <div class="logo flex items-center m-4">
           <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />

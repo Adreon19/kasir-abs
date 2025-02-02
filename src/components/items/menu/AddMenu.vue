@@ -131,11 +131,7 @@ onMounted(fetchCategories);
     </div>
     <div class="flex flex-row gap-5 p-0 mt-8">
       <FloatLabel>
-        <InputText
-          id="menu name"
-          v-model="menuName"
-          class="custom-input p-4 w-96"
-        />
+        <InputText id="menu name" v-model="menuName" class="custom-input p-4" />
         <label for="menu name" class="custom-label">Nama menu</label>
       </FloatLabel>
       <Select
