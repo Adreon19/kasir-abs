@@ -14,6 +14,7 @@ const selectedPaymentMethod = ref(null);
 const paidAmount = ref();
 const customer = ref("");
 const isLoading = ref(false);
+const isMessageVisible = ref(false);
 
 const totalAmount = computed(() => {
   return cartItems.value.reduce((sum, item) => {
@@ -381,6 +382,10 @@ onMounted(() => {
   fetchCarts();
   fetchPay();
 });
+
+const toggleMessage = () => {
+  isMessageVisible.value = !isMessageVisible.value;
+};
 </script>
 
 <template>
@@ -397,6 +402,13 @@ onMounted(() => {
             placeholder="Nama Customer"
             class="max-w-fit"
           />
+          <Button
+            label="Sudah Ada Member?"
+            class="max-w-fit"
+            @click="toggleMessage"
+          />
+          <p v-show="isMessageVisible">kontol!</p>
+
           <table class="w-full bg-black text-white rounded-lg overflow-hidden">
             <thead class="bg-gray-800">
               <tr>
