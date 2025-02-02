@@ -536,6 +536,7 @@ const toggleMessage = () => {
             <Select
               v-show="isMessageVisible"
               v-model="selectedMember"
+              filter
               :options="members"
               option-value="nama"
               option-label="nama"
