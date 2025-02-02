@@ -154,6 +154,7 @@ onMounted(initializeData);
             </div>
           </template>
         </Column>
+        <template #empty> Tidak ada Menu! </template>
       </DataTable>
     </div>
   </section>
