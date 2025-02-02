@@ -272,6 +272,7 @@ onMounted(initializeData);
                 </div>
               </template>
             </Column>
+            <template #empty> Belum ada member baru! </template>
           </DataTable>
         </div>
       </section>
