@@ -92,6 +92,7 @@ onMounted(initializeData);
             </div>
           </template>
         </Column>
+        <template #empty> Tidak ada kategori! </template>
       </DataTable>
     </div>
   </section>
