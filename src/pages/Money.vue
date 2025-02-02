@@ -138,6 +138,7 @@ onMounted(initializeData);
                 {{ formatCurrency(slotProps.data.change) }}
               </template>
             </Column>
+            <template #empty> Tidak ada Catatan keuangan! </template>
           </DataTable>
         </div>
       </section>
@@ -191,6 +192,7 @@ onMounted(initializeData);
               </template>
             </Column>
             <Column field="catatan" header="Detail Pengeluaran" />
+            <template #empty> Tidak ada pengeluaran! </template>
           </DataTable>
         </div>
       </section>
