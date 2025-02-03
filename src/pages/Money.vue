@@ -107,7 +107,7 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <div class="p-6 flex flex-col gap-6 max-w-screen">
+  <div class="p-6 flex flex-col gap-6 max-w-full container">
     <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
       Riwayat Keuangan
     </h1>
@@ -122,7 +122,7 @@ onMounted(initializeData);
       </section>
       <section class="main-section">
         <div class="container flex flex-col gap-4">
-          <DataTable :value="finance" stripedRows tableStyle="min-width: 50rem">
+          <DataTable :value="finance" stripedRows>
             <Column header="Total Masuk">
               <template #body="slotProps">
                 <div class="text-[var(--text-secondary)]">
@@ -179,11 +179,7 @@ onMounted(initializeData);
         </div>
         <div class="border-b-2"></div>
         <div class="container flex flex-col gap-4">
-          <DataTable
-            :value="outcomeData"
-            stripedRows
-            tableStyle="min-width: 50rem"
-          >
+          <DataTable :value="outcomeData" stripedRows>
             <Column header="Pengeluaran">
               <template #body="slotProps">
                 {{ formatCurrency(slotProps.data.pengeluaran) }}

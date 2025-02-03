@@ -33,8 +33,8 @@
   --section-bg: rgb(0, 0, 0, 0.5);
   --bg-switch: #e5bb90;
   --input-primary: #dfc3a1;
-  --striped-row: #373a40;
-  --bg-datable: #b4b4b8;
+  --striped-row: #d8ae7e;
+  --bg-datable: #dfc3a1;
 }
 
 :root[class="my-app-dark"] {
@@ -54,8 +54,8 @@
   --bg-drawer: rgba(149, 120, 54, 0.2);
   --section-bg: rgb(0, 0, 0, 0.5);
   --input-primary: rgb(72, 66, 66);
-  --striped-row: #020617;
-  --bg-datable: #0f172a;
+  --striped-row: #493628;
+  --bg-datable: rgb(72, 66, 66);
   --bg-switch: #130b03;
   --bg-icon-switch: #776024;
   --switch-icon-color: #c8a241;

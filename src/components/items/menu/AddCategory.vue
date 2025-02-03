@@ -76,7 +76,7 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <section class="main-section">
+  <section class="main-section max-w-full container">
     <h2>Tambah Kategori</h2>
     <div class="card flex flex-col gap-5">
       <FloatLabel>

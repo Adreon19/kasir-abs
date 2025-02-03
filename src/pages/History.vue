@@ -91,7 +91,7 @@ onMounted(fetchOrder);
       <progressSpinner />
     </div>
     <div v-else>
-      <section class="main-section">
+      <section class="main-section overflow-x-auto">
         <DataTable
           :value="order"
           :expandedRows="expandedRows"
