@@ -6,7 +6,7 @@ import Order from "../pages/Order.vue";
 import Login from "../pages/login.vue";
 import Money from "../pages/Money.vue";
 import Member from "../pages/Member.vue";
-import EditMenu from "../components/items/menu/edit/[id].vue";
+import EditMenu from "../components/items/menu/edit/MenuEdit.vue";
 import EditCategory from "../components/items/category/edit/[id].vue";
 import { supabase } from "../supabase"; // Import your Supabase instance
 
