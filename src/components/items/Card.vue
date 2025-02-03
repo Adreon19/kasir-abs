@@ -222,7 +222,7 @@ onMounted(() => {
       />
       <InputNumber
         v-model="quantity"
-        :min="0"
+        :min="1"
         placeholder="Quantity"
         label="Quantity"
       />
