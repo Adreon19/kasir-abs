@@ -664,16 +664,16 @@ const toggleMessage = () => {
       <ProgressSpinner />
     </div>
     <div v-else>
-      <div class="div">
-        <label for="editNama">Quantity</label>
+      <div class="flex flex-col">
+        <label for="editjumlah">Quantity</label>
         <InputNumber
           v-model="selectedMenu.quantity"
           :min="0"
-          id="editNama"
-          placeholder="Nama Member"
+          id="editjumlah"
+          placeholder="Masukkan jumlah"
         />
       </div>
-      <div class="mt-3">
+      <div class="mt-3 flex flex-col">
         <label for="editNoTelp">Note</label>
         <Textarea
           v-model="selectedMenu.note"

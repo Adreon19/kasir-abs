@@ -290,7 +290,7 @@ onMounted(initializeData);
       <ProgressSpinner />
     </div>
     <div v-else>
-      <div class="div">
+      <div class="flex flex-col">
         <label for="editNama">Nama</label>
         <InputText
           v-model="selectedMember.nama"
@@ -298,7 +298,7 @@ onMounted(initializeData);
           placeholder="Nama Member"
         />
       </div>
-      <div class="mt-3">
+      <div class="mt-3 flex flex-col">
         <label for="editNoTelp">Nomor Telepon</label>
         <InputText
           v-model="formattedSelectedMember"
