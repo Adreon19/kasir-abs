@@ -68,7 +68,14 @@ onMounted(initializeData);
   <section class="main-section">
     <h2>List Kategori</h2>
     <div class="card flex gap-5">
-      <DataTable :value="categories" tableStyle="min-width: 50rem">
+      <DataTable
+        :value="categories"
+        stripedRows
+        paginator
+        :rows="5"
+        :rowsPerPageOptions="[5, 10, 20, 50]"
+        tableStyle="min-width: 50rem"
+      >
         <Column field="kategori" header="Nama Kategori"> </Column>
         <Column header="Aksi" class="flex justify-center">
           <template #body="slotProps">

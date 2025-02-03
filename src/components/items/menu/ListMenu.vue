@@ -86,7 +86,14 @@ onMounted(initializeData);
     <h2>List Menu</h2>
     <div class="card flex gap-5">
       <!-- Updated DataTable -->
-      <DataTable :value="menu" tableStyle="min-width: 50rem">
+      <DataTable
+        :value="menu"
+        stripedRows
+        paginator
+        :rows="5"
+        :rowsPerPageOptions="[5, 10, 20, 50]"
+        tableStyle="min-width: 50rem"
+      >
         <!-- Menu Name -->
         <Column
           field="menu_id.name"
