@@ -252,7 +252,7 @@ const finishOrder = async () => {
 
     doc.setFont("helvetica", "bold");
     doc.text("No", marginLeft, currentY);
-    doc.text("Menu", marginLeft + 10, currentY);
+    doc.text("Menu", marginLeft + 6, currentY);
     doc.text("Price", marginLeft + 40, currentY);
     doc.text("Qty", marginLeft + 62, currentY, { align: "right" });
     currentY += 5;
@@ -266,8 +266,8 @@ const finishOrder = async () => {
         menuName,
         pageWidth - marginLeft * 2 - 10
       ); // Adjust width as needed
-      doc.setFontSize(6);
-      doc.text(wrappedMenuName, marginLeft + 10, currentY);
+      doc.setFontSize(7);
+      doc.text(wrappedMenuName, marginLeft + 6, currentY);
       doc.setFontSize(8);
       doc.text(
         `${formatCurrency(item.menu_detail.price)}`,
@@ -532,7 +532,7 @@ const toggleMessage = () => {
               :options="members"
               option-value="nama"
               option-label="nama"
-              placeholder="Select Categories"
+              placeholder="Pilih Member"
               class="p-select w-full md:w-56 font-bold"
             />
           </div>
