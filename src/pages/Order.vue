@@ -29,7 +29,7 @@ const changeAmount = computed(() => {
   // Assuming that the ID for "Cash" is '1'. Replace it with the correct ID if needed.
   if (selectedPaymentMethod.value === 1) {
     // Adjust the ID for "Cash"
-    return paidAmount.value - totalAmount.value;
+    return paidAmount.value - discountedTotalAmount.value;
   }
   return 0;
 });
@@ -137,7 +137,7 @@ const finishOrder = async () => {
       return;
     }
 
-    if (!paidAmount.value) {
+    if (!discountedTotalAmount.value) {
       toast.add({
         severity: "warn",
         summary: "Peringatan",
@@ -146,7 +146,7 @@ const finishOrder = async () => {
       });
       return;
     }
-    if (paidAmount.value < totalAmount.value) {
+    if (paidAmount.value < discountedTotalAmount.value) {
       toast.add({
         severity: "warn",
         summary: "Peringatan",
@@ -253,29 +253,31 @@ const finishOrder = async () => {
     doc.setFont("helvetica", "bold");
     doc.text("No", marginLeft, currentY);
     doc.text("Menu", marginLeft + 10, currentY);
-    doc.text("Price", marginLeft + 30, currentY);
-    doc.text("Qty", marginLeft + 60, currentY, { align: "right" });
+    doc.text("Price", marginLeft + 40, currentY);
+    doc.text("Qty", marginLeft + 62, currentY, { align: "right" });
     currentY += 5;
 
     cartItems.value.forEach((item, index) => {
       const subtotal = item.quantity * item.menu_detail.price;
-
-      // Main item details
       doc.setFont("helvetica", "normal");
       doc.text(`${index + 1}`, marginLeft, currentY);
-      doc.text(`${item.menu_detail.menu_id.name}`, marginLeft + 10, currentY);
+      const menuName = item.menu_detail.menu_id.name;
+      const wrappedMenuName = doc.splitTextToSize(
+        menuName,
+        pageWidth - marginLeft * 2 - 10
+      ); // Adjust width as needed
+      doc.setFontSize(6);
+      doc.text(wrappedMenuName, marginLeft + 10, currentY);
+      doc.setFontSize(8);
       doc.text(
         `${formatCurrency(item.menu_detail.price)}`,
-        marginLeft + 30,
+        marginLeft + 40,
         currentY
       );
-      doc.text(`${item.quantity}`, marginLeft + 60, currentY, {
+      doc.text(`${item.quantity}`, marginLeft + 62, currentY, {
         align: "right",
       });
-      // doc.text(`${formatCurrency(subtotal)}`, marginLeft + 60, currentY, {
-      //   align: "right",
-      // });
-      currentY += 4;
+      currentY += 4 + (wrappedMenuName.length - 1) * 4;
 
       // note pesanan
       if (item.note && item.note.trim()) {
@@ -299,7 +301,7 @@ const finishOrder = async () => {
     doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
     doc.text(
-      `Total: ${formatCurrency(totalAmount.value)}`,
+      `Total: ${formatCurrency(discountedTotalAmount.value)}`,
       marginLeft,
       currentY
     );
@@ -481,10 +483,9 @@ const updateMenu = async () => {
 watch(selectedPaymentMethod, (newValue) => {
   if (newValue === 2) {
     // QRIS
-
     paidAmount.value = discountedTotalAmount.value + 1000; // Pajak QRIS
   } else {
-    paidAmount.value = totalAmount.value;
+    paidAmount.value = "";
   }
 });
 
@@ -621,7 +622,7 @@ const toggleMessage = () => {
             <InputNumber
               v-model="paidAmount"
               placeholder="Masukkan Nominal Uang"
-              :value="selectedPaymentMethod === 2 ? totalAmount : paidAmount"
+              :value="paidAmount"
               :disabled="selectedPaymentMethod === 2"
               :min="0"
               mode="currency"
