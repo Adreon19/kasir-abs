@@ -96,7 +96,7 @@ onMounted(() => {
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
-          class="bg-var[--btn-secondary] text-[var(--text-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
+          class="bg-[var(--btn-secondary)] text-[var(--text-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
           @click="handleLogout"
         />
       </div>

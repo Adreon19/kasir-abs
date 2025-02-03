@@ -27,11 +27,11 @@
   --hover-primary: #634f2b;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
-  --btn-secondary: #c8a241;
+  --btn-secondary: #634f2b;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
   --section-bg: rgb(0, 0, 0, 0.5);
-  --icon-switch: #e5bb90;
+  --bg-switch: #e5bb90;
   --input-primary: #dfc3a1;
   --striped-row: #373a40;
   --bg-datable: #b4b4b8;
@@ -56,6 +56,9 @@
   --input-primary: rgb(72, 66, 66);
   --striped-row: #020617;
   --bg-datable: #0f172a;
+  --bg-switch: #130b03;
+  --bg-icon-switch: #776024;
+  --switch-icon-color: #c8a241;
 }
 
 body {

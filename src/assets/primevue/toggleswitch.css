@@ -8,7 +8,7 @@
 
 .p-toggleswitch-slider {
   @apply inline-block w-full h-full rounded-[10px] shadow-[0_1px_2px_0_rgba(18,18,23,0.05)]
-        bg-slate-800
+        bg-[var(--bg-switch)]
         border border-transparent
         transition-colors duration-200;
 }
@@ -22,11 +22,11 @@
 }
 
 .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-slider {
-  @apply bg-orange-100;
+  @apply bg-[var(--bg-switch)];
 }
 
 .p-toggleswitch.p-toggleswitch-checked .p-toggleswitch-handle {
-  @apply bg-surface-0 dark:bg-surface-900 text-primary start-12;
+  @apply bg-[var(--bg-icon-switch)] dark:bg-surface-900 text-[var(--switch-icon-color)] start-12;
 }
 
 /* .p-toggleswitch:not(.p-disabled):has(.p-toggleswitch-input:hover)
