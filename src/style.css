@@ -184,3 +184,93 @@ button:focus-visible {
 .main-section {
   @apply p-6 bg-[var(--section-bg)] rounded-lg border border-surface-200/80;
 }
+
+/* add menu optimalize on mini ipad */
+
+<style scoped > .main-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.img-menu {
+  border: 2px solid;
+  max-width: 100%;
+  height: auto;
+}
+
+.custom-input,
+.custom-select,
+.custom-button {
+  margin-bottom: 10px;
+}
+.custom-textarea {
+  padding-top: 20px;
+}
+
+.custom-label {
+  font-size: 0.9rem;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  color: #666;
+}
+
+/* Responsive Styles for iPad Mini lenskep (1024x768) */
+@media (max-width: 1024px) {
+  .main-section {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .img-menu {
+    max-width: 200px;
+  }
+
+  .custom-input,
+  .custom-select,
+  .custom-textarea,
+  .custom-button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+  .custom-input {
+    padding: 6px;
+    margin-top: 10px;
+  }
+
+  .custom-label {
+    font-size: 10px;
+    padding-bottom: 15px;
+    padding-left: 5px;
+  }
+}
+
+/*  lebih Responsive untuk Styles for Smaller Screens (Mobile) */
+@media (max-width: 768px) {
+  .main-section {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .img-menu {
+    max-width: 150px;
+  }
+
+  .custom-input,
+  .custom-select,
+  .custom-textarea,
+  .custom-button {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+
+  .custom-label {
+    font-size: 0.7rem;
+  }
+}

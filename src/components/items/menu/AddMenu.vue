@@ -108,9 +108,11 @@ onMounted(fetchCategories);
 
 <template>
   <section class="main-section">
-    <h2 class="font-bold text-2xl m capitalize">Tambah nama menu</h2>
-    <div class="flex flex-row gap-20 mt-5 items-center bg[var(--section-bg)]">
-      <div class="flex flex-row items-center gap-5">
+    <h2 class="font-bold text-2xl capitalize">Tambah nama menu</h2>
+    <div
+      class="flex flex-col md:flex-row gap-5 mt-5 items-center bg-[var(--section-bg)]"
+    >
+      <div class="flex flex-col md:flex-row items-center gap-5">
         <img
           v-if="src"
           :src="src"
@@ -125,14 +127,18 @@ onMounted(fetchCategories);
           accept="image/*"
           :maxFileSize="150000"
           severity="secondary"
-          class="bg-[var(--input-primary)] text-[var(--text-secondary)] border border-white p-button-outlined p-10 z-0"
+          class="bg-[var(--input-primary)] text-[var(--text-secondary)] border border-white p-button-outlined p-10 z-0 m-5"
         />
       </div>
     </div>
-    <div class="flex flex-row gap-5 p-0 mt-8">
-      <FloatLabel>
-        <InputText id="menu name" v-model="menuName" class="custom-input p-4" />
-        <label for="menu name" class="custom-label">Nama menu</label>
+    <div class="flex flex-col md:flex-row gap-5 mt-8">
+      <FloatLabel class="w-full md:w-auto">
+        <InputText
+          id="menu-name"
+          v-model="menuName"
+          class="custom-input p-6 md:w-auto"
+        />
+        <label for="menu-name" class="custom-label">Nama menu</label>
       </FloatLabel>
       <Select
         v-model="selectedCategory"
@@ -140,19 +146,17 @@ onMounted(fetchCategories);
         optionLabel="kategori"
         optionValue="id"
         placeholder="Select Categories"
-        class="custom-select w-full p-2"
+        class="custom-select w-full md:w-auto p-4"
       />
-
       <Textarea
         v-model="descriptionForm"
         rows="1"
         cols="30"
-        placeholder="Masukkan Deskripsi menu "
+        placeholder="Masukkan Deskripsi menu"
         style="resize: none"
-        class="custom-textarea"
+        class="custom-textarea p-2 w-full"
       />
     </div>
-
     <div>
       <Button
         label="Save"
