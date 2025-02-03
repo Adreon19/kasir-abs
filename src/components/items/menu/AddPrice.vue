@@ -174,13 +174,14 @@ onMounted(() => {
       </div>
 
       <!-- Add Another Variant Field -->
-      <Button class="btn btn-secondary mt-4" @click="addVariantField">
+      <Button class="btn btn-secondary mt-4 w-fit" @click="addVariantField">
         Tambah Variant Lainnya
       </Button>
 
       <!-- Submit Button -->
       <Button class="btn btn-primary mt-4" @click="insertMenuDetail">
-        Tambah Detail Menu
+        <i class="fa-solid fa-floppy-disk"></i>
+        Simpan Detail Menu
       </Button>
     </div>
   </section>

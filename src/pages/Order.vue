@@ -436,15 +436,6 @@ const updateMenu = async () => {
 
     const trimmedNote = note.trim();
 
-    if (!trimmedNote) {
-      toast.add({
-        severity: "warn",
-        summary: "Peringatan",
-        detail: "Catatan tidak boleh kosong",
-        life: 5000,
-      });
-      return;
-    }
     if (
       quantity === null ||
       quantity === undefined ||
@@ -632,6 +623,7 @@ const toggleMessage = () => {
               placeholder="Masukkan Nominal Uang"
               :value="selectedPaymentMethod === 2 ? totalAmount : paidAmount"
               :disabled="selectedPaymentMethod === 2"
+              :min="0"
               mode="currency"
               currency="IDR"
             />
@@ -675,6 +667,7 @@ const toggleMessage = () => {
         <label for="editNama">Quantity</label>
         <InputNumber
           v-model="selectedMenu.quantity"
+          :min="0"
           id="editNama"
           placeholder="Nama Member"
         />

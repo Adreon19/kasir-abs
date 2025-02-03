@@ -220,7 +220,12 @@ onMounted(() => {
         optionLabel="menu_variants.name"
         placeholder="Choose a variant"
       />
-      <InputNumber v-model="quantity" placeholder="Quantity" label="Quantity" />
+      <InputNumber
+        v-model="quantity"
+        :min="0"
+        placeholder="Quantity"
+        label="Quantity"
+      />
       <Textarea v-model="note" rows="3" cols="30" placeholder="Add a note" />
     </div>
 
