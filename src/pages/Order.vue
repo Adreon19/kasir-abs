@@ -669,6 +669,7 @@ const toggleMessage = () => {
         <InputNumber
           v-model="selectedMenu.quantity"
           :min="0"
+          :max="500"
           id="editjumlah"
           placeholder="Masukkan jumlah"
         />
