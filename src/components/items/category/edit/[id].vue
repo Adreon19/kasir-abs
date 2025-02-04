@@ -88,35 +88,45 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="button-container p-6">
-    <Button
-      as="router-link"
-      label="Kembali"
-      icon="fa-solid fa-arrow-left"
-      class="maw-w-fit"
-      to="/add"
-    />
-  </div>
-  <div class="p-6">
-    <h2>Edit Kategori</h2>
+  <div class="container p-6">
+    <div class="button-container mb-4">
+      <Button
+        as="router-link"
+        label="Kembali"
+        icon="fa-solid fa-arrow-left"
+        class="custom-button maw-w-fit"
+        to="/add"
+      />
+    </div>
+    <h2 class="text-2xl font-semibold mb-4">Edit Kategori</h2>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
     <div v-else>
-      <section class="main-section">
-        <div class="field">
-          <label for="id">ID:</label>
-          <InputText id="id" v-model="selectedCategory.id" disabled />
+      <section class="main-section bg-white shadow-md rounded-lg p-6">
+        <div class="field mb-4">
+          <label for="id" class="block text-sm font-medium text-gray-700"
+            >ID:</label
+          >
+          <InputText
+            id="id"
+            v-model="selectedCategory.id"
+            disabled
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+          />
         </div>
-        <div class="field mt-3">
-          <label for="kategori">Kategori:</label>
+        <div class="field mb-4">
+          <label for="kategori" class="block text-sm font-medium text-gray-700"
+            >Kategori:</label
+          >
           <InputText
             id="kategori"
             v-model="selectedCategory.kategori"
             placeholder="Enter new category name"
+            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
           />
         </div>
-        <div class="mt-4 flex justify-end gap-3">
+        <div class="flex justify-end">
           <Button
             label="Save"
             icon="fa-solid fa-save"

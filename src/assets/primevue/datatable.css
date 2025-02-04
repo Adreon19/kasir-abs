@@ -206,17 +206,9 @@
   @apply transform-none min-h-0 sticky top-0 start-0;
 }
 
-.p-datatable-paginator-top {
-  @apply border-b border-surface-200 dark:border-surface-700;
-}
-
-.p-datatable-paginator-bottom {
-  @apply border-t border-surface-200 dark:border-surface-700;
-}
-
 .p-datatable-header {
   @apply py-3 px-4 border-b border-surface-200 dark:border-surface-700
-        bg-surface-0 dark:bg-surface-900
+        bg-[var(--bg-datable)]
         text-surface-700 dark:text-surface-0;
 }
 
@@ -238,11 +230,11 @@
 }
 
 .p-datatable-tbody > tr {
-  @apply bg-[var(--bg-datable)] text-[var(--text-primary)] dark:text-surface-0 transition-colors duration-200;
+  @apply bg-[var(--bg-datable)] text-[var(--text-primary)] transition-colors duration-200;
 }
 
 .p-datatable-tbody > tr > td {
-  @apply text-start py-3 px-4 border-b border-surface-200 dark:border-surface-800;
+  @apply text-[var(--text-secondary)] py-3 px-4 border-b border-surface-200 dark:border-surface-800;
 }
 
 .p-datatable-hoverable

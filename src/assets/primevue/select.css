@@ -4,7 +4,7 @@
 
 .p-select {
   @apply inline-flex cursor-pointer relative select-none rounded-md
-        bg-[var(--components-bg)]
+        bg-black
         placeholder-[var(--text-primary)]
         shadow-[0_1px_2px_0_rgba(18,18,23,0.05)]
         transition-colors duration-200 text-black;
@@ -27,7 +27,7 @@
 }
 
 .p-select.p-disabled {
-  @apply bg-surface-200 text-surface-500 dark:bg-surface-700 dark:text-surface-400 opacity-100 cursor-default;
+  @apply bg-transparent text-surface-500 dark:bg-surface-700 dark:text-surface-400 opacity-100 cursor-default;
 }
 
 .p-select-clear-icon {
@@ -35,8 +35,8 @@
 }
 
 .p-select-dropdown {
-  @apply flex items-center justify-center shrink-0 bg-transparent
-        text-surface-500 dark:text-surface-400 w-10 rounded-e-md;
+  @apply flex items-center justify-center shrink-0
+        text-[var(--text-secondary)] w-10 rounded-e-md;
 }
 
 .p-select-label {
@@ -46,7 +46,7 @@
 }
 
 .p-select-label.p-placeholder {
-  @apply text-surface-500 dark:text-surface-400;
+  @apply text-[var(--text-secondary)] bg-[var(--input-searchy)];
 }
 
 .p-select:has(.p-select-clear-icon) .p-select-label {
@@ -54,7 +54,7 @@
 }
 
 .p-select.p-disabled .p-select-label {
-  @apply text-surface-500 dark:text-surface-400;
+  @apply bg-transparent text-surface-500 dark:text-surface-400;
 }
 
 .p-select-label-empty {

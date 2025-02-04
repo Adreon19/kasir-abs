@@ -223,6 +223,7 @@ onMounted(() => {
       <Select
         v-model="selectedvariant"
         :options="selectedMenu?.menu_detail"
+        class="custom-select"
         optionLabel="menu_variants.name"
         placeholder="Choose a variant"
       />
@@ -269,20 +270,21 @@ onMounted(() => {
             {{ item.menu_detail.menu_id.name }}
           </h3>
           <template v-if="item.menu_detail">
-            <h4 class="mb-2 text-sm text-slate-400">
+            <h4 class="mb-2 text-sm text-white">
               {{ item.menu_detail.variant_id.name || "No Variant" }}:
               {{ formatCurrency(item.menu_detail.price) || "N/A" }}
             </h4>
           </template>
 
           <template v-else>
-            <h4 class="mb-2 text-sm text-slate-400">No Variant: N/A</h4>
+            <h4 class="mb-2 text-sm text-white">No Variant: N/A</h4>
           </template>
           <div class="button-container flex justify-between gap-6">
-            <p>Quantity : {{ item.quantity }}</p>
+            <p class="text-white">Quantity : {{ item.quantity }}</p>
             <Button
               label="Delete"
               icon="fa-solid fa-trash"
+              style="color: #ffffff"
               class="button"
               severity="danger"
               @click="deleteCartItem(item.id)"
@@ -290,19 +292,20 @@ onMounted(() => {
             <Button
               label="Add Another"
               icon="fa-solid fa-plus"
+              style="color: #ffffff"
               class="button w-fit"
               @click="closeDrawerAndOpenAddVariantDialog(menuList[0])"
             />
           </div>
           <div class="mb-2">
-            <p>Note : {{ item.note || "No note" }}</p>
+            <p class="text-white">Note : {{ item.note || "No note" }}</p>
           </div>
           <hr />
         </li>
       </ul>
     </div>
 
-    <div v-else class="p-4 text-center text-gray-500">No orders yet.</div>
+    <div v-else class="p-4 text-center text-white">No orders yet.</div>
     <div class="button-container flex justify-end gap-8 mt-16">
       <RouterLink to="/order">
         <Button
@@ -361,8 +364,8 @@ onMounted(() => {
 <style scoped>
 .button {
   background-color: transparent;
-  border: 2px solid var(--btn-secondary);
-  color: var(--btn-secondary);
+  border: 2px solid var(--btn-order);
+  color: var(--btn-order);
   margin-top: 0;
 }
 

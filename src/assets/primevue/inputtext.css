@@ -1,9 +1,8 @@
 .p-inputtext {
   @apply appearance-none rounded-md
         /* enabled:hover:border-surface-400 dark:enabled:hover:border-surface-600 */
-        bg-[var(--components-bg)] 
         text-[var(--text-primary)]
-        placeholder-white
+        placeholder-[var(--text-secondary)]
         /* disabled:bg-surface-200 disabled:text-surface-500 dark:disabled:bg-surface-700 dark:disabled:text-surface-400 disabled:opacity-100 */
         /* placeholder:text-surface-500 dark:placeholder:text-surface-400 */
         px-3 py-2
@@ -34,6 +33,10 @@
 
 .custom-input {
   @apply bg-[var(--input-primary)] text-[var(--text-secondary)];
+}
+
+.custom-search {
+  @apply bg-[var(--components-bg)];
 }
 
 .custom-label {

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useToast, Toast } from "primevue";
+import { useToast, Toast, InputNumber } from "primevue";
 import { useRouter, useRoute } from "vue-router";
 import { supabase } from "../../../../supabase"; // Replace with your actual Supabase config
 
@@ -158,7 +158,7 @@ onMounted(() => {
       as="router-link"
       label="Kembali"
       icon="fa-solid fa-arrow-left"
-      class="maw-w-fit"
+      class="custom-button maw-w-fit"
       to="/add"
     />
   </div>
@@ -169,27 +169,15 @@ onMounted(() => {
     </div>
     <div v-else>
       <section class="main-section">
-        <div v-for="menuItem in menu" :key="menuItem.id">
-          <div class="flex flex-col gap-3">
-            <h2 for="name">Nama Menu</h2>
-            <InputText
-              v-model="menuItem.name"
-              id="name"
-              placeholder="Enter name"
-              class="w-fit"
-              @input="
-                (e) => handleInputChange(menuItem, 'name', e.target.value)
-              "
-            />
-          </div>
-          <div class="flex flex-col gap-3">
-            <h2>Gambar menu</h2>
+        <div v-for="menuItem in menu" :key="menuItem.id" class="flex">
+          <div class="flex-shrink-0 m-auto">
             <img
               :src="imagePreviews[menuItem.id] || menuItem.image"
               alt="Menu Image"
-              class="img-menu shadow-md max-w-64 rounded-xl z-10"
+              class="img-menu shadow-md max-w-64 rounded-xl z-10 h-64"
             />
             <FileUpload
+              class="mt-4"
               mode="basic"
               accept="image/*"
               :maxFileSize="9000000"
@@ -197,51 +185,67 @@ onMounted(() => {
               @select="(e) => handleFileSelect(menuItem, e.files[0])"
             />
           </div>
-          <div class="flex flex-col gap-3">
-            <h2>Deskripsi Menu</h2>
-            <TextArea
-              v-model="menuItem.description"
-              rows="5"
-              cols="30"
-              class="max-w-fit resize-none"
-              @input="
-                (e) =>
-                  handleInputChange(menuItem, 'description', e.target.value)
-              "
-            />
-          </div>
-        </div>
-        <div class="flex flex-col gap-3">
-          <h2>Harga Menu</h2>
-          <div v-for="menuDetail in menuDetails" :key="menuDetail.id">
-            <div class="flex flex-col gap-2">
-              <label for="price">{{ menuDetail.variant_id.name }}</label>
-              <InputText
-                v-model="menuDetail.price"
-                id="price"
-                placeholder="Enter price"
-                class="max-w-fit"
-                @input="(e) => handleDetailChange(menuDetail, e.target.value)"
-              />
+          <div class="ml-4 flex-grow">
+            <div class="form grid grid-cols-1 gap-4">
+              <div>
+                <h2 for="name">Nama Menu</h2>
+                <InputText
+                  v-model="menuItem.name"
+                  id="name"
+                  placeholder="Enter name"
+                  class="custom-textarea w-full"
+                  @input="
+                    (e) => handleInputChange(menuItem, 'name', e.target.value)
+                  "
+                />
+              </div>
+              <div>
+                <h2>Deskripsi Menu</h2>
+                <TextArea
+                  v-model="menuItem.description"
+                  rows="5"
+                  cols="30"
+                  class="custom-textarea w-full resize-none"
+                  @input="
+                    (e) =>
+                      handleInputChange(menuItem, 'description', e.target.value)
+                  "
+                />
+              </div>
+              <div>
+                <h2>Harga Menu</h2>
+                <div v-for="menuDetail in menuDetails" :key="menuDetail.id">
+                  <div class="flex flex-col gap-2">
+                    <label for="price">{{ menuDetail.variant_id.name }}</label>
+                    <InputNumber
+                      v-model="menuDetail.price"
+                      id="price"
+                      placeholder="Enter price"
+                      class="w-full"
+                      :min="0"
+                      mode="currency"
+                      currency="IDR"
+                      @input="
+                        (e) => handleDetailChange(menuDetail, e.target.value)
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
-      <div class="flex justify-end">
-        <Button
-          label="Save"
-          icon="fa-solid fa-save"
-          class="p-button-success mt-2"
-          @click="saveChanges"
-        />
-      </div>
+      <Button
+        label="Save"
+        icon="fa-solid fa-save"
+        class="p-button-success mt-4 float-end"
+        @click="saveChanges"
+      />
     </div>
   </div>
-
   <Toast />
 </template>
-
 <style scoped>
 .img-menu {
   border: 2px solid;

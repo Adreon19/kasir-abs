@@ -84,7 +84,7 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>List Menu</h2>
-    <div class="flex gap-5">
+    <div class="card flex-col flex gap-5">
       <!-- Updated DataTable -->
       <DataTable
         :value="menu"
@@ -93,6 +93,7 @@ onMounted(initializeData);
         :rows="5"
         :rowsPerPageOptions="[5, 10, 20, 50]"
         tableStyle="min-width: 50rem"
+        class="w-ful"
       >
         <!-- Menu Name -->
         <Column

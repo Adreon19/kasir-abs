@@ -108,7 +108,7 @@ onMounted(initializeData);
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
+    <h1 class="text-[var(--text-secondary)] font-bold" style="font-size: 30px">
       Riwayat Keuangan
     </h1>
     <div v-if="isLoading" class="flex justify-center">
@@ -151,10 +151,12 @@ onMounted(initializeData);
 
       <section class="main-section flex flex-col gap-10">
         <div
-          class="flex flex-col bg-[var(--striped-row)] justify-between item-center gap-3 p-5"
+          class="flex flex-row bg-[var(--striped-row)] justify-between item-center gap-3 p-5"
         >
           <div class="flex flex-col gap-3">
-            <label for="outcome"> Pengeluaran </label>
+            <label for="outcome" class="text-[var(--text-secondary)]">
+              Pengeluaran
+            </label>
             <InputNumber
               v-model="outcomeDetail"
               id="outcome"
@@ -166,12 +168,14 @@ onMounted(initializeData);
             />
           </div>
           <div class="flex flex-col gap-2">
-            <label for="detail"> Detail </label>
+            <label for="detail" class="text-[var(--text-secondary)]">
+              Detail
+            </label>
             <TextArea
               v-model="detail"
               row="5"
               cols="30"
-              class="custom-textarea"
+              class="custom-textarea w-fit"
               placeholder="Masukkan detail pengeluaranmu!"
             />
           </div>
