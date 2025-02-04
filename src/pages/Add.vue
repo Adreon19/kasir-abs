@@ -6,7 +6,7 @@ import AddPrice from "../components/items/menu/AddPrice.vue";
 import AddVariants from "../components/items/variants/Variants.vue";
 </script>
 <template>
-  <div class="flex flex-col gap-4 max-w-screen-2xl mx-auto p-4">
+  <div class="flex flex-col gap-4 p-4 max-w-full min-w-96 container">
     <Add />
     <AddPrice />
     <ListMenu />

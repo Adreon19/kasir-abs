@@ -155,17 +155,19 @@ onMounted(() => {
 
 <template>
   <section class="flex flex-col m-4">
-    <div class="grid grid-cols-4 gap-4">
+    <div
+      class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4"
+    >
       <Card
         v-for="menu in menuList"
         :key="menu.name"
-        class="menu flex flex-col h-full p-0 rounded-lg"
+        class="menu flex flex-col p-0 rounded-lg drop-shadow-xl"
       >
         <template #header>
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover h-48 w-full rounded-t-lg"
+            class="img-menu object-cover w-full h-48 rounded-t-lg border-none"
           />
         </template>
         <template #title>
@@ -182,25 +184,29 @@ onMounted(() => {
               </h4>
             </template>
           </template>
-          <p>{{ menu.description || "No description available." }}</p>
+          <p class="desc">
+            {{ menu.description || "No description available." }}
+          </p>
         </template>
         <template #footer>
-          <Button
-            v-if="
-              menu.menu_detail.some((detail) =>
-                orderedMenuIds.includes(detail.id)
-              )
-            "
-            label="View Order"
-            class="button w-full"
-            @click="drawerVisible = true"
-          />
-          <Button
-            v-else
-            label="Pesan"
-            class="button w-full"
-            @click="openDialog(menu)"
-          />
+          <div class="flex items-center">
+            <Button
+              v-if="
+                menu.menu_detail.some((detail) =>
+                  orderedMenuIds.includes(detail.id)
+                )
+              "
+              label="Lihat Pesanan"
+              class="button w-full"
+              @click="drawerVisible = true"
+            />
+            <Button
+              v-else
+              label="Pesan"
+              class="button w-full"
+              @click="openDialog(menu)"
+            />
+          </div>
         </template>
       </Card>
     </div>
@@ -253,6 +259,7 @@ onMounted(() => {
     v-model:visible="drawerVisible"
     position="right"
     header="Your Order"
+    class="bg-[var(--bg-drawer)]"
     :style="{ 'min-width': '45vw' }"
   >
     <div v-if="cartItems.length" class="p-4">
@@ -321,6 +328,7 @@ onMounted(() => {
         :options="selectedMenu?.menu_detail"
         optionLabel="menu_variants.name"
         placeholder="Choose a variant"
+        style="Select"
       />
       <InputNumber
         v-model="quantity"
@@ -328,10 +336,11 @@ onMounted(() => {
         :max="500"
         placeholder="Quantity"
         label="Quantity"
+        style="Input"
       />
     </div>
 
-    <div class="flex justify-end mt-4 gap-2">
+    <div class="button flex justify-end mt-4 gap-2">
       <Button
         type="button"
         label="Cancel"
@@ -352,13 +361,13 @@ onMounted(() => {
 <style scoped>
 .button {
   background-color: transparent;
-  border: 2px solid var(--sidebar-color);
-  color: var(--sidebar-color);
+  border: 2px solid var(--btn-secondary);
+  color: var(--btn-secondary);
+  margin-top: 0;
 }
 
-.button:hover {
-  background-color: var(--sidebar-color);
-  color: #fff;
-  transition: 0.3s;
+.footer-buttons .button {
+  min-height: 2.5rem;
+  /* Menyamakan tinggi tombol */
 }
 </style>

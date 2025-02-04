@@ -128,7 +128,7 @@ onMounted(() => {
           optionLabel="name"
           optionValue="id"
           placeholder="Select Menu"
-          class="w-full p-3"
+          class="custom-select w-full p-3"
         />
       </div>
 
@@ -146,7 +146,7 @@ onMounted(() => {
             optionLabel="name"
             optionValue="id"
             placeholder="Select Variant"
-            class="w-full p-3"
+            class="custom-select w-full p-3"
           />
         </div>
 
@@ -166,7 +166,7 @@ onMounted(() => {
         <!-- Remove Variant Field -->
         <Button
           v-if="variantDetails.length > 1"
-          class="btn btn-danger mt-2"
+          class="remove-btn btn btn-danger mt-2"
           @click="removeVariantField(index)"
         >
           Remove Variant
@@ -174,12 +174,18 @@ onMounted(() => {
       </div>
 
       <!-- Add Another Variant Field -->
-      <Button class="btn btn-secondary mt-4 w-fit" @click="addVariantField">
+      <Button
+        class="custom-button btn btn-secondary mt-4 p-4"
+        @click="addVariantField"
+      >
         Tambah Variant Lainnya
       </Button>
 
       <!-- Submit Button -->
-      <Button class="btn btn-primary mt-4" @click="insertMenuDetail">
+      <Button
+        class="custom-button btn btn-primary mt-4"
+        @click="insertMenuDetail"
+      >
         <i class="fa-solid fa-floppy-disk"></i>
         Simpan Detail Menu
       </Button>

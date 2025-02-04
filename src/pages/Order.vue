@@ -517,7 +517,7 @@ const toggleMessage = () => {
               v-if="!isMessageVisible"
               v-model="customer"
               placeholder="Nama Customer"
-              class="max-w-fit"
+              class="custom-input max-w-fit"
             />
 
             <Button
@@ -604,10 +604,11 @@ const toggleMessage = () => {
               optionLabel="label"
               optionValue="value"
               placeholder="Select Payment Method"
+              class="custom-select"
             />
             <div class="flex gap-2">
               <h2>Total:</h2>
-              <h2 class="text-black">
+              <h2 class="text-white">
                 {{ formatCurrency(discountedTotalAmount) }}
               </h2>
             </div>
@@ -646,7 +647,7 @@ const toggleMessage = () => {
         <Button
           label="Finish Order"
           icon="fa-solid fa-check"
-          class="button"
+          class="button33"
           severity="save"
           @click="finishOrder"
         />
@@ -696,24 +697,6 @@ const toggleMessage = () => {
 </template>
 
 <style scoped>
-table {
-  border-collapse: collapse;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 8px;
-}
-
-th {
-  background-color: #393939;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #454545;
-}
-
 .button {
   background-color: transparent;
   border: 2px solid var(--sidebar-color);

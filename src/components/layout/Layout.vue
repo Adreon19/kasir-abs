@@ -1,8 +1,11 @@
 <script setup>
+import { ref, onMounted } from "vue";
 import { supabase } from "../../supabase";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const darkMode = ref(false);
+const checked = ref(false);
 
 const handleLogout = async () => {
   const { error } = await supabase.auth.signOut();
@@ -12,21 +15,51 @@ const handleLogout = async () => {
     router.push("/login");
   }
 };
+function toggleDarkMode() {
+  darkMode.value = !darkMode.value;
+  checked.value = !darkMode.value;
+  document.documentElement.classList.toggle("my-app-dark", darkMode.value);
+
+  localStorage.setItem("darkMode", darkMode.value);
+}
+onMounted(() => {
+  const savedDarkMode = localStorage.getItem("darkMode");
+
+  if (savedDarkMode === "true") {
+    darkMode.value = true;
+    checked.value = true;
+    document.documentElement.classList.add("my-app-dark");
+  }
+});
 </script>
 
 <template>
   <div class="flex flex-row min-h-screen">
-    <aside class="sidebar text-black max-w-64 flex flex-col justify-between">
+    <aside
+      class="sidebar text-black xl:max-w-64 xl:min-w-64 lg:max-w-64 lg:min-w-64 flex flex-col justify-between"
+    >
       <div class="">
         <div class="logo flex items-center m-4">
           <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <h1 class="text-sm font-semibold text-white">
+          <h1 class="text-sm font-semibold text-[var(--text-primary)]">
             Artisan Beverage Studio
           </h1>
         </div>
 
-        <div class="flex flex-col justify-between">
+        <div class="flex flex-col justify-between relative top-10">
           <ul class="flex flex-col">
+            <div class="m-3">
+              <ToggleSwitch v-model="checked" @click="toggleDarkMode()">
+                <template #handle="{ checked }">
+                  <i
+                    :class="[
+                      '!text-xs pi',
+                      { 'pi-moon': checked, 'pi-sun': !checked },
+                    ]"
+                  />
+                </template>
+              </ToggleSwitch>
+            </div>
             <RouterLink to="/">
               <li>
                 <i class="fa-solid fa-house ease-in duration-300"></i> Halaman
@@ -40,21 +73,18 @@ const handleLogout = async () => {
                 Pesanan
               </li>
             </RouterLink>
-
-            <RouterLink to="/add">
+            <RouterLink to="/history">
               <li>
                 <i class="fa-solid fa-square-plus ease-in duration-300"></i>
                 Tambah Menu
               </li>
             </RouterLink>
-
-            <RouterLink to="/member">
+            <RouterLink to="/order">
               <li>
                 <i class="fa-solid fa-users ease-in duration-300"></i> Member
               </li>
             </RouterLink>
-
-            <RouterLink to="/history">
+            <RouterLink to="/money">
               <li>
                 <i class="fa-solid fa-scroll ease-in duration-300"></i> Riwayat
                 Pesanan
@@ -70,12 +100,11 @@ const handleLogout = async () => {
           </ul>
         </div>
       </div>
-
-      <div class="m-4">
+      <div class="flex justify-center mb-4">
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
-          class="shadow-lg text-white"
+          class="bg-[var(--btn-secondary)] text-[var(--text-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
           @click="handleLogout"
         />
       </div>
@@ -91,34 +120,24 @@ const handleLogout = async () => {
 
 <style scoped>
 .sidebar {
-  width: 350px;
+  width: 650px;
   height: 100vh;
   position: sticky;
+  overflow: hidden;
   top: 0;
-  background-color: var(--sidebar-color);
+  background-color: var(--sidebar-bg);
 }
 
 .sidebar li {
   padding: 1rem;
   font-size: 20px;
+  color: var(--text-primary);
 }
 
 .sidebar li:hover {
   color: #fff;
-  background: #000;
+  background: var(--hover-primary);
   width: 100%;
   transition: 0.5s;
-}
-
-.sidebar i {
-  margin-right: 15px;
-}
-
-li {
-  color: var(--primary-text);
-}
-
-button {
-  background: var(--sidebar-color);
 }
 </style>
