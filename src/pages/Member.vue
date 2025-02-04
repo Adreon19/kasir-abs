@@ -214,6 +214,7 @@ onMounted(initializeData);
     </div>
     <div v-else class="flex flex-col gap-6 max-w-full container">
       <section class="main-section flex flex-col gap-4">
+        <h2>Registrasi Member</h2>
         <div class="flex justify-between item-center gap-3">
           <div class="flex flex-col gap-3">
             <label for="telfon"> No. Telfon </label>
@@ -278,6 +279,14 @@ onMounted(initializeData);
           </DataTable>
         </div>
       </section>
+      <div class="flex flex-col gap-3">
+        <Button
+          as="router-link"
+          label="Registrasi akun"
+          to="/register"
+          class="w-fit h-fit mt-6 text-white"
+        />
+      </div>
     </div>
   </div>
 
