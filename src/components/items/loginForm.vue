@@ -2,12 +2,14 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { supabase } from "../../supabase";
+import { Toast, useToast } from "primevue";
 
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
 const darkMode = ref(false);
 const router = useRouter();
+const toast = useToast(); // Initialize toast
 
 const handleLogin = async () => {
   try {
@@ -19,7 +21,13 @@ const handleLogin = async () => {
     });
 
     if (error) {
-      errorMessage.value = error.message;
+      // Show toast notification for invalid email/password
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Email atau password salah",
+        life: 3000,
+      });
       return;
     }
 
@@ -35,16 +43,15 @@ const handleLogin = async () => {
     console.error(err);
   }
 };
+
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
-
   localStorage.setItem("darkMode", darkMode.value);
 }
 
 onMounted(() => {
   const savedDarkMode = localStorage.getItem("darkMode");
-
   if (savedDarkMode === "true") {
     darkMode.value = true;
     document.documentElement.classList.add("my-app-dark");
@@ -89,6 +96,7 @@ onMounted(() => {
       </div>
     </form>
   </section>
+  <Toast />
 </template>
 
 <style>
