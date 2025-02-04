@@ -23,7 +23,7 @@
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
   --text-primary: #000000;
-  --text-secondary: #ffffff;
+  --text-secondary: #000000;
   --hover-primary: #634f2b;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
@@ -186,8 +186,8 @@ button:focus-visible {
 }
 
 /* add menu optimalize on mini ipad */
-
-<style scoped > .main-section {
+/* 
+.main-section {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -213,7 +213,7 @@ button:focus-visible {
   padding-bottom: 15px;
   padding-left: 20px;
   color: #666;
-}
+} */
 
 /* Responsive Styles for iPad Mini lenskep (1024x768) */
 @media (max-width: 1024px) {

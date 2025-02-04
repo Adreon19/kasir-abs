@@ -259,7 +259,7 @@ onMounted(() => {
     v-model:visible="drawerVisible"
     position="right"
     header="Your Order"
-    class="bg-[var(--bg-drawer)]"
+    class="bg-[var(--bg-drawer)] text-slate-50"
     :style="{ 'min-width': '45vw' }"
   >
     <div v-if="cartItems.length" class="p-4">
@@ -291,6 +291,7 @@ onMounted(() => {
               label="Add Another"
               icon="fa-solid fa-plus"
               class="button w-fit"
+              severity="warn"
               @click="closeDrawerAndOpenAddVariantDialog(menuList[0])"
             />
           </div>
