@@ -16,21 +16,18 @@ const handleRegister = async () => {
   try {
     errorMessage.value = "";
 
-    // Check if the email already exists
     const { data: existingUser, error: emailCheckError } = await supabase
       .from("user")
       .select("user_id")
       .eq("email", email.value)
       .single();
 
-    // Check if the display name already exists
     const { data: existingName, error: nameCheckError } = await supabase
       .from("user")
       .select("user_id")
       .eq("name", displayName.value)
       .single();
 
-    // Handle errors for both checks
     if (emailCheckError && emailCheckError.code !== "PGRST116") {
       errorMessage.value = emailCheckError.message;
       return;
@@ -41,7 +38,6 @@ const handleRegister = async () => {
       return;
     }
 
-    // Check if both email and name already exist
     if (existingUser && existingName) {
       toast.add({
         severity: "error",
@@ -52,7 +48,6 @@ const handleRegister = async () => {
       return;
     }
 
-    // Check if only the email exists
     if (existingUser) {
       toast.add({
         severity: "error",
@@ -63,7 +58,6 @@ const handleRegister = async () => {
       return;
     }
 
-    // Check if only the display name exists
     if (existingName) {
       toast.add({
         severity: "error",
@@ -92,7 +86,6 @@ const handleRegister = async () => {
       return;
     }
 
-    // Insert the user data into the custom 'user' table
     const { error: insertError } = await supabase.from("user").insert([
       {
         user_id: signUpData.user.id,
@@ -119,7 +112,9 @@ const handleRegister = async () => {
       detail: "User  berhasil ditambahkan",
       life: 5000,
     });
-    router.push("/member");
+    setTimeout(() => {
+      router.push("/member");
+    }, 3000);
   } catch (err) {
     errorMessage.value = "An unexpected error occurred. Please try again.";
     console.error(err);
