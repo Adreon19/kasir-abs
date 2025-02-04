@@ -92,12 +92,10 @@ const handleRegister = async () => {
       return;
     }
 
-    const userId = signUpData.user.id;
-
     // Insert the user data into the custom 'user' table
     const { error: insertError } = await supabase.from("user").insert([
       {
-        user_id: userId,
+        user_id: signUpData.user.id,
         name: displayName.value,
         email: email.value,
         role_id: 1,
