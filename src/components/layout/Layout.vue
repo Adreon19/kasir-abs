@@ -62,31 +62,39 @@ onMounted(() => {
             </div>
             <RouterLink to="/">
               <li>
-                <i class="fa-solid fa-book-open ease-in duration-300"></i> Menu
+                <i class="fa-solid fa-house ease-in duration-300"></i> Halaman
+                Menu
               </li>
             </RouterLink>
-            <RouterLink to="/history">
-              <li>
-                <i class="fa-solid fa-scroll ease-in duration-300"></i> Riwayat
-                Pesanan
-              </li>
-            </RouterLink>
+
             <RouterLink to="/order">
               <li>
                 <i class="fa-solid fa-cart-shopping ease-in duration-300"></i>
                 Pesanan
               </li>
             </RouterLink>
-            <RouterLink to="/money">
-              <li>
-                <i class="fa-solid fa-money-bill ease-in duration-300"></i>
-                Keuangan
-              </li>
-            </RouterLink>
-            <RouterLink to="/add">
+            <RouterLink to="/history">
               <li>
                 <i class="fa-solid fa-square-plus ease-in duration-300"></i>
                 Tambah Menu
+              </li>
+            </RouterLink>
+            <RouterLink to="/order">
+              <li>
+                <i class="fa-solid fa-users ease-in duration-300"></i> Member
+              </li>
+            </RouterLink>
+            <RouterLink to="/money">
+              <li>
+                <i class="fa-solid fa-scroll ease-in duration-300"></i> Riwayat
+                Pesanan
+              </li>
+            </RouterLink>
+
+            <RouterLink to="/money">
+              <li>
+                <i class="fa-solid fa-money-bill ease-in duration-300"></i>
+                Finansial
               </li>
             </RouterLink>
           </ul>
@@ -131,9 +139,5 @@ onMounted(() => {
   background: var(--hover-primary);
   width: 100%;
   transition: 0.5s;
-}
-
-.sidebar i {
-  /* margin-right: 15px; */
 }
 </style>

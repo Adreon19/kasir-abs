@@ -27,30 +27,44 @@ const fetchMenu = async () => {
 
 const deleteMenuByMenuId = async (menuId) => {
   try {
-    // Delete from the menu table by menu_id
-    const { error } = await supabase
+    // Konfirmasi sebelum menghapus
+    if (!confirm("Apakah Anda yakin ingin menghapus menu ini?")) {
+      return;
+    }
+
+    // Hapus menu dari menu_detail berdasarkan menu_id
+    const { error: detailError } = await supabase
+      .from("menu_detail")
+      .delete()
+      .eq("menu_id", menuId);
+
+    if (detailError) throw detailError;
+
+    // Hapus menu dari menu_list setelah menu_detail dihapus
+    const { error: menuError } = await supabase
       .from("menu_list")
       .delete()
-      .eq("id", menuId); // `menu_id` corresponds to the `menu` table's `id`
+      .eq("id", menuId);
 
-    if (error) throw error;
+    if (menuError) throw menuError;
 
     toast.add({
       severity: "success",
-      summary: "Success",
-      detail: "Menu and its details deleted successfully",
+      summary: "Berhasil",
+      detail: "Menu berhasil dihapus",
       life: 3000,
     });
 
-    await fetchMenu(); // Refresh the menu list after deletion
+    // Refresh data
+    await fetchMenu();
   } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Error",
-      detail: "Error deleting menu",
+      summary: "Gagal",
+      detail: "Terjadi kesalahan saat menghapus menu",
       life: 3000,
     });
-    console.error("Error deleting menu by menu_id:", error.message);
+    console.error("Error deleting menu:", error.message);
   }
 };
 
@@ -72,7 +86,14 @@ onMounted(initializeData);
     <h2>List Menu</h2>
     <div class="flex gap-5">
       <!-- Updated DataTable -->
-      <DataTable :value="menu" stripedRows class="w-full">
+      <DataTable
+        :value="menu"
+        stripedRows
+        paginator
+        :rows="5"
+        :rowsPerPageOptions="[5, 10, 20, 50]"
+        tableStyle="min-width: 50rem"
+      >
         <!-- Menu Name -->
         <Column
           field="menu_id.name"
@@ -140,6 +161,7 @@ onMounted(initializeData);
             </div>
           </template>
         </Column>
+        <template #empty> Tidak ada Menu! </template>
       </DataTable>
     </div>
   </section>
