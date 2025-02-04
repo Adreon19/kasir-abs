@@ -225,10 +225,6 @@ button:focus-visible {
     font-size: 1.5rem;
   }
 
-  .img-menu {
-    max-width: 200px;
-  }
-
   .custom-input,
   .custom-select,
   .custom-textarea,
