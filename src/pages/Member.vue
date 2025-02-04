@@ -147,7 +147,10 @@ const updateMember = async () => {
       return;
     }
 
-    if (!nama.trim() || !no_telp.trim()) {
+    const trimmedNoTelp = String(no_telp).trim();
+    const trimmedNama = nama.trim();
+
+    if (!trimmedNama || !trimmedNoTelp) {
       toast.add({
         severity: "warn",
         summary: "Peringatan",
@@ -159,7 +162,7 @@ const updateMember = async () => {
 
     const { error } = await supabase
       .from("membership")
-      .update({ no_telp: String(no_telp).trim(), nama: nama.trim() })
+      .update({ no_telp: trimmedNoTelp, nama: trimmedNama })
       .eq("id", id);
 
     if (error) throw error;
@@ -209,7 +212,7 @@ onMounted(initializeData);
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
-    <div v-else class="flex flex-col gap-6">
+    <div v-else class="flex flex-col gap-6 max-w-full container">
       <section class="main-section flex flex-col gap-4">
         <div class="flex justify-between item-center gap-3">
           <div class="flex flex-col gap-3">
@@ -239,7 +242,7 @@ onMounted(initializeData);
               iconPos="left"
               @click="insertMember"
               :loading="isLoading"
-              class="w-fit h-fit"
+              class="w-fit h-fit mt-6"
             />
           </div>
         </div>
@@ -250,7 +253,6 @@ onMounted(initializeData);
             paginator
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 50rem"
           >
             <Column field="no_telp" header="Nomor Telfon" />
             <Column field="nama" header="Nama Member" />
