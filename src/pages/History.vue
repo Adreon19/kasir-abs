@@ -213,8 +213,8 @@ const downloadPDF = () => {
 
   // Table Header
   doc.setFont("helvetica", "bold");
-  doc.text("Customer Name", marginLeft, currentY);
-  doc.text("Menu", marginLeft + 20, currentY);
+  doc.text("Name", marginLeft, currentY);
+  doc.text("Menu", marginLeft + 15, currentY);
   doc.text("Price", marginLeft + 45, currentY);
   doc.text("Qty", marginLeft + 65, currentY, { align: "right" });
   currentY += 5;
@@ -224,7 +224,7 @@ const downloadPDF = () => {
     order.details.forEach((detail) => {
       doc.setFont("helvetica", "normal");
       doc.text(order.customer_name || "Unknown", marginLeft, currentY);
-      doc.text(detail.menu_name || "Unknown", marginLeft + 20, currentY);
+      doc.text(detail.menu_name || "Unknown", marginLeft + 15, currentY);
       doc.text(
         formatCurrency(detail.menu_price) || "0",
         marginLeft + 45,
