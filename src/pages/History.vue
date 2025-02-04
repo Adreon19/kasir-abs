@@ -83,20 +83,21 @@ onMounted(fetchOrder);
 </script>
 
 <template>
-  <div class="p-6 flex flex-col gap-6">
-    <h1 style="font-size: 30px">Riwayat Pesanan</h1>
+  <div class="p-6 flex flex-col gap-6 max-w-full container">
+    <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
+      Riwayat Pesanan
+    </h1>
     <div v-if="isLoading" class="flex justify-center">
       <progressSpinner />
     </div>
     <div v-else>
-      <section class="main-section">
+      <section class="main-section overflow-x-auto">
         <DataTable
           :value="order"
           :expandedRows="expandedRows"
           @update:expandedRows="expandedRows = $event"
           dataKey="id"
           stripedRows
-          tableStyle="min-width: 50rem"
         >
           <!-- Row Expander -->
           <template #header>
@@ -131,10 +132,7 @@ onMounted(fetchOrder);
           <template #expansion="slotProps">
             <div>
               <p>An order from {{ slotProps.data.customer_name }}</p>
-              <DataTable
-                :value="slotProps.data.details"
-                tableStyle="min-width: 50rem"
-              >
+              <DataTable :value="slotProps.data.details">
                 <Column field="menu_name" header="Menu Name" />
                 <Column field="menu_price" header="Total">
                   <template #body="detailsSlotProps">

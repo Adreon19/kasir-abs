@@ -203,7 +203,7 @@ onMounted(() => {
           <InputText
             v-model="customer"
             placeholder="Nama Customer"
-            class="max-w-fit"
+            class="custom-input max-w-fit"
           />
           <table class="w-full bg-black text-white rounded-lg overflow-hidden">
             <thead class="bg-gray-800">
@@ -259,10 +259,11 @@ onMounted(() => {
               optionLabel="label"
               optionValue="value"
               placeholder="Select Payment Method"
+              class="custom-select"
             />
             <div class="flex gap-2">
               <h2>Total:</h2>
-              <h2 class="text-black">{{ formatCurrency(totalAmount) }}</h2>
+              <h2 class="text-white">{{ formatCurrency(totalAmount) }}</h2>
             </div>
           </div>
           <!-- Show input number and calculated change if 'Cash' is selected -->
@@ -299,7 +300,7 @@ onMounted(() => {
         <Button
           label="Finish Order"
           icon="fa-solid fa-check"
-          class="button"
+          class="button33"
           severity="save"
           @click="finishOrder"
         />
@@ -321,7 +322,7 @@ td {
 }
 
 th {
-  background-color: #393939;
+  /* background-color: #393939; */
 }
 
 tbody tr:nth-child(even) {

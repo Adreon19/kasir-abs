@@ -107,8 +107,10 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <div class="p-6 flex flex-col gap-6">
-    <h1 style="font-size: 30px">Riwayat Keuangan</h1>
+  <div class="p-6 flex flex-col gap-6 max-w-full container">
+    <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
+      Riwayat Keuangan
+    </h1>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
@@ -120,23 +122,29 @@ onMounted(initializeData);
       </section>
       <section class="main-section">
         <div class="container flex flex-col gap-4">
-          <DataTable :value="finance" stripedRows tableStyle="min-width: 50rem">
+          <DataTable :value="finance" stripedRows>
             <Column header="Total Masuk">
               <template #body="slotProps">
-                {{ formatCurrency(slotProps.data.paid) }}
+                <div class="text-[var(--text-secondary)]">
+                  {{ formatCurrency(slotProps.data.paid) }}
+                </div>
               </template>
             </Column>
             <Column header="Kembalian">
               <template #body="slotProps">
-                {{ formatCurrency(slotProps.data.change) }}
+                <div class="text-[var(--text-secondary)]">
+                  {{ formatCurrency(slotProps.data.change) }}
+                </div>
               </template>
             </Column>
           </DataTable>
         </div>
       </section>
 
-      <section class="main-section flex flex-col gap-4">
-        <div class="flex justify-between item-center gap-3">
+      <section class="main-section flex flex-col gap-10">
+        <div
+          class="flex flex-col bg-[var(--striped-row)] justify-between item-center gap-3 p-5"
+        >
           <div class="flex flex-col gap-3">
             <label for="outcome"> Pengeluaran </label>
             <InputNumber
@@ -145,7 +153,7 @@ onMounted(initializeData);
               mode="currency"
               currency="IDR"
               locale="id-ID"
-              class="h-full text-l max-w-fit"
+              class="text-l w-full"
             />
           </div>
           <div class="flex flex-col gap-2">
@@ -154,6 +162,7 @@ onMounted(initializeData);
               v-model="detail"
               row="5"
               cols="30"
+              class="custom-textarea"
               placeholder="Masukkan detail pengeluaranmu!"
             />
           </div>
@@ -164,16 +173,13 @@ onMounted(initializeData);
               iconPos="left"
               @click="insertOutcome"
               :loading="isLoading"
-              class="w-fit h-fit"
+              class="custom-button w-full h-fit p-4 mt-4"
             />
           </div>
         </div>
+        <div class="border-b-2"></div>
         <div class="container flex flex-col gap-4">
-          <DataTable
-            :value="outcomeData"
-            stripedRows
-            tableStyle="min-width: 50rem"
-          >
+          <DataTable :value="outcomeData" stripedRows>
             <Column header="Pengeluaran">
               <template #body="slotProps">
                 {{ formatCurrency(slotProps.data.pengeluaran) }}

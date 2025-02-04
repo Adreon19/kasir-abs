@@ -70,9 +70,9 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>List Menu</h2>
-    <div class="card flex gap-5">
+    <div class="flex gap-5">
       <!-- Updated DataTable -->
-      <DataTable :value="menu" tableStyle="min-width: 50rem">
+      <DataTable :value="menu" stripedRows class="w-full">
         <!-- Menu Name -->
         <Column
           field="menu_id.name"
