@@ -73,18 +73,18 @@ onMounted(() => {
                 Pesanan
               </li>
             </RouterLink>
-            <RouterLink to="/history">
+            <RouterLink to="/add">
               <li>
                 <i class="fa-solid fa-square-plus ease-in duration-300"></i>
                 Tambah Menu
               </li>
             </RouterLink>
-            <RouterLink to="/order">
+            <RouterLink to="/member">
               <li>
                 <i class="fa-solid fa-users ease-in duration-300"></i> Member
               </li>
             </RouterLink>
-            <RouterLink to="/money">
+            <RouterLink to="/history">
               <li>
                 <i class="fa-solid fa-scroll ease-in duration-300"></i> Riwayat
                 Pesanan
