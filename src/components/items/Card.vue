@@ -184,10 +184,10 @@ onMounted(() => {
                 {{ formatCurrency(detail.price) || "N/A" }}
               </h4>
             </template>
-            <p class="desc">
-              {{ menu.description || "No description available." }}
-            </p>
           </template>
+          <p class="desc">
+            {{ menu.description || "No description available." }}
+          </p>
         </template>
         <template #footer>
           <div class="flex items-center">
