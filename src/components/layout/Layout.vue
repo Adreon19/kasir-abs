@@ -36,7 +36,7 @@ onMounted(() => {
 <template>
   <div class="flex flex-row min-h-screen">
     <aside
-      class="sidebar text-black xl:max-w-64 xl:min-w-64 lg:max-w-64 lg:min-w-64 flex flex-col justify-between"
+      class="sidebar text-black xl:max-w-64 xl:min-w-64 lg:max-w-64 lg:min-w-64 flex flex-col justify-between overflow-y-auto"
     >
       <div>
         <div class="logo flex items-center m-4">
@@ -110,7 +110,7 @@ onMounted(() => {
     </aside>
 
     <div class="flex-grow flex flex-col">
-      <main class="flex-grow">
+      <main class="main flex-grow">
         <slot />
       </main>
     </div>
@@ -138,5 +138,9 @@ onMounted(() => {
   background: var(--hover-primary);
   width: 100%;
   transition: 0.5s;
+}
+
+.main {
+  max-width: 100vh;
 }
 </style>
