@@ -125,12 +125,17 @@ onMounted(() => {
 
 <style scoped>
 .sidebar {
-  width: 650px;
-  height: 100vh;
+  width: 250px; /* Set a fixed width for the sidebar */
+  height: 100vh; /* Full height of the viewport */
   position: sticky;
-  overflow: hidden;
   top: 0;
   background-color: var(--sidebar-bg);
+}
+
+.main {
+  flex-grow: 1; /* Allow the main area to grow and fill the remaining space */
+  padding: 1rem; /* Add some padding for aesthetics */
+  overflow-y: auto; /* Allow scrolling if content overflows */
 }
 
 .sidebar li {
@@ -142,11 +147,15 @@ onMounted(() => {
 .sidebar li:hover {
   color: #fff;
   background: var(--hover-primary);
-  width: 100%;
   transition: 0.5s;
 }
 
-.main {
-  max-width: 100vh;
+/* Media query for larger screens */
+@media (min-width: 1024px) {
+  .main {
+    max-width: calc(
+      100vw - 250px
+    ); /* Adjust max-width based on sidebar width */
+  }
 }
 </style>
