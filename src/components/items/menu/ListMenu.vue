@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { supabase } from "../../../supabase";
 import { useToast } from "primevue/usetoast";
 import { formatCurrency } from "../../../utils/formatter/currency";
+import { onEvent } from "../../../utils/BusEvent";
 
 const menu = ref([]);
 const toast = useToast();
@@ -71,6 +72,13 @@ const deleteMenuByMenuId = async (menuId) => {
 const initializeData = async () => {
   try {
     await fetchMenu();
+    onEvent("menuAdded", () => {
+      fetchMenu();
+    });
+    onEvent("priceAdded", () => {
+      console.log("Price added event received");
+      fetchMenu();
+    });
   } catch (error) {
     console.error("Error during initialization:", error.message);
   } finally {

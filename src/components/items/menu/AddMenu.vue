@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import { supabase } from "../../../supabase";
 import { useToast } from "primevue/usetoast";
 import { Cropper } from "vue-advanced-cropper";
+import { emitEvent } from "../../../utils/BusEvent";
 import "vue-advanced-cropper/dist/style.css";
 
 const isLoading = ref(false);
@@ -102,8 +103,10 @@ const uploadImageAndSaveMenu = async () => {
           kategori_id: selectedCategory.value,
           description: descriptionForm.value,
         },
-      ]);
+      ])
+      .select();
 
+    emitEvent("menuAdded", { id: menuData[0].id, name: menuName.value });
     if (menuError) {
       throw menuError;
     }

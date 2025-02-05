@@ -10,6 +10,7 @@ const password = ref("");
 const displayName = ref("");
 const errorMessage = ref("");
 const darkMode = ref(false);
+const checked = ref(false);
 const router = useRouter();
 
 const handleRegister = async () => {
@@ -123,75 +124,82 @@ const handleRegister = async () => {
 
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
+  checked.value = !darkMode.value;
   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
 
   localStorage.setItem("darkMode", darkMode.value);
 }
-
 onMounted(() => {
   const savedDarkMode = localStorage.getItem("darkMode");
 
   if (savedDarkMode === "true") {
     darkMode.value = true;
+    checked.value = true;
     document.documentElement.classList.add("my-app-dark");
   }
 });
 </script>
 
 <template>
-  <div class="p-6">
+  <div class="flex justify-start w-fit m-3">
     <Button as="router-link" label="Back" icon="pi pi-arrow-left" to="/" />
   </div>
-  <section class="flex flex-col items-center gap-8 mb-10 mt-10">
-    <img src="/images/logoABS.png" alt="ABS Logo" class="w-36 mb-10" />
-    <form class="flex flex-col" @submit.prevent="handleRegister">
-      <div
-        class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md"
-      >
-        <FloatLabel>
-          <InputText
-            type="text"
-            v-model="displayName"
-            class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none w-full"
-          />
-          <label style="color: black">Display Name</label>
-        </FloatLabel>
-        <FloatLabel>
-          <InputText
-            type="text"
-            v-model="email"
-            class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none w-full"
-          />
-          <label style="color: black">Email</label>
-        </FloatLabel>
-        <FloatLabel>
-          <Password
-            v-model="password"
-            toggleMask
-            class="password text-lg rounded-md w-full border-none focus:outline-none"
-          />
-          <label style="color: black">Password</label>
-        </FloatLabel>
+  <section class="flex flex-col items-center gap-8 mb-10">
+    <div class="flex flex-col items-center">
+      <img src="/images/logoABS.png" alt="ABS Logo" class="w-36 mb-10" />
+      <form class="flex flex-col" @submit.prevent="handleRegister">
         <div
-          v-if="errorMessage"
-          class="text-red-600 text-center mt-2 bg-slate-900"
+          class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md"
         >
-          {{ errorMessage }}
+          <FloatLabel>
+            <InputText
+              type="text"
+              v-model="displayName"
+              class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none w-full"
+            />
+            <label style="color: black">Display Name</label>
+          </FloatLabel>
+          <FloatLabel>
+            <InputText
+              type="text"
+              v-model="email"
+              class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none w-full"
+            />
+            <label style="color: black">Email</label>
+          </FloatLabel>
+          <FloatLabel>
+            <Password
+              v-model="password"
+              toggleMask
+              class="password text-lg rounded-md w-full border-none focus:outline-none"
+            />
+            <label style="color: black">Password</label>
+          </FloatLabel>
+          <div
+            v-if="errorMessage"
+            class="text-red-600 text-center mt-2 bg-slate-900"
+          >
+            {{ errorMessage }}
+          </div>
+          <h3>Selalu ingat Email anda untuk login!</h3>
+          <div class="m-3">
+            <ToggleSwitch v-model="checked" @click="toggleDarkMode()">
+              <template #handle="{ checked }">
+                <i
+                  :class="[
+                    '!text-xs pi',
+                    { 'pi-moon': checked, 'pi-sun': !checked },
+                  ]"
+                />
+              </template>
+            </ToggleSwitch>
+          </div>
+          <div class="btn-login flex justify-center">
+            <Button label="Register" type="submit" class="btn-inlogin" />
+          </div>
         </div>
-        <h3>Selalu ingat Email anda untuk login!</h3>
-        <div class="flex gap-3 items-center mt-3 justify-between">
-          <Button
-            :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
-            :class="darkMode ? 'text-yellow-500' : 'text-black'"
-            @click="toggleDarkMode()"
-            class="bg-transparent hover:border-none active:border-none p-0"
-          />
-        </div>
-        <div class="btn-login flex justify-center">
-          <Button label="Register" type="submit" class="btn-inlogin" />
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </section>
   <Toast />
 </template>
