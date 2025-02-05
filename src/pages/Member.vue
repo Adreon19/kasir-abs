@@ -279,14 +279,6 @@ onMounted(initializeData);
           </DataTable>
         </div>
       </section>
-      <div class="flex flex-col gap-3">
-        <Button
-          as="router-link"
-          label="Registrasi akun"
-          to="/register"
-          class="w-fit h-fit mt-6 text-white"
-        />
-      </div>
     </div>
   </div>
 
