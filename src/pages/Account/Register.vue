@@ -113,7 +113,7 @@ const handleRegister = async () => {
       life: 5000,
     });
     setTimeout(() => {
-      router.push("/member");
+      router.push("/");
     }, 3000);
   } catch (err) {
     errorMessage.value = "An unexpected error occurred. Please try again.";
@@ -140,12 +140,7 @@ onMounted(() => {
 
 <template>
   <div class="p-6">
-    <Button
-      as="router-link"
-      label="Back"
-      icon="pi pi-arrow-left"
-      to="/member"
-    />
+    <Button as="router-link" label="Back" icon="pi pi-arrow-left" to="/" />
   </div>
   <section class="flex flex-col items-center gap-8 mb-10 mt-10">
     <img src="/images/logoABS.png" alt="ABS Logo" class="w-36 mb-10" />
