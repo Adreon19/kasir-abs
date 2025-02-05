@@ -275,7 +275,7 @@ onMounted(fetchOrder);
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
+    <h1 class="text-[var(--text-secondary)] font-bold" style="font-size: 30px">
       Riwayat Pesanan
     </h1>
     <div v-if="isLoading" class="flex justify-center">
@@ -291,10 +291,15 @@ onMounted(fetchOrder);
             optionLabel="label"
             optionValue="value"
             placeholder="Select Date Filter"
+            class="custom-select"
             @change="filterOrders"
           />
 
-          <Button label="Download PDF" @click="downloadPDF" />
+          <Button
+            label="Download PDF"
+            class="text-[--text-secondary]"
+            @click="downloadPDF"
+          />
         </div>
 
         <DataTable
@@ -315,6 +320,7 @@ onMounted(fetchOrder);
                 text
                 icon="pi pi-plus"
                 label="Expand All"
+                class="text-[var(--text-secondary)]"
                 @click="expandAll"
               />
 
@@ -322,6 +328,7 @@ onMounted(fetchOrder);
                 text
                 icon="pi pi-minus"
                 label="Collapse All"
+                class="text-[var(--text-secondary)]"
                 @click="collapseAll"
               />
             </div>

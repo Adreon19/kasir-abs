@@ -180,7 +180,11 @@ onMounted(initializeData);
     <div class="card flex flex-col gap-5">
       <div class="flex gap-5">
         <FloatLabel>
-          <InputText id="variant-name" v-model="newVariant" class="p-3" />
+          <InputText
+            id="variant-name"
+            v-model="newVariant"
+            class="custom-input p-3"
+          />
           <label for="variant-name">Nama variant</label>
         </FloatLabel>
         <Button
@@ -234,10 +238,11 @@ onMounted(initializeData);
     </div>
     <div v-else>
       <div class="flex flex-col">
-        <label for="editNama">Nama</label>
+        <label for="editNama" class="text-[var(--text-secondary)]">Nama</label>
         <InputText
           v-model="selectedVariant.name"
           id="editNama"
+          class="custom-input mt-3"
           placeholder="Nama Variant"
         />
       </div>

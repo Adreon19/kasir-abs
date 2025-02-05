@@ -2,11 +2,11 @@
   @apply appearance-none rounded-md
         border border-surface-300 dark:border-surface-700
         enabled:hover:border-surface-400 dark:enabled:hover:border-surface-600
-        enabled:focus:border-primary
-        bg-surface-0 dark:bg-surface-950
-        text-surface-700 dark:text-surface-0
+        /* enabled:focus:border-primary */
+        bg-[var(--input-primary)] 
+        text-[var(--text-secondary)]
         disabled:bg-surface-200 disabled:text-surface-500 disabled:opacity-100 dark:disabled:bg-surface-700 dark:disabled:text-surface-400
-        placeholder:text-surface-500 dark:placeholder:text-surface-400
+        placeholder-[var(--text-secondary)]
         px-3 py-2
         transition-colors duration-200
         shadow-[0_1px_2px_0_rgba(18,18,23,0.05)]
@@ -37,5 +37,5 @@
   @apply text-lg px-[0.875rem] py-[0.625rem];
 }
 .custom-textarea {
-  @apply bg-[var(--input-primary)] text-[var(--text-secondary)] placeholder-white;
+  @apply bg-[var(--input-primary)] text-[var(--text-secondary)] placeholder-[var(--text-secondary)];
 }

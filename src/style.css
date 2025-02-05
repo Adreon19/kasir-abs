@@ -22,12 +22,15 @@
   /* #81684f */
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
-  --text-primary: #000000;
+  --text-primary: #ffffff;
   --text-secondary: #000000;
   --hover-primary: #634f2b;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
+  --btn-order: #c8a241;
   --btn-secondary: #634f2b;
+  --input-search: #dfc3a1;
+  --btn-search: #d8ae7e;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
   --section-bg: rgb(0, 0, 0, 0.5);
@@ -35,6 +38,7 @@
   --input-primary: #dfc3a1;
   --striped-row: #d8ae7e;
   --bg-datable: #dfc3a1;
+  --outline: #000000;
 }
 
 :root[class="my-app-dark"] {
@@ -49,7 +53,10 @@
   --hover-primary: #c8a241;
   --view-order: #957836;
   --border-btn: #ffffff;
+  --btn-order: #c8a241;
   --btn-secondary: #c8a241;
+  --input-search: #453721;
+  --btn-search: rgb(72, 66, 66);
   --text-order: #c8a241;
   --bg-drawer: rgba(149, 120, 54, 0.2);
   --section-bg: rgb(0, 0, 0, 0.5);
@@ -59,6 +66,8 @@
   --bg-switch: #130b03;
   --bg-icon-switch: #776024;
   --switch-icon-color: #c8a241;
+  --outline: #ffffff;
+  --promp-bg: rgb(32, 25, 7);
 }
 
 body {
@@ -82,13 +91,14 @@ body {
   margin-top: 10px;
 }
 .p-select-label.p-placeholder {
-  margin-top: 4px;
-  font-family: "Roboto", serif;
   font-weight: 400;
-  color: white;
 }
 .p-select-label {
   color: #ffffff;
+}
+
+.toggle-member {
+  color: var(--text-secondary);
 }
 
 /* asset login */
@@ -145,7 +155,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  /* background-color: #1a1a1a; */
   cursor: pointer;
   transition: border-color 0.25s;
 }

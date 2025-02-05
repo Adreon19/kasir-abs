@@ -220,7 +220,7 @@ onMounted(initializeData);
             <InputText
               v-model="phoneNumber"
               id="telfon"
-              class="h-full text-lg max-w-fit"
+              class="custom-input h-full text-lg max-w-fit"
               placeholder="Masukkan Nomor Telepon"
               @keypress="onlyNumbers"
             />
@@ -231,7 +231,7 @@ onMounted(initializeData);
               v-model="memberName"
               row="5"
               cols="30"
-              class="h-full text-lg max-w-fit"
+              class="custom-input h-full text-lg max-w-fit"
               placeholder="Masukkan Nama Member!"
             />
           </div>
@@ -242,7 +242,7 @@ onMounted(initializeData);
               iconPos="left"
               @click="insertMember"
               :loading="isLoading"
-              class="w-fit h-fit mt-6"
+              class="custom-button w-fit h-fit mt-6"
             />
           </div>
         </div>

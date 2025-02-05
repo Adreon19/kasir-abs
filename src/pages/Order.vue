@@ -501,6 +501,10 @@ const toggleMessage = () => {
     selectedMember.value = null;
   }
 };
+
+const buttonLabel = computed(() => {
+  return selectedMember.value ? "Belum Ada Member?" : " Ada Member?";
+});
 </script>
 
 <template>
@@ -521,8 +525,8 @@ const toggleMessage = () => {
             />
 
             <Button
-              label="Sudah Ada Member?"
-              class="max-w-fit"
+              :label="buttonLabel"
+              class="custom-button max-w-fit"
               @click="toggleMessage"
             />
             <Select
@@ -533,7 +537,7 @@ const toggleMessage = () => {
               option-value="nama"
               option-label="nama"
               placeholder="Pilih Member"
-              class="p-select w-full md:w-56 font-bold"
+              class="custom-select p-select w-full md:w-56 font-bold"
             />
           </div>
 
@@ -592,7 +596,7 @@ const toggleMessage = () => {
             <Button
               label="Tambah menu lainnya"
               icon="fa-solid fa-plus"
-              class="button"
+              class="custom-button"
               severity="save"
             />
           </RouterLink>
@@ -647,7 +651,7 @@ const toggleMessage = () => {
         <Button
           label="Finish Order"
           icon="fa-solid fa-check"
-          class="button33"
+          class="button33 custom-button"
           severity="save"
           @click="finishOrder"
         />
@@ -672,6 +676,7 @@ const toggleMessage = () => {
           :min="0"
           :max="500"
           id="editjumlah"
+          class="custom-number"
           placeholder="Masukkan jumlah"
         />
       </div>

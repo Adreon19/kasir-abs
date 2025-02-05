@@ -133,6 +133,7 @@ onMounted(initializeData);
         :rows="5"
         :rowsPerPageOptions="[5, 10, 20, 50]"
         tableStyle="min-width: 50rem"
+        class="w-full"
       >
         <Column field="kategori" header="Nama Kategori"> </Column>
         <Column header="Aksi" class="flex justify-center">

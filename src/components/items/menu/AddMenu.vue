@@ -192,7 +192,7 @@ onMounted(fetchCategories);
         :options="categories"
         optionLabel="kategori"
         optionValue="id"
-        placeholder="Select Categories"
+        placeholder="Pilih Kategori"
         class="custom-select w-full md:w-auto p-4"
       />
       <Textarea
