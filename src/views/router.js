@@ -7,6 +7,7 @@ import Login from "../pages/login.vue";
 import Money from "../pages/Money.vue";
 import Member from "../pages/Member.vue";
 import EditMenu from "../components/items/menu/edit/MenuEdit.vue";
+import Register from "../pages/Account/Register.vue";
 import EditCategory from "../components/items/category/edit/[id].vue";
 import { supabase } from "../supabase"; // Import your Supabase instance
 
@@ -46,6 +47,12 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+    meta: { requiresAuth: false, layout: false },
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
     meta: { requiresAuth: false, layout: false },
   },
   {

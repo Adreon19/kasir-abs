@@ -2,12 +2,15 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { supabase } from "../../supabase";
+import { Toast, useToast } from "primevue";
 
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
 const darkMode = ref(false);
+const checked = ref(false);
 const router = useRouter();
+const toast = useToast(); // Initialize toast
 
 const handleLogin = async () => {
   try {
@@ -19,7 +22,13 @@ const handleLogin = async () => {
     });
 
     if (error) {
-      errorMessage.value = error.message;
+      // Show toast notification for invalid email/password
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Email atau password salah",
+        life: 3000,
+      });
       return;
     }
 
@@ -37,16 +46,17 @@ const handleLogin = async () => {
 };
 function toggleDarkMode() {
   darkMode.value = !darkMode.value;
+  checked.value = !darkMode.value;
   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
 
   localStorage.setItem("darkMode", darkMode.value);
 }
-
 onMounted(() => {
   const savedDarkMode = localStorage.getItem("darkMode");
 
   if (savedDarkMode === "true") {
     darkMode.value = true;
+    checked.value = true;
     document.documentElement.classList.add("my-app-dark");
   }
 });
@@ -75,13 +85,17 @@ onMounted(() => {
           />
           <label style="color: black">Password</label>
         </FloatLabel>
-        <div class="flex gap-3 items-center mt-3 justify-between">
-          <Button
-            :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
-            :class="darkMode ? 'text-yellow-500' : 'text-black'"
-            @click="toggleDarkMode()"
-            class="bg-transparent hover:border-none active:border-none p-0"
-          />
+        <div class="m-3">
+          <ToggleSwitch v-model="checked" @click="toggleDarkMode()">
+            <template #handle="{ checked }">
+              <i
+                :class="[
+                  '!text-xs pi',
+                  { 'pi-moon': checked, 'pi-sun': !checked },
+                ]"
+              />
+            </template>
+          </ToggleSwitch>
         </div>
         <div class="btn-login flex justify-center">
           <Button label="Login" type="submit" class="btn-inlogin" />
@@ -89,6 +103,7 @@ onMounted(() => {
       </div>
     </form>
   </section>
+  <Toast />
 </template>
 
 <style>

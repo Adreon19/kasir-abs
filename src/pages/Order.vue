@@ -359,7 +359,6 @@ const finishOrder = async () => {
       throw new Error(orderDetailsError.message);
     }
 
-    // Delete all cart items after successful order creation and PDF
     const { error: deleteError } = await supabase
       .from("cart")
       .delete()
@@ -367,6 +366,12 @@ const finishOrder = async () => {
         "id",
         cartItems.value.map((item) => item.id)
       );
+
+    cartItems.value = [];
+    paidAmount.value = null;
+    customer.value = "";
+    selectedMember.value = null;
+    selectedPaymentMethod.value = null;
 
     if (deleteError) {
       console.error("Error deleting cart items:", deleteError);
@@ -376,7 +381,7 @@ const finishOrder = async () => {
     toast.add({
       severity: "success",
       summary: "Order Finished",
-      detail: "Your order has been successfully placed!",
+      detail: "Pesanan mu berhasil ditambahkan!",
       life: 3000,
     });
   } catch (error) {

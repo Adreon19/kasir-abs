@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { supabase } from "../../../supabase";
 import { useToast } from "primevue";
+import { onEvent, emitEvent } from "../../../utils/BusEvent"; // Adjust the path as necessary
 
 const toast = useToast();
 const menus = ref([]);
@@ -88,6 +89,7 @@ const insertMenuDetail = async () => {
       throw error;
     }
 
+    emitEvent("priceAdded", { menuId: selectedMenu.value });
     toast.add({
       severity: "success",
       summary: "Sukses",
@@ -112,6 +114,9 @@ const insertMenuDetail = async () => {
 onMounted(() => {
   fetchMenus();
   fetchVariants();
+  onEvent("menuAdded", () => {
+    fetchMenus();
+  });
 });
 </script>
 
@@ -160,6 +165,8 @@ onMounted(() => {
             currency="IDR"
             locale="id-ID"
             fluid
+            :min="0"
+            :max="100000"
           />
         </div>
 

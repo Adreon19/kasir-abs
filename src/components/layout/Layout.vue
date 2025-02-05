@@ -96,6 +96,12 @@ onMounted(() => {
                 Finansial
               </li>
             </RouterLink>
+            <RouterLink to="/register">
+              <li>
+                <i class="fa-solid fa-user ease-in duration-300"></i>
+                Registrasi
+              </li>
+            </RouterLink>
           </ul>
         </div>
       </div>

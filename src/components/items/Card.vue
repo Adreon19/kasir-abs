@@ -129,6 +129,8 @@ const saveOrder = async () => {
     // Refresh cart data
     await fetchCart();
     visible.value = false;
+    addVariantDialogVisible.value = false;
+    drawerVisible.value = true;
   } catch (error) {
     toast.add({
       severity: "error",
