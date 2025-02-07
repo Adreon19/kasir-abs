@@ -144,14 +144,30 @@ const updateItem = async () => {
       return;
     }
 
-    const trimmedQuantity = quantity.trim();
-    const trimmedNama = Name.trim();
+    const trimmedNama = Name.trim(); // Trim the name
 
-    if (!trimmedNama || !trimmedQuantity) {
+    // Check if the name is empty
+    if (!trimmedNama) {
       toast.add({
         severity: "warn",
         summary: "Peringatan",
-        detail: "Nama dan Jumlah tidak boleh kosong",
+        detail: "Nama tidak boleh kosong",
+        life: 5000,
+      });
+      return;
+    }
+
+    // Check if quantity is a valid number
+    if (
+      quantity === null ||
+      quantity === undefined ||
+      isNaN(quantity) ||
+      quantity < 0
+    ) {
+      toast.add({
+        severity: "warn",
+        summary: "Peringatan",
+        detail: "Jumlah tidak boleh kosong dan harus lebih besar dari 0",
         life: 5000,
       });
       return;
@@ -159,7 +175,7 @@ const updateItem = async () => {
 
     const { error } = await supabase
       .from("inventory")
-      .update({ quantity: trimmedQuantity, Name: trimmedNama })
+      .update({ quantity, Name: trimmedNama }) // No need to trim quantity
       .eq("id", id);
 
     if (error) throw error;
