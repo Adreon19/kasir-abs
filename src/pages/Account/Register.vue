@@ -113,9 +113,7 @@ const handleRegister = async () => {
       detail: "User  berhasil ditambahkan",
       life: 5000,
     });
-    setTimeout(() => {
-      router.push("/");
-    }, 3000);
+    alert("Akun sudah terdaftar, silahkan check inbox email mu!");
   } catch (err) {
     errorMessage.value = "An unexpected error occurred. Please try again.";
     console.error(err);
