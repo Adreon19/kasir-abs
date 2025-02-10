@@ -12,6 +12,7 @@ import EditCategory from "../components/items/category/edit/[id].vue";
 import Inventory from "../pages/Inventory.vue";
 import Profile from "../pages/Account/Profile.vue";
 import Cart from "../pages/Order/Cart.vue";
+import Edit from "../pages/Account/Edit.vue";
 import { supabase } from "../supabase";
 
 const routes = [
@@ -94,6 +95,12 @@ const routes = [
     path: "/cart",
     name: "Cart",
     component: Cart,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
+    path: "/profile/edit",
+    name: "Edit",
+    component: Edit,
     meta: { requiresAuth: true, layout: true },
   },
 ];
