@@ -37,7 +37,10 @@ const fetchOrder = async () => {
         menu_detail_id(
           menu_id(
             id,
-            name
+            name,
+            kategori_id(
+              kategori
+            )
           ),
           price
         ),
@@ -53,7 +56,11 @@ const fetchOrder = async () => {
         : "Menu sudah dihapus";
 
       const menuPrice = item.menu_detail_id ? item.menu_detail_id.price : 0;
+      const category = item.menu_detail_id
+        ? item.menu_detail_id.menu_id.kategori_id.kategori
+        : "Unknown Category";
       const totalPrice = item.quantity * menuPrice;
+
       if (existingOrder) {
         existingOrder.details.push({
           menu_name: menuName,
@@ -61,6 +68,7 @@ const fetchOrder = async () => {
           quantity: item.quantity,
           total_price: totalPrice,
           created_at: item.order_id.created_at,
+          category: category, // Add category to details
         });
       } else {
         acc.push({
@@ -75,6 +83,7 @@ const fetchOrder = async () => {
               quantity: item.quantity,
               total_price: totalPrice,
               created_at: item.order_id.created_at,
+              category: category, // Add category to details
             },
           ],
         });
@@ -147,8 +156,8 @@ const collapseAll = () => {
 
 // Download Struk
 const downloadPDF = () => {
-  const pageWidth = 80;
-  const marginLeft = 8;
+  const pageWidth = 57; // Set width to 57mm
+  const marginLeft = 5; // Adjust margin as needed
   let currentY = 8;
   let estimatedHeight = 100;
 
@@ -169,7 +178,7 @@ const downloadPDF = () => {
   const centerX = pageWidth / 2;
 
   // Title
-  doc.setFontSize(10);
+  doc.setFontSize(8); // Adjusted font size
   doc.setFont("helvetica", "bold");
   const title = "Artisan Beverage Studio";
   const titleWidth = doc.getTextWidth(title);
@@ -206,7 +215,7 @@ const downloadPDF = () => {
     timeZone: "Asia/Jakarta",
   }).format(now);
 
-  doc.setFontSize(8);
+  doc.setFontSize(6);
   doc.setFont("helvetica", "normal");
   doc.text(`Date: ${formattedDate}`, marginLeft, currentY);
   currentY += 8;
@@ -214,34 +223,45 @@ const downloadPDF = () => {
   // Table Header
   doc.setFont("helvetica", "bold");
   doc.text("Name", marginLeft, currentY);
-  doc.text("Menu", marginLeft + 15, currentY);
-  doc.text("Price", marginLeft + 45, currentY);
-  doc.text("Qty", marginLeft + 65, currentY, { align: "right" });
+  doc.text("Menu", marginLeft + 10, currentY);
+  doc.text("Price", marginLeft + 30, currentY);
+  doc.text("Qty", marginLeft + 45, currentY, { align: "right" });
   currentY += 5;
+
+  // Total sold by category
+  const totalSoldByCategory = {}; // Object to hold total sold by category
 
   // Table Body
   filteredOrders.value.forEach((order) => {
     order.details.forEach((detail) => {
+      const categoryName = detail.category; // Access the category name
+
+      // Update total sold by category
+      totalSoldByCategory[categoryName] =
+        (totalSoldByCategory[categoryName] || 0) + detail.quantity;
+
       doc.setFont("helvetica", "normal");
       doc.text(order.customer_name || "Unknown", marginLeft, currentY);
-      doc.text(detail.menu_name || "Unknown", marginLeft + 15, currentY);
+      doc.setFontSize(5);
+      doc.text(detail.menu_name || "Unknown", marginLeft + 10, currentY);
+      doc.setFontSize(6);
       doc.text(
         formatCurrency(detail.menu_price) || "0",
-        marginLeft + 45,
+        marginLeft + 30,
         currentY
       );
-      doc.text(detail.quantity.toString() || "0", marginLeft + 65, currentY, {
+      doc.text(detail.quantity.toString() || "0", marginLeft + 45, currentY, {
         align: "right",
       });
       currentY += 4;
 
       // Note
       if (detail.note && detail.note.trim()) {
-        doc.setFontSize(6);
+        doc.setFontSize(5);
         doc.setFont("helvetica", "italic");
         doc.text(`*${detail.note}`, marginLeft + 10, currentY);
         currentY += 3;
-        doc.setFontSize(8);
+        doc.setFontSize(6);
         doc.setFont("helvetica", "normal");
       }
     });
@@ -255,7 +275,7 @@ const downloadPDF = () => {
   currentY += 6;
 
   // Total amount
-  doc.setFontSize(8);
+  doc.setFontSize(6);
   doc.setFont("helvetica", "bold");
   const totalAmount = filteredOrders.value.reduce((sum, order) => {
     return (
@@ -266,7 +286,14 @@ const downloadPDF = () => {
   doc.text(`Total: ${formatCurrency(totalAmount)}`, marginLeft, currentY);
   currentY += 4;
 
-  // Download PDF nya
+  // Total sold by category
+  doc.setFont("helvetica", "normal");
+  for (const [category, quantity] of Object.entries(totalSoldByCategory)) {
+    doc.text(`Total ${category} sold: ${quantity}`, marginLeft, currentY);
+    currentY += 4;
+  }
+
+  // Download PDF
   doc.save(`order_${Date.now()}.pdf`);
 };
 
