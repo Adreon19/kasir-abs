@@ -35,6 +35,17 @@ const fetchUserData = async () => {
   }
 };
 
+const resetPassword = async () => {
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email.value);
+    if (error) throw error;
+    alert("Permintaan ganti password dikirim! Tolong check inbox Email kamu!.");
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    alert("Gagal mengirim permintaan ganti password. Tolong coba lagi.");
+  }
+};
+
 onMounted(fetchUserData);
 </script>
 <template>
@@ -66,13 +77,20 @@ onMounted(fetchUserData);
           </div>
           <div class="flex justify-center items-center">
             <Button
-              label="Edit Kredensial"
+              label="Edit Password"
               icon="fa fa-pencil"
               iconPos="left"
+              @click="resetPassword"
               class="custom-button w-fit h-fit mt-6"
             />
           </div>
         </div>
+        <Button
+          as="router-link"
+          to="/register"
+          label="Bikin Akun baru"
+          class="custom-button last:max-w-fit"
+        />
       </section>
     </div>
   </div>
