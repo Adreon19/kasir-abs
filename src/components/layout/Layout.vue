@@ -1,12 +1,13 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { supabase } from "../../supabase"; // Adjust the import based on your project structure
+import { supabase } from "../../supabase";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const darkMode = ref(false);
 const checked = ref(false);
 const nama = ref("");
+const drawerVisible = ref(false);
 
 const fetchUserData = async () => {
   try {
@@ -53,6 +54,14 @@ const toggleDarkMode = () => {
   localStorage.setItem("darkMode", darkMode.value);
 };
 
+const toggleDrawer = () => {
+  drawerVisible.value = !drawerVisible.value;
+};
+
+const closeDrawer = () => {
+  drawerVisible.value = false;
+};
+
 onMounted(() => {
   const savedDarkMode = localStorage.getItem("darkMode");
   if (savedDarkMode === "true") {
@@ -60,12 +69,18 @@ onMounted(() => {
     checked.value = true;
     document.documentElement.classList.add("my-app-dark");
   }
-  fetchUserData(); // Call fetchUser Data on mount
+  fetchUserData();
 });
 </script>
 
 <template>
   <div class="flex flex-row min-h-screen">
+    <div class="max-w-fit mt-8">
+      <button class="burger-button xl:hidden" @click="toggleDrawer">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
     <aside
       class="sidebar text-black xl:max-w-64 xl:min-w-64 lg:max-w-64 lg:min-w-64 flex flex-col justify-between overflow-y-auto"
     >
@@ -116,11 +131,6 @@ onMounted(() => {
                 Tambah Menu
               </li>
             </RouterLink>
-            <RouterLink to="/member">
-              <li>
-                <i class="fa-solid fa-users ease-in duration-300"></i> Member
-              </li>
-            </RouterLink>
             <RouterLink to="/history">
               <li>
                 <i class="fa-solid fa-scroll ease-in duration-300"></i> Riwayat
@@ -152,6 +162,89 @@ onMounted(() => {
       </div>
     </aside>
 
+    <!-- PrimeVue Drawer for Mobile -->
+    <Drawer
+      v-model:visible="drawerVisible"
+      :modal="true"
+      :closable="true"
+      :style="{ width: '100%' }"
+      @hide="drawerVisible = false"
+      class="bg-[var(--sidebar-bg)]"
+    >
+      <div
+        class="sidebar-mobile text-black flex flex-col justify-between overflow-y-auto"
+      >
+        <div class="flex flex-col gap-1 justify-center items-center">
+          <!-- Center items -->
+          <div class="logo flex justify-center items-center m-4">
+            <img
+              src="/images/logoABS.png"
+              alt="ABS Logo"
+              class="w-8 h-8 mr-4"
+            />
+            <h1 class="text-sm font-semibold text-[var(--text-secondary)]">
+              Artisan Beverage Studio
+            </h1>
+          </div>
+
+          <div class="flex flex-col justify-between relative top-10">
+            <ul class="flex flex-col">
+              <RouterLink to="/profile" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-user ease-in duration-300"></i>
+                  {{ nama }}
+                </li>
+              </RouterLink>
+              <RouterLink to="/" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-house ease-in duration-300"></i> Halaman
+                  Menu
+                </li>
+              </RouterLink>
+              <RouterLink to="/order" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-cart-shopping ease-in duration-300"></i>
+                  Pesanan
+                </li>
+              </RouterLink>
+              <RouterLink to="/add" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-square-plus ease-in duration-300"></i>
+                  Tambah Menu
+                </li>
+              </RouterLink>
+              <RouterLink to="/history" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-scroll ease-in duration-300"></i>
+                  Riwayat Pesanan
+                </li>
+              </RouterLink>
+              <RouterLink to="/money" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-money-bill ease-in duration-300"></i>
+                  Finansial
+                </li>
+              </RouterLink>
+              <RouterLink to="/inventory" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-boxes-stacked ease-in duration-300"></i>
+                  Inventory
+                </li>
+              </RouterLink>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center mt-4">
+        <Button
+          label="Log Out"
+          icon="fa-solid fa-sign-out-alt"
+          class="btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
+          @click="handleLogout"
+        />
+      </div>
+    </Drawer>
+
     <div class="flex-grow flex flex-col">
       <main class="main flex-grow">
         <slot />
@@ -162,11 +255,35 @@ onMounted(() => {
 
 <style scoped>
 .sidebar {
-  width: 250px; /* Set a fixed width for the sidebar */
-  height: 100vh; /* Full height of the viewport */
+  width: 250px;
+  height: 100vh;
   position: sticky;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   top: 0;
   background-color: var(--sidebar-bg);
+}
+
+.sidebar-mobile {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: var(--sidebar-bg);
+}
+
+.sidebar-mobile li {
+  padding: 1rem;
+  font-size: 20px;
+  color: var(--text-secondary);
+}
+
+.sidebar-mobile li:hover {
+  color: #fff;
+  background: var(--hover-primary);
+  transition: 0.5s;
 }
 
 .main {
@@ -196,9 +313,12 @@ onMounted(() => {
 /* Media query for larger screens */
 @media (min-width: 1024px) {
   .main {
-    max-width: calc(
-      100vw - 250px
-    ); /* Adjust max-width based on sidebar width */
+    max-width: calc(100vw - 250px);
+  }
+}
+@media (max-width: 1024px) {
+  .sidebar {
+    display: none;
   }
 }
 </style>
