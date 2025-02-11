@@ -9,7 +9,11 @@ import Member from "../pages/Member.vue";
 import EditMenu from "../components/items/menu/edit/MenuEdit.vue";
 import Register from "../pages/Account/Register.vue";
 import EditCategory from "../components/items/category/edit/[id].vue";
-import { supabase } from "../supabase"; // Import your Supabase instance
+import Inventory from "../pages/Inventory.vue";
+import Profile from "../pages/Account/Profile.vue";
+import Cart from "../pages/Order/Cart.vue";
+import Edit from "../pages/Account/Edit.vue";
+import { supabase } from "../supabase";
 
 const routes = [
   {
@@ -56,6 +60,12 @@ const routes = [
     meta: { requiresAuth: false, layout: false },
   },
   {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
     path: "/menu/edit/:id",
     name: "EditMenu",
     component: EditMenu,
@@ -73,6 +83,24 @@ const routes = [
     path: "/member",
     name: "Member",
     component: Member,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
+    path: "/inventory",
+    name: "Inventory",
+    component: Inventory,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: Cart,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
+    path: "/profile/edit",
+    name: "Edit",
+    component: Edit,
     meta: { requiresAuth: true, layout: true },
   },
 ];

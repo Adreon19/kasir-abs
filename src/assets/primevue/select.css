@@ -42,7 +42,7 @@
 .p-select-label {
   @apply block whitespace-nowrap overflow-hidden flex-auto w-[1%]
         py-2 px-3 overflow-ellipsis
-        text-surface-700 dark:text-surface-0 bg-transparent border-none outline-none;
+        text-[var(--text-secondary)] bg-transparent border-none outline-none;
 }
 
 .p-select-label.p-placeholder {
@@ -95,13 +95,13 @@ input.p-select-label {
 }
 
 .p-select-list {
-  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-white;
+  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-[var(--text-secondary)];
 }
 
 .p-select-option {
   @apply cursor-pointer font-normal whitespace-nowrap relative overflow-hidden flex items-center
         px-3 py-2 border-none dark:text-surface-0 bg-transparent rounded-sm
-        transition-colors duration-200 text-white;
+        transition-colors duration-200 text-[var(--text-secondary)];
 }
 
 .p-select-option:not(.p-select-option-selected):not(.p-disabled).p-focus {

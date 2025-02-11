@@ -1,11 +1,41 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { supabase } from "../../supabase";
+import { supabase } from "../../supabase"; // Adjust the import based on your project structure
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const darkMode = ref(false);
 const checked = ref(false);
+const nama = ref("");
+
+const fetchUserData = async () => {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+    if (authError) throw authError;
+
+    if (user) {
+      const { data, error: userError } = await supabase
+        .from("user")
+        .select("name")
+        .eq("email", user.email)
+        .single();
+
+      if (userError) throw userError;
+
+      if (data) {
+        nama.value = data.name;
+        console.log("Fetched name:", nama.value);
+      } else {
+        console.log("No user data found.");
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+  }
+};
 
 const handleLogout = async () => {
   const { error } = await supabase.auth.signOut();
@@ -15,21 +45,22 @@ const handleLogout = async () => {
     router.push("/login");
   }
 };
-function toggleDarkMode() {
+
+const toggleDarkMode = () => {
   darkMode.value = !darkMode.value;
   checked.value = !darkMode.value;
   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
-
   localStorage.setItem("darkMode", darkMode.value);
-}
+};
+
 onMounted(() => {
   const savedDarkMode = localStorage.getItem("darkMode");
-
   if (savedDarkMode === "true") {
     darkMode.value = true;
     checked.value = true;
     document.documentElement.classList.add("my-app-dark");
   }
+  fetchUserData(); // Call fetchUser Data on mount
 });
 </script>
 
@@ -48,6 +79,12 @@ onMounted(() => {
 
         <div class="flex flex-col justify-between relative top-10">
           <ul class="flex flex-col">
+            <RouterLink to="/profile">
+              <li>
+                <i class="fa-solid fa-user ease-in duration-300"></i>
+                {{ nama }}
+              </li>
+            </RouterLink>
             <div class="m-3">
               <ToggleSwitch v-model="checked" @click="toggleDarkMode()">
                 <template #handle="{ checked }">
@@ -96,10 +133,10 @@ onMounted(() => {
                 Finansial
               </li>
             </RouterLink>
-            <RouterLink to="/register">
+            <RouterLink to="/inventory">
               <li>
-                <i class="fa-solid fa-user ease-in duration-300"></i>
-                Registrasi
+                <i class="fa-solid fa-boxes-stacked ease-in duration-300"></i>
+                Inventory
               </li>
             </RouterLink>
           </ul>
@@ -148,6 +185,12 @@ onMounted(() => {
   color: #fff;
   background: var(--hover-primary);
   transition: 0.5s;
+}
+
+.profile {
+  padding: 1rem;
+  font-size: 20px;
+  color: var(--text-secondary);
 }
 
 /* Media query for larger screens */

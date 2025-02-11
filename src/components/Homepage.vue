@@ -7,7 +7,6 @@ const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
 const isLoading = ref(true);
-const darkMode = ref(false);
 const filteredMenuList = ref([]);
 const originalMenuList = ref([]);
 const searchQuery = ref("");
@@ -103,22 +102,6 @@ const initializeData = async () => {
   }
 };
 onMounted(initializeData);
-
-// function toggleDarkMode() {
-//   darkMode.value = !darkMode.value;
-//   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
-
-//   localStorage.setItem("darkMode", darkMode.value);
-// }
-
-// onMounted(() => {
-//   const savedDarkMode = localStorage.getItem("darkMode");
-
-//   if (savedDarkMode === "true") {
-//     darkMode.value = true;
-//     document.documentElement.classList.add("my-app-dark");
-//   }
-// });
 </script>
 
 <template>

@@ -17,7 +17,8 @@ const fetchMember = async () => {
     let { data: membership, error } = await supabase.from("membership").select(`
     id,
     no_telp,
-    nama
+    nama,
+    created_at
     `);
     if (error) throw error;
     members.value = membership;
@@ -44,6 +45,7 @@ const insertMember = async () => {
       {
         no_telp: String(phoneNumber.value).trim() || null,
         nama: memberName.value.trim(),
+        created_at: new Date().toISOString(),
       },
     ]);
 
@@ -85,6 +87,18 @@ const formattedSelectedMember = computed(() => {
   const noTelp = String(selectedMember.value.no_telp);
   return noTelp.startsWith("0") ? noTelp : "0" + noTelp;
 });
+
+const formatDate = (created_at) => {
+  return new Intl.DateTimeFormat("id-ID", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "Asia/Jakarta",
+  }).format(new Date(created_at));
+};
 
 const deleteMember = async (memberId) => {
   try {
@@ -162,7 +176,11 @@ const updateMember = async () => {
 
     const { error } = await supabase
       .from("membership")
-      .update({ no_telp: trimmedNoTelp, nama: trimmedNama })
+      .update({
+        no_telp: trimmedNoTelp,
+        nama: trimmedNama,
+        created_at: new Date().toISOString,
+      })
       .eq("id", id);
 
     if (error) throw error;
@@ -257,6 +275,11 @@ onMounted(initializeData);
           >
             <Column field="no_telp" header="Nomor Telfon" />
             <Column field="nama" header="Nama Member" />
+            <Column field="created_at" header="Tanggal masuk">
+              <template #body="slotProps">
+                {{ formatDate(slotProps.data.created_at) }}
+              </template>
+            </Column>
             <Column header="Aksi" class="flex justify-center">
               <template #body="slotProps">
                 <div class="flex justify-center gap-2">
