@@ -5,7 +5,6 @@ import History from "../pages/History.vue";
 import Order from "../pages/Order.vue";
 import Login from "../pages/login.vue";
 import Money from "../pages/Money.vue";
-import Member from "../pages/Member.vue";
 import EditMenu from "../components/items/menu/edit/MenuEdit.vue";
 import Register from "../pages/Account/Register.vue";
 import EditCategory from "../components/items/category/edit/[id].vue";
@@ -78,12 +77,6 @@ const routes = [
     component: EditCategory,
     props: true,
     meta: { layout: true },
-  },
-  {
-    path: "/member",
-    name: "Member",
-    component: Member,
-    meta: { requiresAuth: true, layout: true },
   },
   {
     path: "/inventory",

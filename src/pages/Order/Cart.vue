@@ -156,6 +156,20 @@ const fetchUserData = async () => {
   }
 };
 
+const fetchLogoBase64 = async () => {
+  try {
+    const response = await fetch("/images/base64/base64.txt");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const base64 = await response.text();
+    return base64.trim();
+  } catch (error) {
+    console.error("Error fetching logo Base64:", error);
+    return null;
+  }
+};
+
 const finishOrder = async () => {
   try {
     if (paidAmount.value < totalAmount.value) {
@@ -208,6 +222,17 @@ const finishOrder = async () => {
       }
     });
 
+    const logoBase64 = await fetchLogoBase64();
+    if (!logoBase64) {
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: "Failed to load logo image.",
+        life: 10000,
+      });
+      return;
+    }
+
     estimatedHeight += 30;
     const doc = new jsPDF({
       unit: "mm",
@@ -215,6 +240,8 @@ const finishOrder = async () => {
     });
 
     const centerX = pageWidth / 2;
+    doc.addImage(logoBase64, "PNG", centerX - 20, currentY, 40, 20); // Adjust x, y, width, height as needed
+    currentY += 25;
     // Title
     doc.setFontSize(8);
     doc.setFont("helvetica", "bold");

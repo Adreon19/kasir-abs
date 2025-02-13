@@ -156,6 +156,7 @@ const saveOrder = async () => {
 
     // Refresh cart data
     await fetchCart();
+    selectedCustomer.value = null;
     visible.value = false;
   } catch (error) {
     toast.add({
@@ -204,7 +205,7 @@ onMounted(() => {
             </template>
           </template>
           <p class="desc">
-            {{ menu.description || "No description available." }}
+            {{ menu.description || "Tidak ada deskripsi." }}
           </p>
         </template>
         <template #footer>
@@ -230,14 +231,15 @@ onMounted(() => {
     <div class="flex flex-col gap-4">
       <InputText
         v-model="customerName"
-        placeholder="Enter new customer name"
+        placeholder="Masukkan nama pelanggan baru"
         label="Customer Name"
       />
       <Select
         v-model="selectedCustomer"
         :options="customers"
         optionLabel="customer"
-        placeholder="Select an existing customer"
+        placeholder="Pilih pelanggan yang sudah ada"
+        class="custom-select"
       />
       <Select
         v-model="selectedVariant"
