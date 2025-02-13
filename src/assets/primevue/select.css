@@ -95,7 +95,7 @@ input.p-select-label {
 }
 
 .p-select-list {
-  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-[var(--text-secondary)];
+  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-[var(--text-secondary)] bg-[var(--btn-order)];
 }
 
 .p-select-option {
@@ -110,11 +110,11 @@ input.p-select-label {
 }
 
 .p-select-option.p-select-option-selected {
-  @apply bg-highlight;
+  @apply bg-highlight bg-[var(--components-bg)];
 }
 
 .p-select-option.p-select-option-selected.p-focus {
-  @apply bg-highlight-emphasis;
+  @apply bg-[var(--components-bg)] text-[var(--text-primary)];
 }
 
 .p-select-option-check-icon {
