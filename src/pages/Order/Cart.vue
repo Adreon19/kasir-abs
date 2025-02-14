@@ -240,7 +240,7 @@ const finishOrder = async () => {
     });
 
     const centerX = pageWidth / 2;
-    doc.addImage(logoBase64, "PNG", centerX - 20, currentY, 20, 20); // Adjust x, y, width, height as needed
+    doc.addImage(logoBase64, "PNG", centerX, currentY, 20, 20); // Adjust x, y, width, height as needed
     currentY += 25;
     // Title
     doc.setFontSize(10);
@@ -249,7 +249,7 @@ const finishOrder = async () => {
       align: "center",
     });
     currentY += 3;
-    doc.setFontSize(8);
+    doc.setFontSize(7);
     doc.setFont("helvetica", "bold");
 
     const addressText =
@@ -294,8 +294,8 @@ const finishOrder = async () => {
     doc.setFont("helvetica", "bold");
     doc.text("No", marginLeft, currentY);
     doc.text("Menu", marginLeft + 6, currentY);
-    doc.text("Price", marginLeft + 25, currentY); // Adjusted position
-    doc.text("Qty", marginLeft + 42, currentY, { align: "right" }); // Adjusted position
+    doc.text("Price", marginLeft + 25, currentY);
+    doc.text("Qty", marginLeft + 45, currentY, { align: "right" });
     currentY += 5;
 
     cartItems.value.forEach((item, index) => {
@@ -314,7 +314,7 @@ const finishOrder = async () => {
         marginLeft + 25,
         currentY
       );
-      doc.text(`${item.quantity}`, marginLeft + 42, currentY, {
+      doc.text(`${item.quantity}`, marginLeft + 45, currentY, {
         align: "right",
       });
       currentY += 4 + (wrappedMenuName.length - 1) * 4;
@@ -366,7 +366,7 @@ const finishOrder = async () => {
     currentY += 8;
 
     // Footer
-    doc.setFontSize(7);
+    doc.setFontSize(6);
     doc.setFont("helvetica", "normal");
     doc.text(
       "Thank you for your purchase! We truly appreciate your support.",
