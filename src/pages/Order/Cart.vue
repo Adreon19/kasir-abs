@@ -15,7 +15,7 @@ const paidAmount = ref();
 const isLoading = ref(false);
 const dialogVisible = ref(false);
 const selectedMenu = ref({ id: null, quantity: "", note: "" });
-const customerName = ref(""); // To hold the customer name
+const customerName = ref("");
 const route = useRoute();
 const router = useRouter();
 const customerId = route.query.customerId;
@@ -210,7 +210,7 @@ const finishOrder = async () => {
       note: item.note,
     }));
 
-    const pageWidth = 57; // Set width to 57mm
+    const pageWidth = 58;
     const marginLeft = 5; // Reduced margin to maximize space
     let currentY = 8;
     let estimatedHeight = 100; // Initial height, adjust as needed
@@ -259,7 +259,7 @@ const finishOrder = async () => {
       pageWidth - marginLeft * 2
     );
     doc.text(addressLines, centerX, currentY, { align: "center" });
-    currentY += addressLines.length * 2;
+    currentY += addressLines.length * 3;
 
     // Separator line
     doc.setDrawColor(0);
@@ -338,7 +338,7 @@ const finishOrder = async () => {
     currentY += 6;
 
     // Total amount and payment details
-    doc.setFontSize(8);
+    doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     doc.text(
       `Total: ${formatCurrency(totalAmount.value)}`,
@@ -366,10 +366,10 @@ const finishOrder = async () => {
     currentY += 8;
 
     // Footer
-    doc.setFontSize(5);
+    doc.setFontSize(7);
     doc.setFont("helvetica", "normal");
     doc.text(
-      "Thank you for your purchase! We truly appreciate your support.",
+      "Thank you for your purchase! We appreciate your support.",
       centerX,
       currentY,
       {
@@ -377,14 +377,9 @@ const finishOrder = async () => {
       }
     );
     currentY += 4;
-    doc.text(
-      "We hope you enjoy your product and have a great experience!",
-      centerX,
-      currentY,
-      {
-        align: "center",
-      }
-    );
+    doc.text("We hope you enjoy our product!", centerX, currentY, {
+      align: "center",
+    });
     currentY += 4;
     doc.text("Visit us again!", centerX, currentY, { align: "center" });
 
@@ -527,8 +522,12 @@ watch(selectedPaymentMethod, (newValue) => {
   if (newValue === 2) {
     // QRIS
     paidAmount.value = totalAmount.value + 1000; // Pajak QRIS
+  }
+  if (newValue === 3) {
+    // TRANSFER
+    paidAmount.value = totalAmount.value;
   } else {
-    paidAmount.value = "";
+    paidAmount.value = null;
   }
 });
 
@@ -629,7 +628,11 @@ onMounted(() => {
           </div>
         </div>
         <div
-          v-if="selectedPaymentMethod === 1 || selectedPaymentMethod === 2"
+          v-if="
+            selectedPaymentMethod === 1 ||
+            selectedPaymentMethod === 2 ||
+            selectedPaymentMethod === 3
+          "
           class="mt-4 flex justify-between"
         >
           <InputNumber
