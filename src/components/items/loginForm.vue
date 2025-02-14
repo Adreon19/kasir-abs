@@ -73,7 +73,7 @@ onMounted(() => {
           <InputText
             type="text"
             v-model="email"
-            class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none min-w-64"
+            class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none min-w-64 w-full"
           />
           <label style="color: black">Email</label>
         </FloatLabel>

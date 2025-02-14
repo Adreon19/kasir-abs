@@ -163,7 +163,7 @@ onMounted(() => {
     />
   </div>
   <div class="p-6">
-    <h2>Menu Editor</h2>
+    <h2 class="text-[var(--text-secondary)]">Menu Editor</h2>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>

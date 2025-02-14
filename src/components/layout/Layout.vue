@@ -76,9 +76,11 @@ onMounted(() => {
 <template>
   <div class="flex flex-row min-h-screen">
     <div class="max-w-fit mt-8">
-      <button class="burger-button xl:hidden" @click="toggleDrawer">
-        <i class="fa-solid fa-bars"></i>
-      </button>
+      <Button
+        class="burger-button xl:hidden text-[var(text-secondary)] ml-8"
+        icon="pi pi-bars"
+        @click="toggleDrawer"
+      />
     </div>
 
     <aside
@@ -171,6 +173,16 @@ onMounted(() => {
       @hide="drawerVisible = false"
       class="bg-[var(--sidebar-bg)]"
     >
+      <template #header>
+        <div class="flex justify-end">
+          <Button
+            label="Log Out"
+            icon="fa-solid fa-sign-out-alt"
+            class="btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
+            @click="handleLogout"
+          />
+        </div>
+      </template>
       <div
         class="sidebar-mobile text-black flex flex-col justify-between overflow-y-auto"
       >
@@ -189,6 +201,18 @@ onMounted(() => {
 
           <div class="flex flex-col justify-between relative top-10">
             <ul class="flex flex-col">
+              <div class="m-3">
+                <ToggleSwitch v-model="checked" @click="toggleDarkMode()">
+                  <template #handle="{ checked }">
+                    <i
+                      :class="[
+                        '!text-xs pi',
+                        { 'pi-moon': checked, 'pi-sun': !checked },
+                      ]"
+                    />
+                  </template>
+                </ToggleSwitch>
+              </div>
               <RouterLink to="/profile" @click="closeDrawer">
                 <li>
                   <i class="fa-solid fa-user ease-in duration-300"></i>
@@ -235,14 +259,14 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="flex justify-center mt-4">
+      <!-- <div class="flex justify-center mt-4">
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
           class="btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
           @click="handleLogout"
         />
-      </div>
+      </div> -->
     </Drawer>
 
     <div class="flex-grow flex flex-col">
@@ -313,10 +337,10 @@ onMounted(() => {
 /* Media query for larger screens */
 @media (min-width: 1024px) {
   .main {
-    max-width: calc(100vw - 250px);
+    max-width: calc(150vw - 250px);
   }
 }
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .sidebar {
     display: none;
   }

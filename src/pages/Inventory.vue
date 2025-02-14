@@ -283,8 +283,18 @@ onMounted(initializeData);
         <!-- Display the message here -->
       </section>
       <section class="main-section flex flex-col gap-4">
-        <h2>Inventory</h2>
-        <div class="flex justify-between item-center gap-3">
+        <div class="flex flex-row items-center justify-between">
+          <h2>Inventory</h2>
+          <!-- <Button
+            label="Simpan"
+            icon="fa fa-check"
+            iconPos="left"
+            @click="insertInventory"
+            :loading="isLoading"
+            class="custom-button w-fit h-fit mt-6"
+          /> -->
+        </div>
+        <div class="flex justify-between item-center gap-3 flex-col">
           <div class="flex justify-between item-center gap-3">
             <div class="flex flex-col gap-3">
               <label for="itemName"> Nama Barang </label>
@@ -318,16 +328,16 @@ onMounted(initializeData);
                 class="custom-select w-full md:w-auto p-4"
               />
             </div>
-            <div class="flex justify-center items-center">
-              <Button
-                label="Simpan"
-                icon="fa fa-check"
-                iconPos="left"
-                @click="insertInventory"
-                :loading="isLoading"
-                class="custom-button w-fit h-fit mt-6"
-              />
-            </div>
+          </div>
+          <div class="">
+            <Button
+              label="Simpan"
+              icon="fa fa-check"
+              iconPos="left"
+              @click="insertInventory"
+              :loading="isLoading"
+              class="custom-button w-full h-fit mt-6"
+            />
           </div>
         </div>
         <div class="container flex flex-col gap-4">
@@ -393,15 +403,18 @@ onMounted(initializeData);
     </div>
     <div v-else>
       <div class="flex flex-col">
-        <label for="editNama">Nama</label>
+        <label for="editNama" class="text-[var(--text-primary)]">Nama</label>
         <InputText
           v-model="selectedItem.Name"
           id="editNama"
           placeholder="Nama Barang"
+          class="bg-[var(--input-primary)]"
         />
       </div>
       <div class="mt-3 flex flex-col">
-        <label for="editQuantity">Quantity</label>
+        <label for="editQuantity" class="text-[var(--text-primary)]"
+          >Quantity</label
+        >
         <InputNumber
           v-model="selectedItem.quantity"
           id="editQuantity"
@@ -411,7 +424,7 @@ onMounted(initializeData);
         />
       </div>
       <div class="mt-3 flex flex-col">
-        <label for="editUnit">Satuan</label>
+        <label for="editUnit" class="text-[var(--text-primary)]">Satuan</label>
         <Select
           v-model="selectedItem.unit_id"
           :options="units"

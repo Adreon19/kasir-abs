@@ -660,6 +660,8 @@ onMounted(() => {
         />
       </div>
     </section>
+
+    <!-- DIALOG EDIT -->
     <Dialog
       v-model:visible="dialogVisible"
       header="Edit Pesanan"
@@ -672,7 +674,9 @@ onMounted(() => {
       </div>
       <div v-else>
         <div class="flex flex-col">
-          <label for="editjumlah">Quantity</label>
+          <label for="editjumlah" class="text-[var(--text-primary)]"
+            >Quantity</label
+          >
           <InputNumber
             v-model="selectedMenu.quantity"
             :min="0"
@@ -683,7 +687,9 @@ onMounted(() => {
           />
         </div>
         <div class="mt-3 flex flex-col">
-          <label for="editNoTelp">Note</label>
+          <label for="editNoTelp" class="text-[var(--text-primary)]"
+            >Note</label
+          >
           <Textarea
             v-model="selectedMenu.note"
             id="editNoTelp"

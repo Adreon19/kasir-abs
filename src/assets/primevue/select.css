@@ -42,11 +42,11 @@
 .p-select-label {
   @apply block whitespace-nowrap overflow-hidden flex-auto w-[1%]
         py-2 px-3 overflow-ellipsis
-        text-[var(--text-secondary)] bg-transparent border-none outline-none;
+        /* text-[var(--text-secondary)] bg-transparent border-none outline-none; */;
 }
 
 .p-select-label.p-placeholder {
-  @apply text-[var(--text-secondary)] bg-[var(--input-searchy)];
+  /* @apply text-[var(--text-secondary)] bg-[var(--input-searchy)]; */
 }
 
 .p-select:has(.p-select-clear-icon) .p-select-label {
@@ -95,7 +95,7 @@ input.p-select-label {
 }
 
 .p-select-list {
-  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-[var(--text-secondary)];
+  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-[var(--text-secondary)] bg-[var(--btn-order)];
 }
 
 .p-select-option {
@@ -110,11 +110,11 @@ input.p-select-label {
 }
 
 .p-select-option.p-select-option-selected {
-  @apply bg-highlight;
+  @apply bg-highlight bg-[var(--components-bg)];
 }
 
 .p-select-option.p-select-option-selected.p-focus {
-  @apply bg-highlight-emphasis;
+  @apply bg-[var(--components-bg)] text-[var(--text-primary)];
 }
 
 .p-select-option-check-icon {
@@ -147,4 +147,8 @@ input.p-select-label {
 
 .custom-select {
   @apply bg-[var(--input-primary)] text-[var(--text-secondary)];
+}
+
+.custom-dropdown {
+  @apply text-black;
 }

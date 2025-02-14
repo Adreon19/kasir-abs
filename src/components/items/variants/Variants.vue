@@ -238,7 +238,7 @@ onMounted(initializeData);
     </div>
     <div v-else>
       <div class="flex flex-col">
-        <label for="editNama" class="text-[var(--text-secondary)]">Nama</label>
+        <label for="editNama" class="text-[var(--text-primary)]">Nama</label>
         <InputText
           v-model="selectedVariant.name"
           id="editNama"

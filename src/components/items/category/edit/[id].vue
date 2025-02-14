@@ -98,7 +98,9 @@ onMounted(() => {
         to="/add"
       />
     </div>
-    <h2 class="text-2xl font-semibold mb-4">Edit Kategori</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-[var(--text-primary)]">
+      Edit Kategori
+    </h2>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>

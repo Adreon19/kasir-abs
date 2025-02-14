@@ -17,6 +17,9 @@ importers:
       jspdf:
         specifier: ^2.5.2
         version: 2.5.2
+      kasir-abs:
+        specifier: 'link:'
+        version: 'link:'
       primeicons:
         specifier: ^7.0.0
         version: 7.0.0
