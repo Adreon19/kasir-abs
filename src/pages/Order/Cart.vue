@@ -240,7 +240,7 @@ const finishOrder = async () => {
     });
 
     const centerX = pageWidth / 2;
-    doc.addImage(logoBase64, "PNG", centerX, currentY, 20, 20); // Adjust x, y, width, height as needed
+    doc.addImage(logoBase64, "PNG", centerX - 20, currentY, 20, 20);
     currentY += 25;
     // Title
     doc.setFontSize(10);
@@ -366,7 +366,7 @@ const finishOrder = async () => {
     currentY += 8;
 
     // Footer
-    doc.setFontSize(6);
+    doc.setFontSize(5);
     doc.setFont("helvetica", "normal");
     doc.text(
       "Thank you for your purchase! We truly appreciate your support.",
