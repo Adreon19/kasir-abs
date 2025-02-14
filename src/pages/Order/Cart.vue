@@ -293,9 +293,9 @@ const finishOrder = async () => {
 
     doc.setFont("helvetica", "bold");
     doc.text("No", marginLeft, currentY);
-    doc.text("Menu", marginLeft + 6, currentY);
-    doc.text("Price", marginLeft + 25, currentY);
-    doc.text("Qty", marginLeft + 45, currentY, { align: "right" });
+    doc.text("Menu", marginLeft + 4, currentY);
+    doc.text("Price", marginLeft + 27, currentY);
+    doc.text("Qty", marginLeft + 47, currentY, { align: "right" });
     currentY += 5;
 
     cartItems.value.forEach((item, index) => {
@@ -305,16 +305,16 @@ const finishOrder = async () => {
       const wrappedMenuName = doc.splitTextToSize(
         menuName,
         pageWidth - marginLeft * 2 - 15 // Adjust width as needed
-      ); // Adjust width as needed
+      );
       doc.setFontSize(7); // Smaller font size for menu name
-      doc.text(wrappedMenuName, marginLeft + 6, currentY);
+      doc.text(wrappedMenuName, marginLeft + 4, currentY);
       doc.setFontSize(7); // Smaller font size for price
       doc.text(
         `${formatCurrency(item.menu_detail.price)}`,
-        marginLeft + 25,
+        marginLeft + 27,
         currentY
       );
-      doc.text(`${item.quantity}`, marginLeft + 45, currentY, {
+      doc.text(`${item.quantity}`, marginLeft + 47, currentY, {
         align: "right",
       });
       currentY += 4 + (wrappedMenuName.length - 1) * 4;
@@ -369,22 +369,27 @@ const finishOrder = async () => {
     doc.setFontSize(7);
     doc.setFont("helvetica", "normal");
     doc.text(
-      "Thank you for your purchase! We appreciate your support.",
-      centerX,
+      "Thank you for your purchase! We appreciate",
+      marginLeft,
       currentY,
       {
-        align: "center",
+        align: "justify",
       }
     );
     currentY += 4;
-    doc.text("We hope you enjoy our product!", centerX, currentY, {
-      align: "center",
-    });
+    doc.text(
+      "your support. We hope you enjoy our product!",
+      marginLeft,
+      currentY,
+      {
+        align: "justify",
+      }
+    );
     currentY += 4;
-    doc.text("Visit us again!", centerX, currentY, { align: "center" });
+    doc.text("Visit us again!", marginLeft, currentY, { align: "justify" });
 
     currentY += 4;
-    doc.text("powered by: PPLG", centerX, currentY, { align: "center" });
+    doc.text("powered by: PPLG", marginLeft, currentY, { align: "justify" });
 
     // SAVE PDF
     doc.save(`order_${generatedOrderId}.pdf`);
@@ -521,9 +526,8 @@ const updateMenu = async () => {
 watch(selectedPaymentMethod, (newValue) => {
   if (newValue === 2) {
     // QRIS
-    paidAmount.value = totalAmount.value + 1000; // Pajak QRIS
-  }
-  if (newValue === 3) {
+    paidAmount.value = totalAmount.value + 1000;
+  } else if (newValue === 3) {
     // TRANSFER
     paidAmount.value = totalAmount.value;
   } else {
@@ -639,7 +643,9 @@ onMounted(() => {
             v-model="paidAmount"
             placeholder="Masukkan Nominal Uang"
             :value="paidAmount"
-            :disabled="selectedPaymentMethod === 2"
+            :disabled="
+              selectedPaymentMethod === 2 || selectedPaymentMethod === 3
+            "
             :min="0"
             mode="currency"
             currency="IDR"
