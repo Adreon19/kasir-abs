@@ -240,16 +240,16 @@ const finishOrder = async () => {
     });
 
     const centerX = pageWidth / 2;
-    doc.addImage(logoBase64, "PNG", centerX - 20, currentY, 40, 20); // Adjust x, y, width, height as needed
+    doc.addImage(logoBase64, "PNG", centerX - 20, currentY, 20, 20); // Adjust x, y, width, height as needed
     currentY += 25;
     // Title
-    doc.setFontSize(8);
+    doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.text("Artisan Beverage Studio", centerX, currentY, {
       align: "center",
     });
     currentY += 3;
-    doc.setFontSize(5);
+    doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
 
     const addressText =
@@ -279,7 +279,7 @@ const finishOrder = async () => {
       timeZone: "Asia/Jakarta",
     }).format(now);
 
-    doc.setFontSize(6);
+    doc.setFontSize(7);
     doc.setFont("helvetica", "normal");
     doc.text(`Customer: ${customerName.value}`, marginLeft, currentY);
     currentY += 4;
@@ -295,7 +295,7 @@ const finishOrder = async () => {
     doc.text("No", marginLeft, currentY);
     doc.text("Menu", marginLeft + 6, currentY);
     doc.text("Price", marginLeft + 25, currentY); // Adjusted position
-    doc.text("Qty", marginLeft + 39, currentY, { align: "right" }); // Adjusted position
+    doc.text("Qty", marginLeft + 42, currentY, { align: "right" }); // Adjusted position
     currentY += 5;
 
     cartItems.value.forEach((item, index) => {
@@ -306,22 +306,22 @@ const finishOrder = async () => {
         menuName,
         pageWidth - marginLeft * 2 - 15 // Adjust width as needed
       ); // Adjust width as needed
-      doc.setFontSize(5); // Smaller font size for menu name
+      doc.setFontSize(7); // Smaller font size for menu name
       doc.text(wrappedMenuName, marginLeft + 6, currentY);
-      doc.setFontSize(5); // Smaller font size for price
+      doc.setFontSize(7); // Smaller font size for price
       doc.text(
         `${formatCurrency(item.menu_detail.price)}`,
         marginLeft + 25,
         currentY
       );
-      doc.text(`${item.quantity}`, marginLeft + 39, currentY, {
+      doc.text(`${item.quantity}`, marginLeft + 42, currentY, {
         align: "right",
       });
       currentY += 4 + (wrappedMenuName.length - 1) * 4;
 
       // note pesanan
       if (item.note && item.note.trim()) {
-        doc.setFontSize(5);
+        doc.setFontSize(6);
         doc.setFont("helvetica", "italic");
         doc.text(`*${item.note}`, marginLeft + 10, currentY);
         currentY += 3;
@@ -338,7 +338,7 @@ const finishOrder = async () => {
     currentY += 6;
 
     // Total amount and payment details
-    doc.setFontSize(6);
+    doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
     doc.text(
       `Total: ${formatCurrency(totalAmount.value)}`,
@@ -366,7 +366,7 @@ const finishOrder = async () => {
     currentY += 8;
 
     // Footer
-    doc.setFontSize(5);
+    doc.setFontSize(7);
     doc.setFont("helvetica", "normal");
     doc.text(
       "Thank you for your purchase! We truly appreciate your support.",
@@ -387,6 +387,9 @@ const finishOrder = async () => {
     );
     currentY += 4;
     doc.text("Visit us again!", centerX, currentY, { align: "center" });
+
+    currentY += 4;
+    doc.text("powered by: PPLG", centerX, currentY, { align: "center" });
 
     // SAVE PDF
     doc.save(`order_${generatedOrderId}.pdf`);
