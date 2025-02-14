@@ -104,7 +104,7 @@ const saveOrder = async () => {
         toast.add({
           severity: "error",
           summary: "Error",
-          detail: `Failed to insert new customer: ${insertError.message}`,
+          detail: `Gagal memasukkan pelanggan baru: ${insertError.message}`,
           life: 3000,
         });
         return; // Exit the function if there's an error
@@ -120,7 +120,7 @@ const saveOrder = async () => {
       toast.add({
         severity: "warn",
         summary: "Warning",
-        detail: "Please select or enter a customer.",
+        detail: "Tolong pilih atau masukkan nama pelanggan.",
         life: 3000,
       });
       return;
@@ -131,7 +131,7 @@ const saveOrder = async () => {
       menu_detail_id: selectedVariant.value.id,
       quantity: quantity.value,
       note: note.value.trim(),
-      customer_id: customerId, // Use the customer ID from either the new or selected customer
+      customer_id: customerId,
     };
 
     const { error } = await supabase.from("cart").insert(payload);
@@ -141,7 +141,7 @@ const saveOrder = async () => {
       toast.add({
         severity: "error",
         summary: "Error",
-        detail: `Failed to insert into cart: ${error.message}`,
+        detail: `Gagal memasukkan ke keranjaang: ${error.message}`,
         life: 3000,
       });
       return; // Exit the function if there's an error
@@ -150,7 +150,7 @@ const saveOrder = async () => {
     toast.add({
       severity: "success",
       summary: "Success",
-      detail: "Order added to cart successfully!",
+      detail: "Pesanan berhasil dimasukkan ke keranjang!",
       life: 3000,
     });
 
