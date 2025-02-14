@@ -240,7 +240,7 @@ const finishOrder = async () => {
     });
 
     const centerX = pageWidth / 2;
-    doc.addImage(logoBase64, "PNG", centerX - 20, currentY, 20, 20);
+    doc.addImage(logoBase64, "PNG", centerX - 10, currentY, 20, 20);
     currentY += 25;
     // Title
     doc.setFontSize(10);
