@@ -56,12 +56,13 @@
   --btn-order: #c8a241;
   --btn-secondary: #c8a241;
   --input-search: #453721;
-  --btn-search: rgb(72, 66, 66);
+  /* --btn-search: rgb(72, 66, 66); */
+  --btn-search: #2e1605;
   --text-order: #c8a241;
   --bg-drawer: rgba(149, 120, 54, 0.2);
   --section-bg: rgb(0, 0, 0, 0.5);
   --input-primary: rgb(72, 66, 66);
-  --striped-row: #493628;
+  --striped-row: #2e1605;
   --bg-datable: rgb(72, 66, 66);
   --bg-switch: #130b03;
   --bg-icon-switch: #776024;

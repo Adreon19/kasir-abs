@@ -4,7 +4,7 @@
 
 .p-select {
   @apply inline-flex cursor-pointer relative select-none rounded-md
-        bg-black
+        bg-[var(--btn-search)]
         placeholder-[var(--text-primary)]
         shadow-[0_1px_2px_0_rgba(18,18,23,0.05)]
         transition-colors duration-200 text-black;
@@ -95,7 +95,7 @@ input.p-select-label {
 }
 
 .p-select-list {
-  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-[var(--text-secondary)] bg-[var(--btn-order)];
+  @apply m-0 p-1 list-none gap-[2px] flex flex-col text-[var(--text-secondary)] bg-[var(--btn-search)];
 }
 
 .p-select-option {
