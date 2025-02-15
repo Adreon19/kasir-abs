@@ -232,7 +232,7 @@ onMounted(() => {
       <InputText
         v-model="customerName"
         placeholder="Masukkan nama pelanggan baru"
-        class="text-[var(--text-secondary)]"
+        class="text-[var(--text-secondary)] bg-[var(--input-search)]"
         label="Customer Name"
       />
       <Select
