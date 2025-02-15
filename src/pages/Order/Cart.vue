@@ -172,6 +172,7 @@ const fetchLogoBase64 = async () => {
 
 const finishOrder = async () => {
   try {
+    isLoading.value = true;
     if (paidAmount.value < totalAmount.value) {
       toast.add({
         severity: "warn",
@@ -412,6 +413,7 @@ const finishOrder = async () => {
 
     cartItems.value = [];
     paidAmount.value = null;
+    isLoading.value = true;
 
     if (deleteError) {
       console.error("Error deleting cart items:", deleteError);
