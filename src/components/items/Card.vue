@@ -113,10 +113,9 @@ const saveOrder = async () => {
       // Get the new customer ID
       customerId = newCustomer[0].id; // Access the first element of the array
     } else if (selectedCustomer.value) {
-      // Use the selected customer ID if no new name is provided
       customerId = selectedCustomer.value.id;
     } else {
-      // If no customer is provided, show a warning
+      // Kirim peringatan kalau tidak ada pelanggan
       toast.add({
         severity: "warn",
         summary: "Warning",
@@ -144,7 +143,7 @@ const saveOrder = async () => {
         detail: `Gagal memasukkan ke keranjaang: ${error.message}`,
         life: 3000,
       });
-      return; // Exit the function if there's an error
+      return;
     }
 
     toast.add({
@@ -158,6 +157,7 @@ const saveOrder = async () => {
     await fetchCart();
     selectedCustomer.value = null;
     visible.value = false;
+    isLoading.value = false;
   } catch (error) {
     toast.add({
       severity: "error",
@@ -165,8 +165,6 @@ const saveOrder = async () => {
       detail: error.message,
       life: 3000,
     });
-  } finally {
-    isLoading.value = true;
   }
 };
 onMounted(() => {
@@ -262,23 +260,22 @@ onMounted(() => {
         label="Quantity"
       />
       <Textarea v-model="note" rows="3" cols="30" placeholder="Add a note" />
-    </div>
-
-    <div class="flex justify-end mt-4 gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        icon="fa-solid fa-x-mark"
-        severity="secondary"
-        @click="visible = false"
-      />
-      <Button
-        type="button"
-        label="Save Order"
-        icon="fa-solid fa-check"
-        severity="success"
-        @click="saveOrder"
-      />
+      <div class="flex justify-end mt-4 gap-2">
+        <Button
+          type="button"
+          label="Cancel"
+          icon="fa-solid fa-x-mark"
+          severity="secondary"
+          @click="visible = false"
+        />
+        <Button
+          type="button"
+          label="Save Order"
+          icon="fa-solid fa-check"
+          severity="success"
+          @click="saveOrder"
+        />
+      </div>
     </div>
   </Dialog>
 </template>
