@@ -172,7 +172,6 @@ const fetchLogoBase64 = async () => {
 
 const finishOrder = async () => {
   try {
-    isLoading.value = true;
     if (paidAmount.value < totalAmount.value) {
       toast.add({
         severity: "warn",
@@ -183,13 +182,14 @@ const finishOrder = async () => {
       return;
     }
 
-    const generatedOrderId = Date.now(); // Example of a unique numeric ID
+    isLoading.value = true;
+    const generatedOrderId = Date.now();
 
     // Step 1: Insert a new order record into the 'order' table with the generated ID
     const { error: orderError } = await supabase.from("order").insert([
       {
-        id: generatedOrderId, // Use the numeric ID here
-        customer_name: customerName.value, // Use the customer name
+        id: generatedOrderId,
+        customer_name: customerName.value,
         total_price: totalAmount.value,
         payment: selectedPaymentMethod.value,
         paid: paidAmount.value,
