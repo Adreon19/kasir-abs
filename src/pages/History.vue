@@ -221,7 +221,7 @@ const downloadPDF = () => {
   // Table Header
   doc.setFont("helvetica", "bold");
   doc.text("Name", marginLeft, currentY);
-  doc.text("Menu", marginLeft + 10, currentY);
+  doc.text("Menu", marginLeft + 13, currentY);
   doc.text("Price", marginLeft + 30, currentY);
   doc.text("Qty", marginLeft + 45, currentY, { align: "right" });
   currentY += 5;
@@ -247,7 +247,7 @@ const downloadPDF = () => {
       doc.setFont("helvetica", "normal");
       doc.text(order.customer_name || "Unknown", marginLeft, currentY);
       doc.setFontSize(5);
-      doc.text(detail.menu_name || "Unknown", marginLeft + 10, currentY);
+      doc.text(detail.menu_name || "Unknown", marginLeft + 13, currentY);
       doc.setFontSize(6);
       doc.text(
         formatCurrency(detail.menu_price) || "0",
