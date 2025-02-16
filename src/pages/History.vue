@@ -223,7 +223,7 @@ const downloadPDF = () => {
   doc.text("Name", marginLeft, currentY);
   doc.text("Menu", marginLeft + 13, currentY);
   doc.text("Price", marginLeft + 30, currentY);
-  doc.text("Qty", marginLeft + 45, currentY, { align: "right" });
+  doc.text("Qty", marginLeft + 47, currentY, { align: "right" });
   currentY += 5;
 
   // Total sold by category
@@ -254,7 +254,7 @@ const downloadPDF = () => {
         marginLeft + 30,
         currentY
       );
-      doc.text(detail.quantity.toString() || "0", marginLeft + 45, currentY, {
+      doc.text(detail.quantity.toString() || "0", marginLeft + 47, currentY, {
         align: "right",
       });
       currentY += 4;
