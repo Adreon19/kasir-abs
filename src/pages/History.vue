@@ -154,7 +154,7 @@ const collapseAll = () => {
 
 // Download Struk
 const downloadPDF = () => {
-  const pageWidth = 57;
+  const pageWidth = 58;
   const marginLeft = 5;
   let currentY = 8;
   let estimatedHeight = 100;
@@ -176,7 +176,7 @@ const downloadPDF = () => {
   const centerX = pageWidth / 2;
 
   // Title
-  doc.setFontSize(8); // Adjusted font size
+  doc.setFontSize(8);
   doc.setFont("helvetica", "bold");
   const title = "Artisan Beverage Studio";
   const titleWidth = doc.getTextWidth(title);
@@ -184,7 +184,7 @@ const downloadPDF = () => {
   currentY += 3;
 
   // Address
-  doc.setFontSize(5);
+  doc.setFontSize(6);
   doc.setFont("helvetica", "bold");
   const addressText =
     "Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
@@ -279,7 +279,7 @@ const downloadPDF = () => {
   currentY += 6;
 
   // Total amount
-  doc.setFontSize(6);
+  doc.setFontSize(7);
   doc.setFont("helvetica", "bold");
   const totalAmount = filteredOrders.value.reduce((sum, order) => {
     return (
