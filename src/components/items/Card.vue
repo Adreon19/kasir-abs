@@ -5,6 +5,7 @@ import { supabase } from "../../supabase";
 import { formatCurrency } from "../../utils/formatter/currency";
 
 const toast = useToast();
+const isLoading = ref(false);
 const visible = ref(false);
 const selectedMenu = ref(null);
 const quantity = ref(1);
@@ -81,22 +82,21 @@ const saveOrder = async () => {
     toast.add({
       severity: "warn",
       summary: "Warning",
-      detail: "Please select a menu and variant.",
+      detail: "Tolong pilih salah satu menu atau varian.",
       life: 3000,
     });
     return;
   }
 
   try {
+    isLoading.value = true;
     let customerId = null;
 
-    // Check if a new customer name is provided
     if (customerName.value.trim() !== "") {
-      // Insert the new customer into the customer table
       const { data: newCustomer, error: insertError } = await supabase
         .from("customer")
         .insert([{ customer: customerName.value }])
-        .select(); // Use .select() to return the inserted row
+        .select();
 
       // Check for insertion error
       if (insertError) {
@@ -107,7 +107,7 @@ const saveOrder = async () => {
           detail: `Gagal memasukkan pelanggan baru: ${insertError.message}`,
           life: 3000,
         });
-        return; // Exit the function if there's an error
+        return;
       }
 
       // Get the new customer ID
@@ -165,6 +165,8 @@ const saveOrder = async () => {
       detail: error.message,
       life: 3000,
     });
+  } finally {
+    isLoading.value = true;
   }
 };
 onMounted(() => {
@@ -228,7 +230,10 @@ onMounted(() => {
     :header="`Order ${selectedMenu?.name}`"
     :style="{ width: '25rem' }"
   >
-    <div class="flex flex-col gap-4">
+    <div v-if="isLoading">
+      <ProgressSpinner />
+    </div>
+    <div v-else class="flex flex-col gap-4">
       <InputText
         v-model="customerName"
         placeholder="Masukkan nama pelanggan baru"
