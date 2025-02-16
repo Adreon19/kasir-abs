@@ -155,7 +155,10 @@ onMounted(initializeData);
       <ProgressSpinner />
     </div>
     <div v-else>
-      <div v-if="menuList.length === 0" class="text-white text-center">
+      <div
+        v-if="menuList.length === 0"
+        class="text-[var(--text-secondary)] text-center"
+      >
         Tidak ada menu
       </div>
       <div v-else>
