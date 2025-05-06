@@ -148,7 +148,7 @@ onMounted(() => {
             <RouterLink to="/inventory">
               <li>
                 <i class="fa-solid fa-boxes-stacked ease-in duration-300"></i>
-                Inventory
+                Inventori
               </li>
             </RouterLink>
           </ul>

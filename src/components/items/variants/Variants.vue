@@ -175,7 +175,7 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <section class="main-section">
+  <section class="main-section max-w-full container">
     <h2>Tambah Variant</h2>
     <div class="card flex flex-col gap-5">
       <div class="flex gap-5">
@@ -183,7 +183,7 @@ onMounted(initializeData);
           <InputText
             id="variant-name"
             v-model="newVariant"
-            class="custom-input p-3"
+            class="custom-input p-4 w-full"
           />
           <label for="variant-name">Nama variant</label>
         </FloatLabel>
@@ -191,9 +191,13 @@ onMounted(initializeData);
           label="Save"
           icon="fa fa-check"
           iconPos="left"
+          class="custom-button p-4"
           @click="addVariant"
         />
       </div>
+    </div>
+    <h2>List Kategori</h2>
+    <div class="card flex gap-5">
       <DataTable
         :value="variants"
         stripedRows
@@ -201,6 +205,7 @@ onMounted(initializeData);
         :rows="5"
         :rowsPerPageOptions="[5, 10, 20, 50]"
         tableStyle="min-width: 50rem"
+        class="w-full"
       >
         <Column field="name" header="Nama Variant" />
         <Column header="Aksi" class="flex justify-center">
