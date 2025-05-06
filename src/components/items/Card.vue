@@ -5,6 +5,7 @@ import { supabase } from "../../supabase";
 import { formatCurrency } from "../../utils/formatter/currency";
 
 const toast = useToast();
+const isLoading = ref(false);
 const visible = ref(false);
 const selectedMenu = ref(null);
 const quantity = ref(1);
@@ -81,22 +82,21 @@ const saveOrder = async () => {
     toast.add({
       severity: "warn",
       summary: "Warning",
-      detail: "Please select a menu and variant.",
+      detail: "Tolong pilih salah satu menu atau varian.",
       life: 3000,
     });
     return;
   }
 
   try {
+    isLoading.value = true;
     let customerId = null;
 
-    // Check if a new customer name is provided
     if (customerName.value.trim() !== "") {
-      // Insert the new customer into the customer table
       const { data: newCustomer, error: insertError } = await supabase
         .from("customer")
         .insert([{ customer: customerName.value }])
-        .select(); // Use .select() to return the inserted row
+        .select();
 
       // Check for insertion error
       if (insertError) {
@@ -107,16 +107,15 @@ const saveOrder = async () => {
           detail: `Gagal memasukkan pelanggan baru: ${insertError.message}`,
           life: 3000,
         });
-        return; // Exit the function if there's an error
+        return;
       }
 
       // Get the new customer ID
       customerId = newCustomer[0].id; // Access the first element of the array
     } else if (selectedCustomer.value) {
-      // Use the selected customer ID if no new name is provided
       customerId = selectedCustomer.value.id;
     } else {
-      // If no customer is provided, show a warning
+      // Kirim peringatan kalau tidak ada pelanggan
       toast.add({
         severity: "warn",
         summary: "Warning",
@@ -144,7 +143,7 @@ const saveOrder = async () => {
         detail: `Gagal memasukkan ke keranjaang: ${error.message}`,
         life: 3000,
       });
-      return; // Exit the function if there's an error
+      return;
     }
 
     toast.add({
@@ -158,6 +157,7 @@ const saveOrder = async () => {
     await fetchCart();
     selectedCustomer.value = null;
     visible.value = false;
+    isLoading.value = false;
   } catch (error) {
     toast.add({
       severity: "error",
@@ -225,10 +225,13 @@ onMounted(() => {
   <Dialog
     v-model:visible="visible"
     modal
-    :header="`Order ${selectedMenu?.name}`"
+    :header="`Pesan ${selectedMenu?.name}`"
     :style="{ width: '25rem' }"
   >
-    <div class="flex flex-col gap-4">
+    <div v-if="isLoading">
+      <ProgressSpinner />
+    </div>
+    <div v-else class="flex flex-col gap-4">
       <InputText
         v-model="customerName"
         placeholder="Masukkan nama pelanggan baru"
@@ -247,7 +250,7 @@ onMounted(() => {
         :options="selectedMenu?.menu_detail"
         class="custom-select"
         optionLabel="menu_variants.name"
-        placeholder="Choose a variant"
+        placeholder="Pilih varian"
       />
       <InputNumber
         v-model="quantity"
@@ -256,24 +259,29 @@ onMounted(() => {
         placeholder="Quantity"
         label="Quantity"
       />
-      <Textarea v-model="note" rows="3" cols="30" placeholder="Add a note" />
-    </div>
-
-    <div class="flex justify-end mt-4 gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        icon="fa-solid fa-x-mark"
-        severity="secondary"
-        @click="visible = false"
+      <Textarea
+        v-model="note"
+        rows="3"
+        cols="30"
+        placeholder="Tambahkan catatan"
       />
-      <Button
-        type="button"
-        label="Save Order"
-        icon="fa-solid fa-check"
-        severity="success"
-        @click="saveOrder"
-      />
+      <div class="flex justify-end mt-4 gap-2">
+        <Button
+          type="button"
+          label="Cancel"
+          icon="fa-solid fa-xmark"
+          style="color: #000000"
+          severity="secondary"
+          @click="visible = false"
+        />
+        <Button
+          type="button"
+          label="Simpan"
+          icon="fa-solid fa-check"
+          severity="success"
+          @click="saveOrder"
+        />
+      </div>
     </div>
   </Dialog>
 </template>

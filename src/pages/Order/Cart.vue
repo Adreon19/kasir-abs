@@ -4,14 +4,13 @@ import { useRoute, useRouter } from "vue-router"; // Import useRoute to access r
 import { supabase } from "../../supabase";
 import { ProgressSpinner, Textarea, useToast } from "primevue";
 import { formatCurrency } from "../../utils/formatter/currency";
-import { jsPDF } from "jspdf";
 
 const toast = useToast();
 const nama = ref("");
 const cartItems = ref([]);
 const paymethod = ref([]);
 const selectedPaymentMethod = ref(null);
-const paidAmount = ref();
+const paidAmount = ref(0);
 const isLoading = ref(false);
 const dialogVisible = ref(false);
 const selectedMenu = ref({ id: null, quantity: "", note: "" });
@@ -19,6 +18,8 @@ const customerName = ref("");
 const route = useRoute();
 const router = useRouter();
 const customerId = route.query.customerId;
+const printFrame = ref(null);
+const isPrinted = ref(false);
 
 const totalAmount = computed(() => {
   return cartItems.value.reduce((sum, item) => {
@@ -156,40 +157,176 @@ const fetchUserData = async () => {
   }
 };
 
-const fetchLogoBase64 = async () => {
-  try {
-    const response = await fetch("/images/base64/base64.txt");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const base64 = await response.text();
-    return base64.trim();
-  } catch (error) {
-    console.error("Error fetching logo Base64:", error);
-    return null;
-  }
+const printReceipt = () => {
+  const receiptData = cartItems.value.map((item) => ({
+    name: item.menu_detail.menu_id.name,
+    qty: item.quantity,
+    price: item.menu_detail.price,
+    note: item.note || "",
+  }));
+
+  const paymentMethod =
+    paymethod.value.find(
+      (method) => method.value === selectedPaymentMethod.value
+    )?.label || "Unknown";
+
+  const receiptInfo = {
+    cashier: nama.value,
+    customer: customerName.value,
+    total: totalAmount.value,
+    paid: paidAmount.value || 0,
+    change: changeAmount.value || 0,
+    paymentMethod: paymentMethod,
+    items: receiptData,
+  };
+
+  // Create the HTML content for the receipt
+  let receiptHTML = `
+    <html lang="id">
+      <head>
+        <title>Struk Pembelian</title>
+        <style>
+          body {
+            width: 58mm; 
+            font-family: Arial, sans-serif;
+            font-size: 10px; 
+            text-align: left;
+            margin: 0;
+            padding: 3px; 
+            background-color: white;
+          }
+          h2 {
+            margin: 2px 0; 
+            text-align: center;
+            font-size: 12px; 
+          }
+          .alamat {
+            font-size: 9px; 
+            margin-bottom: 2px;
+            text-align: center;
+          }
+          hr {
+            border: 1px dashed black;
+            margin: 2px 0; 
+          }
+          .items {
+            text-align: left;
+            margin-bottom: 5px; 
+          }
+          .items table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          .items td {
+            font-size: 10px; 
+            padding: 1px 0; 
+          }
+          .note {
+            font-size: 8px; 
+            color: gray;
+          }
+          .total {
+            font-weight: bold;
+            font-size: 12px;
+          }
+          .footer {
+            font-size: 8px; 
+            margin-top: 5px;
+            text-align: center;
+          }
+          @page {
+          size: auto; 
+          margin: 0; 
+        }
+        </style>
+      </head>
+      <body>
+        <img src="images/logoABS.png" alt="Logo Artisan Beverage Studio" style="width: 40%; max-width: 50mm; height: auto; display: block; margin: 0 auto;" />
+        <h2>ARTISAN BEVERAGE STUDIO</h2>
+        <div class="alamat">Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat</div>
+        <hr />
+        <div class="info">Customer: ${receiptInfo.customer}</div>
+        <div class="info">Cashier: ${receiptInfo.cashier}</div>
+        <hr />
+        <div class="items">
+          <table>
+            ${receiptData
+              .map(
+                (item) => `
+              <tr>
+                <td style="text-align: left;">${item.name}</td>
+                <td>x${item.qty}</td>
+                <td>Rp${(item.price * item.qty).toLocaleString("id-ID")}</td>
+              </tr>
+              ${
+                item.note
+                  ? `<tr><td colspan="3" class="note">${item.note}</td></tr>`
+                  : ""
+              }
+            `
+              )
+              .join("")}
+          </table>
+        </div>
+        <hr />
+        <div class="payment-info">
+          <div class="total">TOTAL: Rp${receiptInfo.total.toLocaleString(
+            "id-ID"
+          )}</div>
+          <div>Paid: Rp${receiptInfo.paid.toLocaleString("id-ID")}</div>
+          <div>Change: Rp${receiptInfo.change.toLocaleString("id-ID")}</div>
+          <div>Method: ${paymentMethod}</div>
+        </div>
+        <hr />
+        <div class="footer">
+          Terima kasih telah berbelanja!<br />
+          Semoga harimu menyenangkan<br />
+          Powered by: PPLG
+        </div>
+      </body>
+    </html>
+  `;
+
+  // Write the content to the iframe
+  const frameDoc =
+    printFrame.value.contentWindow ||
+    printFrame.value.contentDocument.document ||
+    printFrame.value.contentDocument;
+  frameDoc.document.open();
+  frameDoc.document.write(receiptHTML);
+  frameDoc.document.close();
+
+  // Wait for the content to load and then print
+  printFrame.value.onload = function () {
+    printFrame.value.contentWindow.print();
+    isPrinted.value = true;
+  };
 };
 
 const finishOrder = async () => {
   try {
-    isLoading.value = true;
     if (paidAmount.value < totalAmount.value) {
       toast.add({
         severity: "warn",
         summary: "Warning",
-        detail: "Paid amount must be equal to or greater than the total price.",
+        detail: "Uang yang dibayar harus lebih atau sama dari total harga",
         life: 9000,
       });
       return;
     }
 
-    const generatedOrderId = Date.now(); // Example of a unique numeric ID
+    if (!isPrinted.value) {
+      alert("Harap cetak struk terlebih dahulu!");
+      return;
+    }
+    isLoading.value = true;
+    const generatedOrderId = Date.now();
 
     // Step 1: Insert a new order record into the 'order' table with the generated ID
     const { error: orderError } = await supabase.from("order").insert([
       {
-        id: generatedOrderId, // Use the numeric ID here
-        customer_name: customerName.value, // Use the customer name
+        id: generatedOrderId,
+        customer_name: customerName.value,
         total_price: totalAmount.value,
         payment: selectedPaymentMethod.value,
         paid: paidAmount.value,
@@ -211,189 +348,6 @@ const finishOrder = async () => {
       note: item.note,
     }));
 
-    const pageWidth = 58;
-    const marginLeft = 5; // Reduced margin to maximize space
-    let currentY = 8;
-    let estimatedHeight = 100; // Initial height, adjust as needed
-
-    cartItems.value.forEach((item) => {
-      estimatedHeight += 6;
-      if (item.note && item.note.trim()) {
-        estimatedHeight += 3;
-      }
-    });
-
-    const logoBase64 = await fetchLogoBase64();
-    if (!logoBase64) {
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: "Failed to load logo image.",
-        life: 10000,
-      });
-      return;
-    }
-
-    estimatedHeight += 30;
-    const doc = new jsPDF({
-      unit: "mm",
-      format: [pageWidth, estimatedHeight],
-    });
-
-    const centerX = pageWidth / 2;
-    doc.addImage(logoBase64, "PNG", centerX - 10, currentY, 20, 20);
-    currentY += 25;
-    // Title
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "bold");
-    doc.text("Artisan Beverage Studio", centerX, currentY, {
-      align: "center",
-    });
-    currentY += 3;
-    doc.setFontSize(7);
-    doc.setFont("helvetica", "bold");
-
-    const addressText =
-      "Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
-    const addressLines = doc.splitTextToSize(
-      addressText,
-      pageWidth - marginLeft * 2
-    );
-    doc.text(addressLines, centerX, currentY, { align: "center" });
-    currentY += addressLines.length * 3;
-
-    // Separator line
-    doc.setDrawColor(0);
-    doc.setLineWidth(0.2);
-    doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
-    currentY += 4;
-
-    // Customer details
-    const now = new Date();
-    const formattedDate = new Intl.DateTimeFormat("id-ID", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZone: "Asia/Jakarta",
-    }).format(now);
-
-    doc.setFontSize(7);
-    doc.setFont("helvetica", "normal");
-    doc.text(`Customer: ${customerName.value}`, marginLeft, currentY);
-    currentY += 4;
-    doc.text(`Cashier: ${nama.value}`, marginLeft, currentY);
-    currentY += 4;
-    doc.text(`Order ID: ${generatedOrderId}`, marginLeft, currentY);
-    currentY += 4;
-    doc.text(`Date: ${formattedDate}`, marginLeft, currentY);
-
-    currentY += 8;
-
-    doc.setFont("helvetica", "bold");
-    doc.text("No", marginLeft, currentY);
-    doc.text("Menu", marginLeft + 4, currentY);
-    doc.text("Price", marginLeft + 27, currentY);
-    doc.text("Qty", marginLeft + 47, currentY, { align: "right" });
-    currentY += 5;
-
-    cartItems.value.forEach((item, index) => {
-      doc.setFont("helvetica", "normal");
-      doc.text(`${index + 1}`, marginLeft, currentY);
-      const menuName = item.menu_detail.menu_id.name;
-      const wrappedMenuName = doc.splitTextToSize(
-        menuName,
-        pageWidth - marginLeft * 2 - 15 // Adjust width as needed
-      );
-      doc.setFontSize(7); // Smaller font size for menu name
-      doc.text(wrappedMenuName, marginLeft + 4, currentY);
-      doc.setFontSize(7); // Smaller font size for price
-      doc.text(
-        `${formatCurrency(item.menu_detail.price)}`,
-        marginLeft + 27,
-        currentY
-      );
-      doc.text(`${item.quantity}`, marginLeft + 47, currentY, {
-        align: "right",
-      });
-      currentY += 4 + (wrappedMenuName.length - 1) * 4;
-
-      // note pesanan
-      if (item.note && item.note.trim()) {
-        doc.setFontSize(6);
-        doc.setFont("helvetica", "italic");
-        doc.text(`*${item.note}`, marginLeft + 10, currentY);
-        currentY += 3;
-        doc.setFontSize(6);
-        doc.setFont("helvetica", "normal");
-      }
-    });
-
-    // Garis pembatas
-    currentY += 4;
-    doc.setDrawColor(0);
-    doc.setLineWidth(0.2);
-    doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
-    currentY += 6;
-
-    // Total amount and payment details
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "bold");
-    doc.text(
-      `Total: ${formatCurrency(totalAmount.value)}`,
-      marginLeft,
-      currentY
-    );
-    currentY += 4;
-    doc.text(
-      `Payment Method: ${
-        paymethod.value.find(
-          (method) => method.value === selectedPaymentMethod.value
-        )?.label || "Unknown"
-      }`,
-      marginLeft,
-      currentY
-    );
-    currentY += 4;
-    doc.text(`Paid: ${formatCurrency(paidAmount.value)}`, marginLeft, currentY);
-    currentY += 4;
-    doc.text(
-      `Change: ${formatCurrency(changeAmount.value)}`,
-      marginLeft,
-      currentY
-    );
-    currentY += 8;
-
-    // Footer
-    doc.setFontSize(7);
-    doc.setFont("helvetica", "normal");
-    doc.text(
-      "Thank you for your purchase! We appreciate",
-      marginLeft,
-      currentY,
-      {
-        align: "justify",
-      }
-    );
-    currentY += 4;
-    doc.text(
-      "your support. We hope you enjoy our product!",
-      marginLeft,
-      currentY,
-      {
-        align: "justify",
-      }
-    );
-    currentY += 4;
-    doc.text("Visit us again!", marginLeft, currentY, { align: "justify" });
-
-    currentY += 4;
-    doc.text("powered by: PPLG", marginLeft, currentY, { align: "justify" });
-
-    // SAVE PDF
-    doc.save(`order_${generatedOrderId}.pdf`);
     const { error: orderDetailsError } = await supabase
       .from("order_detail")
       .insert(orderDetails);
@@ -550,13 +504,13 @@ onMounted(() => {
   </div>
   <div v-else>
     <section class="main-section p-5">
-      <h1 class="text-xl font-bold text-white mb-4">Order Details</h1>
+      <h1 class="text-xl font-bold text-white mb-4">Detail Pesanan</h1>
       <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-2">
-          <label for="customer"> Nama customer </label>
+          <label for="customer"> Nama Pembeli </label>
           <InputText
             v-model="customerName"
-            placeholder="Nama Customer"
+            placeholder="Nama Pembeli"
             class="custom-input max-w-fit"
             disabled
           />
@@ -570,23 +524,23 @@ onMounted(() => {
           <Column field="menu_detail.menu_id.name" header="Menu" class="p-3" />
           <Column
             field="menu_detail.variant_id.name"
-            header="Variant"
+            header="Varian"
             class="p-3"
           />
           <Column
             field="menu_detail.price"
-            header="Price"
+            header="Harga"
             class="p-3"
             :body="formatCurrency"
           />
-          <Column field="quantity" header="Quantity" class="p-3" />
+          <Column field="quantity" header="Kuantitas" class="p-3" />
           <Column
             field="note"
-            header="Note"
+            header="Catatan"
             class="p-3"
             :body="(item) => item.note || '-'"
           />
-          <Column header="Action" class="p-3">
+          <Column header="Aksi" class="p-3">
             <template #body="slotProps">
               <div class="flex flex-row gap-2">
                 <Button
@@ -623,7 +577,7 @@ onMounted(() => {
             :options="paymethod"
             optionLabel="label"
             optionValue="value"
-            placeholder="Select Payment Method"
+            placeholder="Pilih Metode Pembayaran"
             class="custom-select text-[var(--text-secondary)]"
           />
           <div class="flex gap-2">
@@ -664,9 +618,16 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="flex justify-end mt-5">
+      <div class="flex justify-end mt-5 gap-3">
         <Button
-          label="Finish Order"
+          label="Cetak Struk"
+          icon="fa-solid fa-print"
+          class="button33 custom-button"
+          severity="save"
+          @click="printReceipt"
+        />
+        <Button
+          label="Tutup Pesanan"
           icon="fa-solid fa-check"
           class="button33 custom-button"
           severity="save"
@@ -674,6 +635,8 @@ onMounted(() => {
         />
       </div>
     </section>
+
+    <iframe ref="printFrame" style="display: none"></iframe>
 
     <!-- DIALOG EDIT -->
     <Dialog
@@ -689,7 +652,7 @@ onMounted(() => {
       <div v-else>
         <div class="flex flex-col">
           <label for="editjumlah" class="text-[var(--text-primary)]"
-            >Quantity</label
+            >Kuantitas</label
           >
           <InputNumber
             v-model="selectedMenu.quantity"

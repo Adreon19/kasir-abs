@@ -148,24 +148,22 @@ const expandAll = () => {
   );
 };
 
-// Collapse all rows
-
 const collapseAll = () => {
   expandedRows.value = [];
 };
 
 // Download Struk
 const downloadPDF = () => {
-  const pageWidth = 57; // Set width to 57mm
-  const marginLeft = 5; // Adjust margin as needed
+  const pageWidth = 58;
+  const marginLeft = 5;
   let currentY = 8;
   let estimatedHeight = 100;
 
   filteredOrders.value.forEach((order) => {
     order.details.forEach((detail) => {
-      estimatedHeight += 6; // Base height for each item
+      estimatedHeight += 6;
       if (detail.note && detail.note.trim()) {
-        estimatedHeight += 3; // Additional height for notes
+        estimatedHeight += 3;
       }
     });
   });
@@ -178,7 +176,7 @@ const downloadPDF = () => {
   const centerX = pageWidth / 2;
 
   // Title
-  doc.setFontSize(8); // Adjusted font size
+  doc.setFontSize(8);
   doc.setFont("helvetica", "bold");
   const title = "Artisan Beverage Studio";
   const titleWidth = doc.getTextWidth(title);
@@ -186,7 +184,7 @@ const downloadPDF = () => {
   currentY += 3;
 
   // Address
-  doc.setFontSize(5);
+  doc.setFontSize(6);
   doc.setFont("helvetica", "bold");
   const addressText =
     "Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
@@ -223,34 +221,40 @@ const downloadPDF = () => {
   // Table Header
   doc.setFont("helvetica", "bold");
   doc.text("Name", marginLeft, currentY);
-  doc.text("Menu", marginLeft + 10, currentY);
+  doc.text("Menu", marginLeft + 13, currentY);
   doc.text("Price", marginLeft + 30, currentY);
-  doc.text("Qty", marginLeft + 45, currentY, { align: "right" });
+  doc.text("Qty", marginLeft + 47, currentY, { align: "right" });
   currentY += 5;
 
   // Total sold by category
-  const totalSoldByCategory = {}; // Object to hold total sold by category
+  const totalSoldByCategory = {};
+  const totalSoldByMenu = {};
 
   // Table Body
   filteredOrders.value.forEach((order) => {
     order.details.forEach((detail) => {
-      const categoryName = detail.category; // Access the category name
+      const categoryName = detail.category;
 
       // Update total sold by category
       totalSoldByCategory[categoryName] =
         (totalSoldByCategory[categoryName] || 0) + detail.quantity;
 
+      const menuName = detail.menu_name;
+
+      totalSoldByMenu[menuName] =
+        (totalSoldByMenu[menuName] || 0) + detail.quantity;
+
       doc.setFont("helvetica", "normal");
       doc.text(order.customer_name || "Unknown", marginLeft, currentY);
       doc.setFontSize(5);
-      doc.text(detail.menu_name || "Unknown", marginLeft + 10, currentY);
+      doc.text(detail.menu_name || "Unknown", marginLeft + 13, currentY);
       doc.setFontSize(6);
       doc.text(
         formatCurrency(detail.menu_price) || "0",
         marginLeft + 30,
         currentY
       );
-      doc.text(detail.quantity.toString() || "0", marginLeft + 45, currentY, {
+      doc.text(detail.quantity.toString() || "0", marginLeft + 47, currentY, {
         align: "right",
       });
       currentY += 4;
@@ -275,7 +279,7 @@ const downloadPDF = () => {
   currentY += 6;
 
   // Total amount
-  doc.setFontSize(6);
+  doc.setFontSize(7);
   doc.setFont("helvetica", "bold");
   const totalAmount = filteredOrders.value.reduce((sum, order) => {
     return (
@@ -286,10 +290,22 @@ const downloadPDF = () => {
   doc.text(`Total: ${formatCurrency(totalAmount)}`, marginLeft, currentY);
   currentY += 4;
 
-  // Total sold by category
+  // Total Category yang di pesan
   doc.setFont("helvetica", "normal");
   for (const [category, quantity] of Object.entries(totalSoldByCategory)) {
     doc.text(`Total ${category} sold: ${quantity}`, marginLeft, currentY);
+    currentY += 4;
+  }
+  currentY += 4;
+  doc.setDrawColor(0);
+  doc.setLineWidth(0.2);
+  doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
+  currentY += 4;
+
+  // Total Category yang di pesan
+  doc.setFont("helvetica", "normal");
+  for (const [menu, quantity] of Object.entries(totalSoldByMenu)) {
+    doc.text(`Total ${menu} sold: ${quantity}`, marginLeft, currentY);
     currentY += 4;
   }
 
@@ -317,7 +333,7 @@ onMounted(fetchOrder);
             :options="dateFilterOptions"
             optionLabel="label"
             optionValue="value"
-            placeholder="Select Date Filter"
+            placeholder="Filter Tanggal"
             class="custom-select"
             @change="filterOrders"
           />
@@ -346,7 +362,7 @@ onMounted(fetchOrder);
               <Button
                 text
                 icon="pi pi-plus"
-                label="Expand All"
+                label="Lebarkan semua"
                 class="text-[var(--text-secondary)]"
                 @click="expandAll"
               />
@@ -354,7 +370,7 @@ onMounted(fetchOrder);
               <Button
                 text
                 icon="pi pi-minus"
-                label="Collapse All"
+                label="Kecilkan semua"
                 class="text-[var(--text-secondary)]"
                 @click="collapseAll"
               />
@@ -372,7 +388,7 @@ onMounted(fetchOrder);
           <!-- Expanded Content -->
           <template #expansion="slotProps">
             <div>
-              <p>An order from {{ slotProps.data.customer_name }}</p>
+              <p>Pesanan dari {{ slotProps.data.customer_name }}</p>
               <DataTable :value="slotProps.data.details">
                 <Column field="menu_name" header="Menu Name" />
                 <Column field="menu_price" header="Total">
