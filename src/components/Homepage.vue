@@ -130,7 +130,7 @@ onMounted(initializeData);
         <InputText
           v-model="searchQuery"
           style="border-radius: 10px 0 0 10px"
-          placeholder="Search..."
+          placeholder="Cari..."
           class="bg-[var(--input-search)] search p-3 font-bold rounded-none focus:outline-none lg:w-48 xl:w-96"
           @keydown.enter="handleSearch"
         />

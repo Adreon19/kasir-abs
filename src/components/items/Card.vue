@@ -225,7 +225,7 @@ onMounted(() => {
   <Dialog
     v-model:visible="visible"
     modal
-    :header="`Order ${selectedMenu?.name}`"
+    :header="`Pesan ${selectedMenu?.name}`"
     :style="{ width: '25rem' }"
   >
     <div v-if="isLoading">
@@ -250,7 +250,7 @@ onMounted(() => {
         :options="selectedMenu?.menu_detail"
         class="custom-select"
         optionLabel="menu_variants.name"
-        placeholder="Choose a variant"
+        placeholder="Pilih varian"
       />
       <InputNumber
         v-model="quantity"
@@ -259,18 +259,24 @@ onMounted(() => {
         placeholder="Quantity"
         label="Quantity"
       />
-      <Textarea v-model="note" rows="3" cols="30" placeholder="Add a note" />
+      <Textarea
+        v-model="note"
+        rows="3"
+        cols="30"
+        placeholder="Tambahkan catatan"
+      />
       <div class="flex justify-end mt-4 gap-2">
         <Button
           type="button"
           label="Cancel"
-          icon="fa-solid fa-x-mark"
+          icon="fa-solid fa-xmark"
+          style="color: #000000"
           severity="secondary"
           @click="visible = false"
         />
         <Button
           type="button"
-          label="Save Order"
+          label="Simpan"
           icon="fa-solid fa-check"
           severity="success"
           @click="saveOrder"

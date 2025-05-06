@@ -333,7 +333,7 @@ onMounted(fetchOrder);
             :options="dateFilterOptions"
             optionLabel="label"
             optionValue="value"
-            placeholder="Select Date Filter"
+            placeholder="Filter Tanggal"
             class="custom-select"
             @change="filterOrders"
           />
@@ -362,7 +362,7 @@ onMounted(fetchOrder);
               <Button
                 text
                 icon="pi pi-plus"
-                label="Expand All"
+                label="Lebarkan semua"
                 class="text-[var(--text-secondary)]"
                 @click="expandAll"
               />
@@ -370,7 +370,7 @@ onMounted(fetchOrder);
               <Button
                 text
                 icon="pi pi-minus"
-                label="Collapse All"
+                label="Kecilkan semua"
                 class="text-[var(--text-secondary)]"
                 @click="collapseAll"
               />
@@ -388,7 +388,7 @@ onMounted(fetchOrder);
           <!-- Expanded Content -->
           <template #expansion="slotProps">
             <div>
-              <p>An order from {{ slotProps.data.customer_name }}</p>
+              <p>Pesanan dari {{ slotProps.data.customer_name }}</p>
               <DataTable :value="slotProps.data.details">
                 <Column field="menu_name" header="Menu Name" />
                 <Column field="menu_price" header="Total">

@@ -132,7 +132,7 @@ onMounted(() => {
           :options="menus"
           optionLabel="name"
           optionValue="id"
-          placeholder="Select Menu"
+          placeholder="Pilih Menu"
           class="custom-select w-full p-3"
         />
       </div>
@@ -150,7 +150,7 @@ onMounted(() => {
             :options="variants"
             optionLabel="name"
             optionValue="id"
-            placeholder="Select Variant"
+            placeholder="Pilih Varian"
             class="custom-select w-full p-3"
           />
         </div>
@@ -159,7 +159,7 @@ onMounted(() => {
           <label for="price">Price</label>
           <InputNumber
             v-model="detail.price"
-            placeholder="Enter Price"
+            placeholder="Masukkan Harga"
             class="price w-full"
             mode="currency"
             currency="IDR"
