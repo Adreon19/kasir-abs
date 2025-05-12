@@ -17,24 +17,27 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --body-bg: conic-gradient(#fff, #96724d, #fff);
-  --sidebar-bg: #f5f5dc;
+  /* --body-bg: conic-gradient(#fff, #96724d, #fff); */
+  --body-bg: #f5f5f5;
+  --sidebar-bg: #ed8437;
   /* #81684f */
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
-  --text-primary: #000000;
+  --text-primary: #ffffff;
   --text-secondary: #000000;
-  --hover-primary: #634f2b;
+  --hover-primary: #f8bf89;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
-  --btn-secondary: #634f2b;
+  --btn-secondary: #ff7006;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
   --section-bg: rgb(0, 0, 0, 0.5);
-  --bg-switch: #e5bb90;
+  --bg-switch: #ff7006;
+  --bg-icon-switch: #ff8a32;
   --input-primary: #dfc3a1;
   --striped-row: #d8ae7e;
   --bg-datable: #dfc3a1;
+  --switch-icon-color: #ffff;
 }
 
 :root[class="my-app-dark"] {

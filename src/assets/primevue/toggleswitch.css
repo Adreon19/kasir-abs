@@ -73,3 +73,8 @@
 .p-toggleswitch.p-disabled .p-toggleswitch-handle {
   @apply bg-surface-700 dark:bg-surface-900;
 }
+
+/* background & icon light mode toggleswitch*/
+.p-toggleswitch .p-toggleswitch-handle {
+  @apply bg-[var(--bg-icon-switch)] text-white;
+}

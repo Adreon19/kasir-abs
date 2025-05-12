@@ -40,8 +40,12 @@ onMounted(() => {
     >
       <div class="">
         <div class="logo flex items-center m-4">
-          <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <h1 class="text-sm font-semibold text-[var(--text-primary)]">
+          <img
+            src="../../assets/Logo Abs.png"
+            alt="ABS Logo"
+            class="w-10 mr-1"
+          />
+          <h1 class="text-base font-semibold text-[var(--text-secondary)]">
             Artisan Beverage Studio
           </h1>
         </div>
