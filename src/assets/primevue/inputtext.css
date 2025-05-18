@@ -3,7 +3,7 @@
         /* enabled:hover:border-surface-400 dark:enabled:hover:border-surface-600 */
         bg-[var(--input-text-login)] opacity-20
         text-[var(--text-secondary)]
-        placeholder-white
+        placeholder-[var(--text-secondary)]
         /* disabled:bg-surface-200 disabled:text-surface-500 dark:disabled:bg-surface-700 dark:disabled:text-surface-400 disabled:opacity-100 */
         /* placeholder:text-surface-500 dark:placeholder:text-surface-400 */
         px-3 py-2
