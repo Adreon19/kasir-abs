@@ -1,8 +1,8 @@
 .p-inputtext {
   @apply appearance-none rounded-md
         /* enabled:hover:border-surface-400 dark:enabled:hover:border-surface-600 */
-        bg-[var(--components-bg)] 
-        text-[var(--text-primary)]
+        bg-[var(--input-text-login)] opacity-20
+        text-[var(--text-secondary)]
         placeholder-white
         /* disabled:bg-surface-200 disabled:text-surface-500 dark:disabled:bg-surface-700 dark:disabled:text-surface-400 disabled:opacity-100 */
         /* placeholder:text-surface-500 dark:placeholder:text-surface-400 */
@@ -33,9 +33,13 @@
 }
 
 .custom-input {
-  @apply bg-[var(--input-primary)] text-[var(--text-secondary)];
+  @apply bg-[var(--bg-form-login)] text-[var(--text-secondary)];
 }
 
 .custom-label {
   @apply text-[var(--text-secondary)];
+}
+
+.custom-search {
+  @apply bg-[var(--searchbar-comp)] opacity-100 text-[var(--text-primary)];
 }

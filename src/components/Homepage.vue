@@ -130,9 +130,9 @@ onMounted(initializeData);
       <div class="flex items-center gap-2">
         <h1
           style="font-size: 30px"
-          class="text-[var(--text-primary)] font-bold"
+          class="text-[var(--text-secondary)] font-bold"
         >
-          Menu
+          MENU
         </h1>
         <!-- <div class="mt-2">
           <Button
@@ -148,14 +148,14 @@ onMounted(initializeData);
           v-model="searchQuery"
           style="border-radius: 10px 0 0 10px"
           placeholder="Search..."
-          class="search p-3 font-bold rounded-none focus:outline-none lg:w-64 xl:w-96"
+          class="custom-search p-3 font-bold rounded-none focus:outline-none lg:w-64 xl:w-96"
           @keydown.enter="handleSearch"
         />
         <Button
           style="border-radius: 0 10px 10px 0"
           icon="fas fa-search"
           iconPos="top"
-          class="button-search color-white bg-[var(--components-bg)] rounded-none"
+          class="button-search color-white bg-[var(--btn-secondary)] rounded-none"
           @click="handleSearch"
         />
       </div>

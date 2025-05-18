@@ -12,15 +12,12 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  /* background: #eaeaea; */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* --body-bg: conic-gradient(#fff, #96724d, #fff); */
-  --body-bg: #f5f5f5;
+  --body-bg: conic-gradient(#fff, #ff8a32, #fff);
   --sidebar-bg: #ed8437;
-  /* #81684f */
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
   --text-primary: #ffffff;
@@ -32,7 +29,11 @@
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
   --section-bg: rgb(0, 0, 0, 0.5);
+  --btn-login: #a67b5b;
+  --bg-form-login: #ffffff;
+  --input-text-login: #988571;
   --bg-switch: #ff7006;
+  --searchbar-comp: #ff7006;
   --bg-icon-switch: #ff8a32;
   --input-primary: #dfc3a1;
   --striped-row: #d8ae7e;
@@ -60,6 +61,9 @@
   --striped-row: #493628;
   --bg-datable: rgb(72, 66, 66);
   --bg-switch: #130b03;
+  --bg-form-login: #634f2b;
+  --input-text-login: #f5f5dc;
+  --btn-login: #634f2b;
   --bg-icon-switch: #776024;
   --switch-icon-color: #c8a241;
 }
@@ -98,8 +102,9 @@ body {
 .btn-inlogin {
   padding: 0.75rem 1rem;
   font-size: 1.125rem;
-  background-color: #634f2b;
+  /* background-color: #634f2b; */
   color: white;
+  border: none;
   border-radius: 0.375rem;
   transition: background-color 0.7s ease, color 0.7s ease;
   min-width: 12rem;
