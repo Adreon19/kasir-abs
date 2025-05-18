@@ -77,13 +77,6 @@ onMounted(() => {
         </FloatLabel>
         <div class="flex gap-3 items-center mt-3 justify-between">
           <Button
-            as="router-link"
-            label="Forgot Password?"
-            to="/"
-            class="p.button bg-transparent border-none text-black"
-          />
-
-          <Button
             :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
             :class="darkMode ? 'text-yellow-500' : 'text-black'"
             @click="toggleDarkMode()"

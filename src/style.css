@@ -76,8 +76,8 @@ body {
   color: white;
 }
 .desc {
-  margin-top: 40px;
   margin-bottom: 20px;
+  margin-top: auto;
   color: white;
 }
 
@@ -231,10 +231,6 @@ button:focus-visible {
 
   h2 {
     font-size: 1.5rem;
-  }
-
-  .img-menu {
-    max-width: 200px;
   }
 
   .custom-input,

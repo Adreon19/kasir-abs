@@ -10,11 +10,15 @@
 }
 
 .p-card-body {
-  @apply p-5 flex flex-col flex-grow gap-2;
+  @apply p-5 flex flex-col flex-grow  gap-2;
 }
 
 .p-card-title {
   @apply font-medium text-xl;
+}
+
+.p-card-content {
+  @apply flex flex-col flex-grow;
 }
 
 .p-card-subtitle {
