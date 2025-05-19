@@ -2,13 +2,14 @@
 import { ref, onMounted, computed } from "vue";
 import { supabase } from "../supabase";
 import { formatCurrency } from "../utils/formatter/currency";
-import { DataTable, Toast, useToast } from "primevue";
+import { DataTable, Toast } from "primevue";
+import { useToast } from "primevue/usetoast";
 
 const toast = useToast();
 const isLoading = ref(false);
 const finance = ref([]);
 const outcomeData = ref([]);
-const outcomeDetail = ref("");
+const outcomeDetail = ref();
 const detail = ref("");
 
 const fetchFinance = async () => {
@@ -61,7 +62,6 @@ const insertOutcome = async () => {
       detail: "Pengeluaran berhasil dicatat!",
       life: 3000,
     });
-    outcomeDetail.value = "";
     await fetchOutcome();
     outcomeDetail.value = "";
     detail.value = "";
@@ -108,7 +108,7 @@ onMounted(initializeData);
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text-[var(--text-primary)] font-bold" style="font-size: 30px">
+    <h1 class="text-[var(--text-secondary)] font-bold" style="font-size: 30px">
       Riwayat Keuangan
     </h1>
     <div v-if="isLoading" class="flex justify-center">
@@ -122,7 +122,14 @@ onMounted(initializeData);
       </section>
       <section class="main-section">
         <div class="container flex flex-col gap-4">
-          <DataTable :value="finance" stripedRows>
+          <DataTable
+            :value="finance"
+            stripedRows
+            paginator
+            :rows="5"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+            tableStyle="min-width: 50rem"
+          >
             <Column header="Total Masuk">
               <template #body="slotProps">
                 <div class="text-[var(--text-secondary)]">
@@ -137,32 +144,38 @@ onMounted(initializeData);
                 </div>
               </template>
             </Column>
+            <template #empty> Tidak ada Catatan keuangan! </template>
           </DataTable>
         </div>
       </section>
 
       <section class="main-section flex flex-col gap-10">
         <div
-          class="flex flex-col bg-[var(--striped-row)] justify-between item-center gap-3 p-5"
+          class="flex flex-row bg-[var(--striped-row)] justify-between item-center gap-3 p-5"
         >
           <div class="flex flex-col gap-3">
-            <label for="outcome"> Pengeluaran </label>
+            <label for="outcome" class="text-[var(--text-secondary)]">
+              Pengeluaran
+            </label>
             <InputNumber
               v-model="outcomeDetail"
               id="outcome"
               mode="currency"
               currency="IDR"
               locale="id-ID"
-              class="text-l w-full"
+              class="h-full text-lg max-w-fit"
+              placeholder="Masukkan pengeluaran"
             />
           </div>
           <div class="flex flex-col gap-2">
-            <label for="detail"> Detail </label>
+            <label for="detail" class="text-[var(--text-secondary)]">
+              Detail
+            </label>
             <TextArea
               v-model="detail"
               row="5"
               cols="30"
-              class="custom-textarea"
+              class="custom-textarea w-fit"
               placeholder="Masukkan detail pengeluaranmu!"
             />
           </div>
@@ -179,13 +192,21 @@ onMounted(initializeData);
         </div>
         <div class="border-b-2"></div>
         <div class="container flex flex-col gap-4">
-          <DataTable :value="outcomeData" stripedRows>
+          <DataTable
+            :value="outcomeData"
+            stripedRows
+            paginator
+            :rows="5"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+            tableStyle="min-width: 50rem"
+          >
             <Column header="Pengeluaran">
               <template #body="slotProps">
                 {{ formatCurrency(slotProps.data.pengeluaran) }}
               </template>
             </Column>
             <Column field="catatan" header="Detail Pengeluaran" />
+            <template #empty> Tidak ada pengeluaran! </template>
           </DataTable>
         </div>
       </section>

@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import { supabase } from "../../../supabase";
 import { useToast } from "primevue";
+import { onEvent, emitEvent } from "../../../utils/BusEvent"; // Adjust the path as necessary
 
 const toast = useToast();
 const menus = ref([]);
@@ -49,6 +50,33 @@ const removeVariantField = (index) => {
 
 const insertMenuDetail = async () => {
   try {
+    // Check if the selected menu already has the chosen variant
+    const { data: existingData, error: fetchError } = await supabase
+      .from("menu_detail")
+      .select("variant_id")
+      .eq("menu_id", selectedMenu.value);
+
+    if (fetchError) {
+      throw fetchError;
+    }
+
+    const existingVariantIds = existingData.map((item) => item.variant_id);
+
+    const duplicateVariant = variantDetails.value.find((detail) =>
+      existingVariantIds.includes(detail.variant_id)
+    );
+
+    if (duplicateVariant) {
+      toast.add({
+        severity: "warn",
+        summary: "Peringatan",
+        detail: "Variant ini sudah ada",
+        life: 9000,
+      });
+      return;
+    }
+
+    // Proceed with insertion
     const payload = variantDetails.value.map((detail) => ({
       menu_id: selectedMenu.value,
       variant_id: detail.variant_id,
@@ -61,11 +89,12 @@ const insertMenuDetail = async () => {
       throw error;
     }
 
+    emitEvent("priceAdded", { menuId: selectedMenu.value });
     toast.add({
       severity: "success",
-      summary: "Success",
-      detail: "Menu details saved successfully!",
-      life: 3000,
+      summary: "Sukses",
+      detail: "Detail menu berhasil disimpan!",
+      life: 9000,
     });
 
     // Reset form
@@ -74,9 +103,9 @@ const insertMenuDetail = async () => {
   } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Error",
+      summary: "Kesalahan",
       detail: error.message,
-      life: 3000,
+      life: 9000,
     });
     console.error("Error inserting menu detail:", error.message);
   }
@@ -85,6 +114,9 @@ const insertMenuDetail = async () => {
 onMounted(() => {
   fetchMenus();
   fetchVariants();
+  onEvent("menuAdded", () => {
+    fetchMenus();
+  });
 });
 </script>
 
@@ -100,7 +132,7 @@ onMounted(() => {
           :options="menus"
           optionLabel="name"
           optionValue="id"
-          placeholder="Select Menu"
+          placeholder="Pilih Menu"
           class="custom-select w-full p-3"
         />
       </div>
@@ -118,7 +150,7 @@ onMounted(() => {
             :options="variants"
             optionLabel="name"
             optionValue="id"
-            placeholder="Select Variant"
+            placeholder="Pilih Varian"
             class="custom-select w-full p-3"
           />
         </div>
@@ -127,12 +159,14 @@ onMounted(() => {
           <label for="price">Price</label>
           <InputNumber
             v-model="detail.price"
-            placeholder="Enter Price"
+            placeholder="Masukkan Harga"
             class="price w-full"
             mode="currency"
             currency="IDR"
             locale="id-ID"
             fluid
+            :min="0"
+            :max="100000"
           />
         </div>
 
@@ -156,10 +190,11 @@ onMounted(() => {
 
       <!-- Submit Button -->
       <Button
-        class="custom-button btn btn-primary mt-4 p-4"
+        class="custom-button btn btn-primary mt-4"
         @click="insertMenuDetail"
       >
-        Tambah Detail Menu
+        <i class="fa-solid fa-floppy-disk"></i>
+        Simpan Detail Menu
       </Button>
     </div>
   </section>

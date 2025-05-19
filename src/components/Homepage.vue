@@ -7,7 +7,6 @@ const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
 const isLoading = ref(true);
-const darkMode = ref(false);
 const filteredMenuList = ref([]);
 const originalMenuList = ref([]);
 const searchQuery = ref("");
@@ -103,22 +102,6 @@ const initializeData = async () => {
   }
 };
 onMounted(initializeData);
-
-// function toggleDarkMode() {
-//   darkMode.value = !darkMode.value;
-//   document.documentElement.classList.toggle("my-app-dark", darkMode.value);
-
-//   localStorage.setItem("darkMode", darkMode.value);
-// }
-
-// onMounted(() => {
-//   const savedDarkMode = localStorage.getItem("darkMode");
-
-//   if (savedDarkMode === "true") {
-//     darkMode.value = true;
-//     document.documentElement.classList.add("my-app-dark");
-//   }
-// });
 </script>
 
 <template>
@@ -147,8 +130,8 @@ onMounted(initializeData);
         <InputText
           v-model="searchQuery"
           style="border-radius: 10px 0 0 10px"
-          placeholder="Search..."
           class="custom-search p-3 font-bold rounded-none focus:outline-none lg:w-64 xl:w-96"
+          placeholder="Cari..."
           @keydown.enter="handleSearch"
         />
         <Button
@@ -164,15 +147,18 @@ onMounted(initializeData);
         :options="categories"
         option-value="id"
         option-label="kategori"
-        placeholder="Select Categories"
-        class="p-select w-full md:w-56"
+        placeholder="Pilih Kategori"
+        class="p-select w-full md:w-56 bg-[var(--input-search)]"
       />
     </div>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
     <div v-else>
-      <div v-if="menuList.length === 0" class="text-white text-center">
+      <div
+        v-if="menuList.length === 0"
+        class="text-[var(--text-secondary)] text-center"
+      >
         Tidak ada menu
       </div>
       <div v-else>

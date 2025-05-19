@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import { supabase } from "../../../supabase";
 import { useToast } from "primevue/usetoast";
 import { Cropper } from "vue-advanced-cropper";
+import { emitEvent } from "../../../utils/BusEvent";
 import "vue-advanced-cropper/dist/style.css";
 
 const isLoading = ref(false);
@@ -102,8 +103,10 @@ const uploadImageAndSaveMenu = async () => {
           kategori_id: selectedCategory.value,
           description: descriptionForm.value,
         },
-      ]);
+      ])
+      .select();
 
+    emitEvent("menuAdded", { id: menuData[0].id, name: menuName.value });
     if (menuError) {
       throw menuError;
     }
@@ -111,8 +114,8 @@ const uploadImageAndSaveMenu = async () => {
     toast.add({
       severity: "success",
       summary: "Success",
-      detail: "Menu saved successfully!",
-      life: 3000,
+      detail: "Menu berhasil ditambah!",
+      life: 5000,
     });
 
     // Reset form setelah upload
@@ -192,7 +195,7 @@ onMounted(fetchCategories);
         :options="categories"
         optionLabel="kategori"
         optionValue="id"
-        placeholder="Select Categories"
+        placeholder="Pilih Kategori"
         class="custom-select w-full md:w-auto p-4"
       />
       <Textarea
