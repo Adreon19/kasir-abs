@@ -96,12 +96,11 @@ onMounted(initializeData);
       <!-- Updated DataTable -->
       <DataTable
         :value="menu"
-        stripedRows
         paginator
         :rows="5"
         :rowsPerPageOptions="[5, 10, 20, 50]"
         tableStyle="min-width: 50rem"
-        class="w-ful"
+        class="custom-datatable w-ful"
       >
         <!-- Menu Name -->
         <Column
@@ -154,7 +153,7 @@ onMounted(initializeData);
                 label="Edit"
                 as="router-link"
                 icon="fa fa-pencil"
-                class="p-button-rounded p-button-info"
+                class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
                 :to="{
                   name: 'EditMenu',
                   params: { id: slotProps.data.menu_id.id },
@@ -164,7 +163,7 @@ onMounted(initializeData);
               <Button
                 label="Delete"
                 icon="fa fa-trash"
-                class="p-button-rounded p-button-danger"
+                class="p-button rounded-xl p-button-danger"
                 @click="deleteMenuByMenuId(slotProps.data?.menu_id?.id)"
               />
             </div>

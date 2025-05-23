@@ -36,6 +36,7 @@
 .p-textarea-lg {
   @apply text-lg px-[0.875rem] py-[0.625rem];
 }
+
 .custom-textarea {
-  @apply bg-[var(--input-primary)] text-[var(--text-secondary)] placeholder-[var(--text-secondary)];
+  @apply bg-[var(--input-primary)] text-[var(--text-primary)] placeholder-[var(--text-primary)] outline-none;
 }

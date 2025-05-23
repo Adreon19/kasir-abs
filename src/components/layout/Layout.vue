@@ -88,8 +88,12 @@ onMounted(() => {
     >
       <div>
         <div class="logo flex items-center m-4">
-          <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <h1 class="text-sm font-semibold text-[var(--text-secondary)]">
+          <img
+            src="../../assets/Logo Abs.png"
+            alt="ABS Logo"
+            class="w-10 mr-1"
+          />
+          <h1 class="text-base font-semibold text-[var(--text-primary)]">
             Artisan Beverage Studio
           </h1>
         </div>
@@ -301,11 +305,10 @@ onMounted(() => {
 .sidebar-mobile li {
   padding: 1rem;
   font-size: 20px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .sidebar-mobile li:hover {
-  color: #fff;
   background: var(--hover-primary);
   transition: 0.5s;
 }
@@ -319,11 +322,10 @@ onMounted(() => {
 .sidebar li {
   padding: 1rem;
   font-size: 20px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .sidebar li:hover {
-  color: #fff;
   background: var(--hover-primary);
   transition: 0.5s;
 }

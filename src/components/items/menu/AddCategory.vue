@@ -144,7 +144,7 @@ onMounted(initializeData);
               <Button
                 label="Edit"
                 icon="fa fa-pencil"
-                class="p-button-rounded p-button-info"
+                class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
                 as="router-link"
                 :to="{
                   name: 'EditCategory',
@@ -154,7 +154,7 @@ onMounted(initializeData);
               <Button
                 label="Delete"
                 icon="fa fa-trash"
-                class="p-button-rounded p-button-danger"
+                class="p-button rounded-xl p-button-danger"
                 @click="deleteCategories(slotProps.data.kategori)"
               />
             </div>
