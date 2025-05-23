@@ -140,10 +140,8 @@ onMounted(fetchCategories);
 
 <template>
   <section class="main-section">
-    <h2 class="font-bold text-2xl capitalize">Tambah nama menu</h2>
-    <div
-      class="flex flex-col md:flex-row gap-5 mt-5 items-center bg-[var(--section-bg)] rounded-xl"
-    >
+    <h2 class="font-bold text-2xl capitalize">Tambah menu</h2>
+    <div class="flex flex-col md:flex-row gap-5 mt-5 items-center rounded-xl">
       <div class="flex flex-col md:flex-row items-center gap-5">
         <FileUpload
           mode="basic"
@@ -153,7 +151,7 @@ onMounted(fetchCategories);
           accept="image/*"
           :maxFileSize="150000"
           severity="secondary"
-          class="rounded-xl bg-[var(--input-primary)] text-[var(--text-secondary)] border border-white p-button-outlined p-10 z-0 m-5 ml-20"
+          class="rounded-xl text-[var(--text-primary)] border border-white p-button-outlined p-10 z-0 m-5 ml-20"
         />
         <img
           v-if="croppedImage"
@@ -204,7 +202,7 @@ onMounted(fetchCategories);
         cols="30"
         placeholder="Masukkan Deskripsi menu"
         style="resize: none"
-        class="custom-textarea p-2 w-full"
+        class="custom-textarea p-2 w-full border-none"
       />
     </div>
     <div>

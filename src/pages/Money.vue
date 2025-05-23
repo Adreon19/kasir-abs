@@ -132,14 +132,14 @@ onMounted(initializeData);
           >
             <Column header="Total Masuk">
               <template #body="slotProps">
-                <div class="text-[var(--text-secondary)]">
+                <div class="text-[var(--text-primary)]">
                   {{ formatCurrency(slotProps.data.paid) }}
                 </div>
               </template>
             </Column>
             <Column header="Kembalian">
               <template #body="slotProps">
-                <div class="text-[var(--text-secondary)]">
+                <div class="text-[var(--text-primary)]">
                   {{ formatCurrency(slotProps.data.change) }}
                 </div>
               </template>
@@ -151,7 +151,7 @@ onMounted(initializeData);
 
       <section class="main-section flex flex-col gap-10">
         <div
-          class="flex flex-row bg-[var(--striped-row)] justify-between item-center gap-3 p-5"
+          class="flex flex-row bg-[var(--striped-row)] rounded-lg justify-between item-center gap-3 p-5"
         >
           <div class="flex flex-col gap-3">
             <label for="outcome" class="text-[var(--text-secondary)]">

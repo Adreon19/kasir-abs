@@ -331,7 +331,7 @@
 }
 
 .custom-button {
-  @apply bg-[var(--input-primary)] text-[var(--text-secondary)];
+  @apply bg-[var(--input-primary)] text-[var(--text-primary)];
 }
 .remove-btn {
   @apply bg-red-600;

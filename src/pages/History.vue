@@ -340,7 +340,7 @@ onMounted(fetchOrder);
 
           <Button
             label="Download PDF"
-            class="text-[--text-secondary]"
+            class="text-[--text-primary]"
             @click="downloadPDF"
           />
         </div>
@@ -363,7 +363,7 @@ onMounted(fetchOrder);
                 text
                 icon="pi pi-plus"
                 label="Lebarkan semua"
-                class="text-[var(--text-secondary)]"
+                class="text-[var(--text-primary)]"
                 @click="expandAll"
               />
 
@@ -371,7 +371,7 @@ onMounted(fetchOrder);
                 text
                 icon="pi pi-minus"
                 label="Kecilkan semua"
-                class="text-[var(--text-secondary)]"
+                class="text-[var(--text-primary)]"
                 @click="collapseAll"
               />
             </div>

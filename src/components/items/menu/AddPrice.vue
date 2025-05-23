@@ -160,7 +160,7 @@ onMounted(() => {
           <InputNumber
             v-model="detail.price"
             placeholder="Masukkan Harga"
-            class="price w-full"
+            class="custom-price w-full"
             mode="currency"
             currency="IDR"
             locale="id-ID"

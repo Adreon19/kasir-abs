@@ -93,7 +93,7 @@ onMounted(() => {
             alt="ABS Logo"
             class="w-10 mr-1"
           />
-          <h1 class="text-base font-semibold text-[var(--text-secondary)]">
+          <h1 class="text-base font-semibold text-[var(--text-primary)]">
             Artisan Beverage Studio
           </h1>
         </div>
@@ -305,11 +305,10 @@ onMounted(() => {
 .sidebar-mobile li {
   padding: 1rem;
   font-size: 20px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .sidebar-mobile li:hover {
-  color: #fff;
   background: var(--hover-primary);
   transition: 0.5s;
 }
@@ -323,11 +322,10 @@ onMounted(() => {
 .sidebar li {
   padding: 1rem;
   font-size: 20px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .sidebar li:hover {
-  color: #fff;
   background: var(--hover-primary);
   transition: 0.5s;
 }

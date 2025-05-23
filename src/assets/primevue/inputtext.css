@@ -1,10 +1,11 @@
 .p-inputtext {
   @apply appearance-none rounded-md
         /* enabled:hover:border-surface-400 dark:enabled:hover:border-surface-600 */
-        bg-[var(--input-text-login)] opacity-20
+        bg-[var(--input-text-login)] 
         /* disabled:bg-surface-200 disabled:text-surface-500 dark:disabled:bg-surface-700 dark:disabled:text-surface-400 disabled:opacity-100 */
         /* placeholder:text-surface-500 dark:placeholder:text-surface-400 */
         px-3 py-2
+        placeholder-white
         /* transition-colors duration-200 */
         shadow-[0_1px_2px_0_rgba(18,18,23,0.05)]
         outline-none;
@@ -31,7 +32,7 @@
 }
 
 .custom-input {
-  @apply bg-[var(--bg-form-login)] text-[var(--text-secondary)];
+  @apply bg-[var(--input-addMenu)] text-[var(--text-primary)] opacity-100;
 }
 
 .custom-search {
@@ -44,4 +45,8 @@
 
 .custom-search {
   @apply bg-[var(--searchbar-comp)] opacity-100 text-[var(--text-primary)];
+}
+
+.custom-price {
+  @apply bg-[var(--input-primary)] opacity-100 text-[var(--text-primary)];
 }

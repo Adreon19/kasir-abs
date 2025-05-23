@@ -25,7 +25,10 @@
   --hover-primary: #f8bf89;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
+  --btn-order: #fff;
   --btn-secondary: #ff7006;
+  --input-search: #ff7006;
+  --btn-search: #ff7006;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
   --section-bg: rgb(0, 0, 0, 0.5);
@@ -35,10 +38,12 @@
   --bg-switch: #ff7006;
   --searchbar-comp: #ff7006;
   --bg-icon-switch: #ff8a32;
-  --input-primary: #dfc3a1;
+  --input-primary: #7d5b3e;
   --striped-row: #d8ae7e;
   --bg-datable: #dfc3a1;
   --switch-icon-color: #ffff;
+  --btn-outline-primary: #fffff;
+  --input-addMenu: #7d5b3e;
 }
 
 :root[class="my-app-dark"] {
@@ -54,10 +59,10 @@
   --view-order: #957836;
   --border-btn: #ffffff;
   --btn-order: #c8a241;
-  --btn-secondary: #c8a241;
+  --btn-secondary: #453721;
   --input-search: #453721;
   /* --btn-search: rgb(72, 66, 66); */
-  --btn-search: #2e1605;
+  --btn-search: #453721;
   --text-order: #c8a241;
   --bg-drawer: rgba(149, 120, 54, 0.2);
   --section-bg: rgb(0, 0, 0, 0.5);
@@ -65,6 +70,7 @@
   --striped-row: #2e1605;
   --bg-datable: rgb(72, 66, 66);
   --bg-switch: #130b03;
+  --searchbar-comp: #453721;
   --bg-form-login: #634f2b;
   --input-text-login: #f5f5dc;
   --btn-login: #634f2b;
@@ -72,6 +78,8 @@
   --switch-icon-color: #c8a241;
   --outline: #ffffff;
   --promp-bg: rgb(32, 25, 7);
+  --btn-outline-primary: #c8a241;
+  --input-addMenu: #373230;
 }
 
 body {
