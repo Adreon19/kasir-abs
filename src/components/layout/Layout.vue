@@ -8,6 +8,7 @@ const darkMode = ref(false);
 const checked = ref(false);
 const nama = ref("");
 const drawerVisible = ref(false);
+const userRoleId = ref(null);
 
 const fetchUserData = async () => {
   try {
@@ -20,21 +21,29 @@ const fetchUserData = async () => {
     if (user) {
       const { data, error: userError } = await supabase
         .from("user")
-        .select("name")
-        .eq("email", user.email)
+        .select("name, role_id")
+        .eq("user_id", user.id)
         .single();
 
       if (userError) throw userError;
 
       if (data) {
         nama.value = data.name;
+        userRoleId.value = data.role_id;
         console.log("Fetched name:", nama.value);
       } else {
-        console.log("No user data found.");
+        console.log("No user data found in 'user' table.");
+        userRoleId.value = null;
       }
+    } else {
+      nama.value = "";
+      userRoleId.value = null;
+      console.log("No authenticated user session.");
     }
   } catch (error) {
-    console.error("Error fetching user data:", error);
+    console.error("Error fetching user data and role:", error);
+    nama.value = "";
+    userRoleId.value = null;
   }
 };
 
@@ -70,6 +79,15 @@ onMounted(() => {
     document.documentElement.classList.add("my-app-dark");
   }
   fetchUserData();
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (
+      event === "SIGNED_IN" ||
+      event === "SIGNED_OUT" ||
+      event === "USER_UPDATED"
+    ) {
+      fetchUserData();
+    }
+  });
 });
 </script>
 
@@ -127,7 +145,7 @@ onMounted(() => {
                 Pesanan
               </li>
             </RouterLink>
-            <RouterLink to="/add">
+            <RouterLink v-if="userRoleId === 1" to="/add">
               <li>
                 <i class="fa-solid fa-square-plus ease-in duration-300"></i>
                 Tambah Menu
@@ -139,7 +157,7 @@ onMounted(() => {
                 Pesanan
               </li>
             </RouterLink>
-            <RouterLink to="/money">
+            <RouterLink v-if="userRoleId === 1" to="/money">
               <li>
                 <i class="fa-solid fa-money-bill ease-in duration-300"></i>
                 Finansial
@@ -164,7 +182,6 @@ onMounted(() => {
       </div>
     </aside>
 
-    <!-- PrimeVue Drawer for Mobile -->
     <Drawer
       v-model:visible="drawerVisible"
       :modal="true"
@@ -187,7 +204,6 @@ onMounted(() => {
         class="sidebar-mobile text-black flex flex-col justify-between overflow-y-auto"
       >
         <div class="flex flex-col gap-1 justify-center items-center">
-          <!-- Center items -->
           <div class="logo flex justify-center items-center m-4">
             <img
               src="/images/logoABS.png"
@@ -231,7 +247,11 @@ onMounted(() => {
                   Pesanan
                 </li>
               </RouterLink>
-              <RouterLink to="/add" @click="closeDrawer">
+              <RouterLink
+                v-if="userRoleId === 1"
+                to="/add"
+                @click="closeDrawer"
+              >
                 <li>
                   <i class="fa-solid fa-square-plus ease-in duration-300"></i>
                   Tambah Menu
@@ -243,7 +263,11 @@ onMounted(() => {
                   Riwayat Pesanan
                 </li>
               </RouterLink>
-              <RouterLink to="/money" @click="closeDrawer">
+              <RouterLink
+                v-if="userRoleId === 1"
+                to="/money"
+                @click="closeDrawer"
+              >
                 <li>
                   <i class="fa-solid fa-money-bill ease-in duration-300"></i>
                   Finansial
@@ -259,14 +283,6 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <!-- <div class="flex justify-center mt-4">
-        <Button
-          label="Log Out"
-          icon="fa-solid fa-sign-out-alt"
-          class="btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
-          @click="handleLogout"
-        />
-      </div> -->
     </Drawer>
 
     <div class="flex-grow flex flex-col">
