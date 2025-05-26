@@ -53,7 +53,8 @@ const fetchCart = async () => {
             name
           ),
           price
-        )
+        ),
+        timestamp
       `);
 
     if (error) throw error;
@@ -111,7 +112,7 @@ const saveOrder = async () => {
       }
 
       // Get the new customer ID
-      customerId = newCustomer[0].id; // Access the first element of the array
+      customerId = newCustomer[0].id;
     } else if (selectedCustomer.value) {
       customerId = selectedCustomer.value.id;
     } else {
@@ -125,12 +126,15 @@ const saveOrder = async () => {
       return;
     }
 
+    const timestamp = new Date().toISOString();
+
     // Prepare the payload for the cart insertion
     const payload = {
       menu_detail_id: selectedVariant.value.id,
       quantity: quantity.value,
       note: note.value.trim(),
       customer_id: customerId,
+      timestamp,
     };
 
     const { error } = await supabase.from("cart").insert(payload);
