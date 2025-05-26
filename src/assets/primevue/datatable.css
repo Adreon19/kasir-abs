@@ -1,7 +1,7 @@
 @import "./paginator";
 
 .p-datatable {
-  @apply relative bg-black;
+  @apply relative;
 }
 
 .p-datatable-table {
@@ -206,17 +206,9 @@
   @apply transform-none min-h-0 sticky top-0 start-0;
 }
 
-.p-datatable-paginator-top {
-  @apply border-b border-surface-200 dark:border-surface-700;
-}
-
-.p-datatable-paginator-bottom {
-  @apply border-t border-surface-200 dark:border-surface-700;
-}
-
 .p-datatable-header {
   @apply py-3 px-4 border-b border-surface-200 dark:border-surface-700
-        bg-surface-0 dark:bg-surface-900
+        bg-transparent
         text-surface-700 dark:text-surface-0;
 }
 
@@ -229,8 +221,9 @@
 .p-datatable-header-cell {
   @apply py-3 px-4 font-normal text-start transition-colors duration-200
         border-b border-surface-200 dark:border-surface-700
-        bg-surface-0 dark:bg-surface-900
-        text-surface-700 dark:text-surface-0;
+        bg-transparent
+        text-white
+         dark:text-surface-0;
 }
 
 .p-datatable-column-title {
@@ -238,11 +231,11 @@
 }
 
 .p-datatable-tbody > tr {
-  @apply bg-surface-0 dark:bg-surface-900 text-surface-700 dark:text-surface-0 transition-colors duration-200;
+  @apply bg-transparent text-white transition-colors duration-200;
 }
 
 .p-datatable-tbody > tr > td {
-  @apply text-start py-3 px-4 border-b border-surface-200 dark:border-surface-800;
+  @apply text-white py-3 px-4 border-b border-surface-200 dark:border-surface-800;
 }
 
 .p-datatable-hoverable
@@ -384,7 +377,7 @@
 }
 
 .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
-  @apply bg-surface-50 dark:bg-surface-950;
+  @apply text-[var(--text-primary)];
 }
 
 .p-datatable.p-datatable-striped

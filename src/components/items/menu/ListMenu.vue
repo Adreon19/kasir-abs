@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { supabase } from "../../../supabase";
 import { useToast } from "primevue/usetoast";
 import { formatCurrency } from "../../../utils/formatter/currency";
+import { onEvent } from "../../../utils/BusEvent";
 
 const menu = ref([]);
 const toast = useToast();
@@ -27,36 +28,57 @@ const fetchMenu = async () => {
 
 const deleteMenuByMenuId = async (menuId) => {
   try {
-    // Delete from the menu table by menu_id
-    const { error } = await supabase
+    // Konfirmasi sebelum menghapus
+    if (!confirm("Apakah Anda yakin ingin menghapus menu ini?")) {
+      return;
+    }
+
+    // Hapus menu dari menu_detail berdasarkan menu_id
+    const { error: detailError } = await supabase
+      .from("menu_detail")
+      .delete()
+      .eq("menu_id", menuId);
+
+    if (detailError) throw detailError;
+
+    // Hapus menu dari menu_list setelah menu_detail dihapus
+    const { error: menuError } = await supabase
       .from("menu_list")
       .delete()
-      .eq("id", menuId); // `menu_id` corresponds to the `menu` table's `id`
+      .eq("id", menuId);
 
-    if (error) throw error;
+    if (menuError) throw menuError;
 
     toast.add({
       severity: "success",
-      summary: "Success",
-      detail: "Menu and its details deleted successfully",
+      summary: "Berhasil",
+      detail: "Menu berhasil dihapus",
       life: 3000,
     });
 
-    await fetchMenu(); // Refresh the menu list after deletion
+    // Refresh data
+    await fetchMenu();
   } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Error",
-      detail: "Error deleting menu",
+      summary: "Gagal",
+      detail: "Terjadi kesalahan saat menghapus menu",
       life: 3000,
     });
-    console.error("Error deleting menu by menu_id:", error.message);
+    console.error("Error deleting menu:", error.message);
   }
 };
 
 const initializeData = async () => {
   try {
     await fetchMenu();
+    onEvent("menuAdded", () => {
+      fetchMenu();
+    });
+    onEvent("priceAdded", () => {
+      console.log("Price added event received");
+      fetchMenu();
+    });
   } catch (error) {
     console.error("Error during initialization:", error.message);
   } finally {
@@ -70,77 +92,86 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>List Menu</h2>
-    <div class="flex gap-5">
-      <!-- Updated DataTable -->
-      <DataTable :value="menu" class="w-full">
-        <!-- Menu Name -->
-        <Column
-          field="menu_id.name"
-          header="Nama Menu"
-          :sortable="true"
-          :filter="true"
+    <div class="card flex gap-5 overflow-x-auto md:flex-col xl:flex-col">
+      <div class="min-w-[900px]">
+        <!-- Updated DataTable -->
+        <DataTable
+          :value="menu"
+          paginator
+          :rows="5"
+          :rowsPerPageOptions="[5, 10, 20, 50]"
+          class="w-full"
         >
-          <template #body="slotProps">
-            {{ slotProps.data.menu_id?.name }}
-          </template>
-        </Column>
+          <!-- Menu Name -->
+          <Column
+            field="menu_id.name"
+            header="Nama Menu"
+            :sortable="true"
+            :filter="true"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.menu_id?.name }}
+            </template>
+          </Column>
 
-        <!-- Category -->
-        <Column
-          field="menu_id.kategori_id.kategori"
-          header="Kategori"
-          :sortable="true"
-          :filter="true"
-        >
-          <template #body="slotProps">
-            {{ slotProps.data.menu_id?.kategori_id?.kategori }}
-          </template>
-        </Column>
+          <!-- Category -->
+          <Column
+            field="menu_id.kategori_id.kategori"
+            header="Kategori"
+            :sortable="true"
+            :filter="true"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.menu_id?.kategori_id?.kategori }}
+            </template>
+          </Column>
 
-        <!-- Variant -->
-        <Column
-          field="variant_id.name"
-          header="Varian"
-          :sortable="true"
-          :filter="true"
-        >
-          <template #body="slotProps">
-            {{ slotProps.data.variant_id?.name || "No Variant" }}
-          </template>
-        </Column>
+          <!-- Variant -->
+          <Column
+            field="variant_id.name"
+            header="Varian"
+            :sortable="true"
+            :filter="true"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.variant_id?.name || "No Variant" }}
+            </template>
+          </Column>
 
-        <!-- Price -->
-        <Column field="price" header="Harga" :sortable="true" :filter="true">
-          <template #body="slotProps"
-            >{{ formatCurrency(slotProps.data.price) }}
-          </template>
-        </Column>
+          <!-- Price -->
+          <Column field="price" header="Harga" :sortable="true" :filter="true">
+            <template #body="slotProps"
+              >{{ formatCurrency(slotProps.data.price) }}
+            </template>
+          </Column>
 
-        <!-- Actions -->
-        <Column header="Aksi" class="flex justify-center">
-          <template #body="slotProps">
-            <div class="flex justify-center gap-2">
-              <Button
-                label="Edit"
-                as="router-link"
-                icon="fa fa-pencil"
-                class="p-button-rounded p-button-info"
-                :to="{
-                  name: 'EditMenu',
-                  params: { id: slotProps.data.menu_id.id },
-                }"
-              />
+          <!-- Actions -->
+          <Column header="Aksi" class="flex justify-center">
+            <template #body="slotProps">
+              <div class="flex justify-center gap-2">
+                <Button
+                  label="Edit"
+                  as="router-link"
+                  icon="fa fa-pencil"
+                  class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
+                  :to="{
+                    name: 'EditMenu',
+                    params: { id: slotProps.data.menu_id.id },
+                  }"
+                />
 
-              <Button
-                label="Delete"
-                icon="fa fa-trash"
-                class="p-button-rounded p-button-danger"
-                @click="deleteMenuByMenuId(slotProps.data?.menu_id?.id)"
-              />
-            </div>
-          </template>
-        </Column>
-      </DataTable>
+                <Button
+                  label="Delete"
+                  icon="fa fa-trash"
+                  class="p-button rounded-xl p-button-danger"
+                  @click="deleteMenuByMenuId(slotProps.data?.menu_id?.id)"
+                />
+              </div>
+            </template>
+          </Column>
+          <template #empty> Tidak ada Menu! </template>
+        </DataTable>
+      </div>
     </div>
   </section>
 </template>

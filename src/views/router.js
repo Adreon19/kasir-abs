@@ -5,9 +5,14 @@ import History from "../pages/History.vue";
 import Order from "../pages/Order.vue";
 import Login from "../pages/login.vue";
 import Money from "../pages/Money.vue";
-import EditMenu from "../components/items/menu/edit/[id].vue";
+import EditMenu from "../components/items/menu/edit/MenuEdit.vue";
+import Register from "../pages/Account/Register.vue";
 import EditCategory from "../components/items/category/edit/[id].vue";
-import { supabase } from "../supabase"; // Import your Supabase instance
+import Inventory from "../pages/Inventory.vue";
+import Profile from "../pages/Account/Profile.vue";
+import Cart from "../pages/Order/Cart.vue";
+import Edit from "../pages/Account/Edit.vue";
+import { supabase } from "../supabase";
 
 const routes = [
   {
@@ -48,6 +53,18 @@ const routes = [
     meta: { requiresAuth: false, layout: false },
   },
   {
+    path: "/register",
+    name: "register",
+    component: Register,
+    meta: { requiresAuth: false, layout: false },
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
     path: "/menu/edit/:id",
     name: "EditMenu",
     component: EditMenu,
@@ -60,6 +77,24 @@ const routes = [
     component: EditCategory,
     props: true,
     meta: { layout: true },
+  },
+  {
+    path: "/inventory",
+    name: "Inventory",
+    component: Inventory,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: Cart,
+    meta: { requiresAuth: true, layout: true },
+  },
+  {
+    path: "/profile/edit",
+    name: "Edit",
+    component: Edit,
+    meta: { requiresAuth: true, layout: true },
   },
 ];
 

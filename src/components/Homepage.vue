@@ -7,7 +7,6 @@ const menuList = ref([]);
 const categories = ref([]);
 const selectedCategory = ref(null);
 const isLoading = ref(true);
-const darkMode = ref(false);
 const filteredMenuList = ref([]);
 const originalMenuList = ref([]);
 const searchQuery = ref("");
@@ -103,74 +102,65 @@ const initializeData = async () => {
   }
 };
 onMounted(initializeData);
-
-function toggleDarkMode() {
-  darkMode.value = !darkMode.value;
-  document.documentElement.classList.toggle("my-app-dark", darkMode.value);
-
-  localStorage.setItem("darkMode", darkMode.value);
-}
-
-onMounted(() => {
-  const savedDarkMode = localStorage.getItem("darkMode");
-
-  if (savedDarkMode === "true") {
-    darkMode.value = true;
-    document.documentElement.classList.add("my-app-dark");
-  }
-});
 </script>
 
 <template>
-  <div>
+  <div class="relative min-h-screen">
     <div
-      class="searchBar m-5"
+      class="searchBar m-5 z-0"
       style="display: flex; justify-content: space-between"
     >
-      <div class="flex justify-center gap-2">
+      <div class="flex items-center gap-2">
         <h1
           style="font-size: 30px"
-          class="text-[var(--text-primary)] font-bold"
+          class="hidden xl:flex md:flex text-[var(--text-secondary)] font-bold"
         >
-          Menu
+          MENU
         </h1>
-        <Button
-          :icon="darkMode ? 'pi pi-moon' : 'pi pi-sun'"
-          :class="darkMode ? 'text-yellow-500' : 'text-black'"
-          @click="toggleDarkMode()"
-          class="bg-transparent hover:border-none active:border-none"
-        />
       </div>
-      <div class="search flex relative">
-        <InputText
-          v-model="searchQuery"
-          style="width: 400px; border-radius: 10px 0 0 10px"
-          placeholder="Search..."
-          class="search p-3 font-bold rounded-none focus:outline-none"
-          @keydown.enter="handleSearch"
-        />
-        <Button
-          style="border-radius: 0 10px 10px 0"
-          icon="fas fa-search"
-          iconPos="top"
-          class="button-search color-white bg-[var(--components-bg)] rounded-none"
-          @click="handleSearch"
-        />
+      <div class="flex flex-col gap-8 xl:flex-row md:flex-row xl:gap-5">
+        <div class="search flex">
+          <InputText
+            v-model="searchQuery"
+            style="border-radius: 10px 0 0 10px"
+            class="custom-search w-48 p-3 font-bold rounded-none focus:outline-none lg:w-64 xl:w-96"
+            placeholder="Cari..."
+            @keydown.enter="handleSearch"
+          />
+          <Button
+            style="border-radius: 0 10px 10px 0"
+            icon="fas fa-search"
+            iconPos="top"
+            class="button-search color-white bg-[var(--btn-secondary)] rounded-none"
+            @click="handleSearch"
+          />
+        </div>
+        <div class="flex justify-between items-center">
+          <h1
+            style="font-size: 20px; margin-left: -110px"
+            class="m-0 font-bold text-black md:hidden xl:hidden"
+          >
+            MENU
+          </h1>
+          <Select
+            v-model="selectedCategory"
+            :options="categories"
+            option-value="id"
+            option-label="kategori"
+            placeholder="Pilih Kategori"
+            class="p-select w-40 font-sm md:w-56 bg-[var(--input-search)] xl:w-full"
+          />
+        </div>
       </div>
-      <Select
-        v-model="selectedCategory"
-        :options="categories"
-        option-value="id"
-        option-label="kategori"
-        placeholder="Select Categories"
-        class="p-select w-full md:w-56"
-      />
     </div>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
     <div v-else>
-      <div v-if="menuList.length === 0" class="text-white text-center">
+      <div
+        v-if="menuList.length === 0"
+        class="text-[var(--text-secondary)] text-center"
+      >
         Tidak ada menu
       </div>
       <div v-else>

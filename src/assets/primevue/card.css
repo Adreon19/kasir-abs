@@ -1,5 +1,5 @@
 .p-card {
-  @apply flex flex-col rounded-xl
+  @apply flex flex-col h-full rounded-xl
         bg-[var(--card-bg)] 
         text-[var(--text-primary)]
         shadow-[0_1px_3px_0_rgba(0,0,0,0.1),0_1px_2px_-1px_rgba(0,0,0,0.1)];
@@ -10,13 +10,21 @@
 }
 
 .p-card-body {
-  @apply p-5 flex flex-col gap-2;
+  @apply p-5 flex flex-col flex-grow  gap-2;
 }
 
 .p-card-title {
   @apply font-medium text-xl;
 }
 
+.p-card-content {
+  @apply flex flex-col flex-grow;
+}
+
 .p-card-subtitle {
   @apply text-surface-500 dark:text-surface-400;
+}
+
+.p-card-footer {
+  @apply mt-auto;
 }

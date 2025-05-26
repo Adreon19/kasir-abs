@@ -12,100 +12,89 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background: #eaeaea;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --body-bg: #ffffff;
-  --sidebar-bg: #f5f5dc;
+  --body-bg: conic-gradient(#fff, #ff8a32, #fff);
+  --sidebar-bg: #ed8437;
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
-  --text-primary: #000000;
-  --text-secondary: #ffffff;
-  --hover-primary: #634f2b;
+  --text-primary: #ffffff;
+  --text-secondary: #000000;
+  --hover-primary: #f8bf89;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
+  --btn-order: #fff;
+  --btn-secondary: #ff7006;
+  --input-search: #ff7006;
+  --btn-search: #ff7006;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
+  --section-bg: rgb(0, 0, 0, 0.5);
+  --btn-login: #a67b5b;
+  --bg-form-login: #ffffff;
+  --input-text-login: #988571;
+  --bg-switch: #ff7006;
+  --searchbar-comp: #ff7006;
+  --bg-icon-switch: #ff8a32;
+  --input-primary: #7d5b3e;
+  --striped-row: #d8ae7e;
+  --bg-datable: #dfc3a1;
+  --switch-icon-color: #ffff;
+  --btn-outline-primary: #fffff;
+  --input-addMenu: #7d5b3e;
 }
 
 :root[class="my-app-dark"] {
-  --body-bg: linear-gradient(140deg, #14110f 40%, #61481c 96%);
+  /* --body-bg: #000000; */
+  --body-bg: conic-gradient(#000, #634f2b, #000);
   --sidebar-bg: #634f2b;
   --components-bg: #453721;
   --component-secondary: #c8a241;
-  --card-bg: rgba(0, 0, 0, 0.5);
+  --card-bg: rgba(0, 0, 0, 0.7);
   --text-primary: #ffffff;
   --text-secondary: #ffffff;
   --hover-primary: #c8a241;
   --view-order: #957836;
   --border-btn: #ffffff;
+  --btn-order: #c8a241;
+  --btn-secondary: #453721;
+  --input-search: #453721;
+  /* --btn-search: rgb(72, 66, 66); */
+  --btn-search: #453721;
   --text-order: #c8a241;
   --bg-drawer: rgba(149, 120, 54, 0.2);
+  --section-bg: rgb(0, 0, 0, 0.5);
+  --input-primary: rgb(72, 66, 66);
+  --striped-row: #2e1605;
+  --bg-datable: rgb(72, 66, 66);
+  --bg-switch: #130b03;
+  --searchbar-comp: #453721;
+  --bg-form-login: #634f2b;
+  --input-text-login: #f5f5dc;
+  --btn-login: #634f2b;
+  --bg-icon-switch: #776024;
+  --switch-icon-color: #c8a241;
+  --outline: #ffffff;
+  --promp-bg: rgb(32, 25, 7);
+  --btn-outline-primary: #c8a241;
+  --input-addMenu: #373230;
 }
 
-.waves {
-  margin-top: -150px;
+body {
+  background: var(--body-bg);
 }
+
 .text-xl {
   color: white;
 }
-.mb-2 {
-  margin-top: 10px;
-  color: white;
-}
 .desc {
-  margin-top: 40px;
   margin-bottom: 20px;
+  margin-top: auto;
   color: white;
 }
 
-.blck {
-  color: #000000;
-  font-family: "Roboto", serif;
-  font-weight: 800;
-
-  button {
-    font-size: 18px;
-    color: #e1e1e1;
-    font-family: inherit;
-    font-weight: 800;
-    cursor: pointer;
-    position: relative;
-    border: none;
-    background: none;
-    text-transform: uppercase;
-    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-    transition-duration: 400ms;
-    transition-property: color;
-  }
-
-  button:focus,
-  button:hover {
-    color: #fff;
-  }
-
-  button:focus:after,
-  button:hover:after {
-    width: 100%;
-    left: 0%;
-  }
-
-  button:after {
-    content: "";
-    pointer-events: none;
-    bottom: -2px;
-    left: 50%;
-    position: absolute;
-    width: 0%;
-    height: 2px;
-    background-color: #fff;
-    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
-    transition-duration: 400ms;
-    transition-property: width, left;
-  }
-}
 .blck1 {
   color: #000000;
   font-family: "Roboto", serif;
@@ -114,18 +103,23 @@
   margin-top: 10px;
 }
 .p-select-label.p-placeholder {
-  margin-top: 4px;
-  font-family: "Roboto", serif;
   font-weight: 400;
-  color: white;
+}
+.p-select-label {
+  color: var(--text-secondary);
+}
+
+.toggle-member {
+  color: var(--text-secondary);
 }
 
 /* asset login */
 .btn-inlogin {
   padding: 0.75rem 1rem;
   font-size: 1.125rem;
-  background-color: #634f2b;
+  /* background-color: #634f2b; */
   color: white;
+  border: none;
   border-radius: 0.375rem;
   transition: background-color 0.7s ease, color 0.7s ease;
   min-width: 12rem;
@@ -148,66 +142,6 @@
 }
 /* done asset login */
 
-/* alt logout*/
-.btn {
-  --color: #cba35c;
-  --color2: rgb(10, 25, 30);
-  margin-left: 40px;
-  padding: 0.8em 1.75em;
-  background-color: transparent;
-  border-radius: 6px;
-  border: 0.3px solid var(--color);
-  transition: 0.5s;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  z-index: 1;
-  font-weight: 300;
-  font-size: 17px;
-  font-family: "Roboto", "Segoe UI", sans-serif;
-  text-transform: uppercase;
-  color: var(--color);
-}
-
-.btn::after,
-.btn::before {
-  content: "";
-  display: block;
-  height: 100%;
-  width: 100%;
-  transform: skew(90deg) translate(-50%, -50%);
-  position: absolute;
-  inset: 50%;
-  left: 25%;
-  z-index: -1;
-  transition: 0.5s ease-out;
-  background-color: var(--color);
-}
-
-.btn::before {
-  top: -50%;
-  left: -25%;
-  transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
-}
-
-.btn:hover::before {
-  transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
-}
-
-.btn:hover::after {
-  transform: skew(45deg) translate(-50%, -50%);
-}
-
-.btn:hover {
-  color: white;
-}
-
-.btn:active {
-  filter: brightness(0.7);
-  transform: scale(0.98);
-}
-/* done alt logout */
-
 a {
   font-weight: 500;
   color: #646cff;
@@ -226,9 +160,7 @@ h2 {
   color: rgb(224, 224, 224);
   font-size: x-large;
 }
-.p-select-label p-placeholder {
-  color: #00a97f;
-}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -236,7 +168,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  /* background-color: #1a1a1a; */
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -250,6 +182,13 @@ button:focus-visible {
 
 .card {
   padding: 2em;
+}
+
+.p-datatable-tbody > tr {
+  color: #ffffff;
+}
+.p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
+  color: #ffffff;
 }
 
 @media (prefers-color-scheme: light) {
@@ -266,5 +205,91 @@ button:focus-visible {
 }
 
 .main-section {
-  @apply p-6 bg-slate-100 bg-surface-500/50 rounded-lg border border-surface-200/80;
+  @apply p-6 bg-[var(--section-bg)] rounded-lg border border-surface-200/80;
+}
+
+/* add menu optimalize on mini ipad */
+/* 
+.main-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.img-menu {
+  border: 2px solid;
+  max-width: 100%;
+  height: auto;
+}
+
+.custom-input,
+.custom-select,
+.custom-button {
+  margin-bottom: 10px;
+}
+.custom-textarea {
+  padding-top: 20px;
+}
+
+.custom-label {
+  font-size: 0.9rem;
+  padding-bottom: 15px;
+  padding-left: 20px;
+  color: #666;
+} */
+
+/* Responsive Styles for iPad Mini lenskep (1024x768) */
+@media (max-width: 1024px) {
+  .main-section {
+    padding: 15px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .custom-input,
+  .custom-select,
+  .custom-textarea,
+  .custom-button {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+  .custom-input {
+    padding: 6px;
+    margin-top: 10px;
+  }
+
+  .custom-label {
+    font-size: 10px;
+    padding-bottom: 15px;
+    padding-left: 5px;
+  }
+}
+
+/*  lebih Responsive untuk Styles for Smaller Screens (Mobile) */
+@media (max-width: 768px) {
+  .main-section {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+  }
+
+  .img-menu {
+    max-width: 150px;
+  }
+
+  .custom-input,
+  .custom-select,
+  .custom-textarea,
+  .custom-button {
+    font-size: 0.8rem;
+    padding: 6px;
+  }
+
+  .custom-label {
+    font-size: 0.7rem;
+  }
 }

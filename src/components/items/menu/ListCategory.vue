@@ -68,7 +68,7 @@ onMounted(initializeData);
   <section class="main-section">
     <h2>List Kategori</h2>
     <div class="flex gap-5">
-      <DataTable :value="categories" class="w-ful">
+      <DataTable :value="categories" stripedRows class="custom-databale">
         <Column field="kategori" header="Nama Kategori"> </Column>
         <Column header="Aksi" class="flex justify-center">
           <template #body="slotProps">
@@ -76,7 +76,7 @@ onMounted(initializeData);
               <Button
                 label="Edit"
                 icon="fa fa-pencil"
-                class="p-button-rounded p-button-info"
+                class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
                 as="router-link"
                 :to="{
                   name: 'EditCategory',
@@ -86,7 +86,7 @@ onMounted(initializeData);
               <Button
                 label="Delete"
                 icon="fa fa-trash"
-                class="p-button-rounded p-button-danger"
+                class="p-button rounded-xl p-button-danger"
                 @click="deleteCategories(slotProps.data.kategori)"
               />
             </div>

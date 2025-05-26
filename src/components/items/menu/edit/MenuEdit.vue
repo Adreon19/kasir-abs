@@ -1,32 +1,37 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useToast, Toast } from "primevue";
-import { useRouter } from "vue-router";
+import { useToast, Toast, InputNumber } from "primevue";
+import { useRouter, useRoute } from "vue-router";
 import { supabase } from "../../../../supabase"; // Replace with your actual Supabase config
 
 const router = useRouter();
+const route = useRoute();
 const toast = useToast();
 const menuDetails = ref([]);
 const menu = ref([]);
 const isLoading = ref(false);
 
-// Reactive objects to store changes
 const updatedMenu = reactive({});
 const updatedMenuDetails = reactive({});
 const imageFiles = reactive({});
-const imagePreviews = reactive({}); // Stores previews for selected images
+const imagePreviews = reactive({});
+const menuId = route.params.id;
 
 const fetchMenuDetails = async () => {
   try {
     isLoading.value = true;
-    let { data: menu_detail, error } = await supabase.from("menu_detail")
-      .select(`
-        id, 
+    let { data: menu_detail, error } = await supabase
+      .from("menu_detail")
+      .select(
+        `
+        id,
         price,
         variant_id(
           id,
           name
-        )`);
+        )`
+      )
+      .eq("menu_id", menuId);
     if (error) throw error;
     menuDetails.value = menu_detail;
   } catch (error) {
@@ -41,7 +46,8 @@ const fetchMenu = async () => {
     isLoading.value = true;
     let { data: menu_list, error } = await supabase
       .from("menu_list")
-      .select("*");
+      .select("*")
+      .eq("id", menuId);
     if (error) throw error;
     menu.value = menu_list;
   } catch (error) {
@@ -152,90 +158,94 @@ onMounted(() => {
       as="router-link"
       label="Kembali"
       icon="fa-solid fa-arrow-left"
-      class="maw-w-fit"
+      class="custom-button maw-w-fit"
       to="/add"
     />
   </div>
   <div class="p-6">
-    <h2>Menu Editor</h2>
+    <h2 class="text-[var(--text-secondary)]">Menu Editor</h2>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
     <div v-else>
       <section class="main-section">
-        <div v-for="menuItem in menu" :key="menuItem.id">
-          <div class="flex flex-col gap-3">
-            <h2 for="name">Nama Menu</h2>
-            <InputText
-              v-model="menuItem.name"
-              id="name"
-              placeholder="Enter name"
-              class="w-fit"
-              @input="
-                (e) => handleInputChange(menuItem, 'name', e.target.value)
-              "
-            />
-          </div>
-          <div class="flex flex-col gap-3">
-            <h2>Gambar menu</h2>
+        <div v-for="menuItem in menu" :key="menuItem.id" class="flex">
+          <div class="flex-shrink-0 m-auto">
             <img
               :src="imagePreviews[menuItem.id] || menuItem.image"
               alt="Menu Image"
-              class="img-menu shadow-md max-w-64 rounded-xl z-10"
+              class="img-menu shadow-md max-w-64 rounded-xl z-10 h-64"
             />
             <FileUpload
+              class="mt-4"
               mode="basic"
               accept="image/*"
-              :maxFileSize="150000"
+              :maxFileSize="9000000"
               auto
               @select="(e) => handleFileSelect(menuItem, e.files[0])"
             />
           </div>
-          <div class="flex flex-col gap-3">
-            <h2>Deskripsi Menu</h2>
-            <TextArea
-              v-model="menuItem.description"
-              rows="5"
-              cols="30"
-              class="max-w-fit resize-none"
-              @input="
-                (e) =>
-                  handleInputChange(menuItem, 'description', e.target.value)
-              "
-            />
-          </div>
-        </div>
-        <div class="flex flex-col gap-3">
-          <h2>Harga Menu</h2>
-          <div v-for="menuDetail in menuDetails" :key="menuDetail.id">
-            <div class="flex flex-col gap-2">
-              <label for="price">{{ menuDetail.variant_id.name }}</label>
-              <InputText
-                v-model="menuDetail.price"
-                id="price"
-                placeholder="Enter price"
-                class="max-w-fit"
-                @input="(e) => handleDetailChange(menuDetail, e.target.value)"
-              />
+          <div class="ml-4 flex-grow">
+            <div class="form grid grid-cols-1 gap-4">
+              <div>
+                <h2 for="name">Nama Menu</h2>
+                <InputText
+                  v-model="menuItem.name"
+                  id="name"
+                  placeholder="Enter name"
+                  class="custom-textarea w-full"
+                  @input="
+                    (e) => handleInputChange(menuItem, 'name', e.target.value)
+                  "
+                />
+              </div>
+              <div>
+                <h2>Deskripsi Menu</h2>
+                <TextArea
+                  v-model="menuItem.description"
+                  rows="5"
+                  cols="30"
+                  class="custom-textarea w-full resize-none"
+                  @input="
+                    (e) =>
+                      handleInputChange(menuItem, 'description', e.target.value)
+                  "
+                />
+              </div>
+              <div>
+                <h2>Harga Menu</h2>
+                <div v-for="menuDetail in menuDetails" :key="menuDetail.id">
+                  <div class="flex flex-col gap-2">
+                    <label for="price">{{ menuDetail.variant_id.name }}</label>
+                    <InputNumber
+                      v-model="menuDetail.price"
+                      id="price"
+                      placeholder="Enter price"
+                      class="w-full"
+                      :min="0"
+                      mode="currency"
+                      currency="IDR"
+                      @input="
+                        (e) => handleDetailChange(menuDetail, e.target.value)
+                      "
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
-
-      <div class="flex justify-end">
-        <Button
-          label="Save"
-          icon="fa-solid fa-save"
-          class="p-button-success mt-2"
-          @click="saveChanges"
-        />
-      </div>
+      <Button
+        label="Save"
+        icon="fa-solid fa-save"
+        class="p-button-success mt-4 float-end"
+        @click="saveChanges"
+      />
     </div>
   </div>
-
   <Toast />
 </template>
-
 <style scoped>
 .img-menu {
   border: 2px solid;

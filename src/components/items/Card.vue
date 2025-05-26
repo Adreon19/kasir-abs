@@ -3,21 +3,37 @@ import { ref, onMounted } from "vue";
 import { useToast, Card } from "primevue";
 import { supabase } from "../../supabase";
 import { formatCurrency } from "../../utils/formatter/currency";
-import { RouterLink } from "vue-router";
 
 const toast = useToast();
+const isLoading = ref(false);
 const visible = ref(false);
-const drawerVisible = ref(false);
-const addVariantDialogVisible = ref(false);
 const selectedMenu = ref(null);
 const quantity = ref(1);
-const selectedvariant = ref(null);
+const selectedVariant = ref(null);
 const note = ref("");
-const orderedMenuIds = ref([]);
+const customerName = ref("");
+const selectedCustomer = ref(null);
+const customers = ref([]);
 const cartItems = ref([]);
 const { menuList } = defineProps(["menuList"]);
 
-// Fetch cart details including related menu and variant information
+const fetchCustomers = async () => {
+  try {
+    const { data, error } = await supabase
+      .from("customer")
+      .select("id, customer");
+    if (error) throw error;
+    customers.value = data;
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: error.message,
+      life: 3000,
+    });
+  }
+};
+
 const fetchCart = async () => {
   try {
     const { data, error } = await supabase.from("cart").select(`
@@ -25,6 +41,7 @@ const fetchCart = async () => {
         menu_detail_id,
         quantity,
         note,
+        customer_id,
         menu_detail:menu_detail_id (
           id,
           menu_id (
@@ -41,7 +58,6 @@ const fetchCart = async () => {
 
     if (error) throw error;
 
-    orderedMenuIds.value = data.map((item) => item.menu_detail_id); // Store menu_detail_id
     cartItems.value = data;
   } catch (error) {
     toast.add({
@@ -50,86 +66,98 @@ const fetchCart = async () => {
       detail: error.message,
       life: 3000,
     });
-    console.error("Error fetching cart:", error);
   }
 };
 
-// Buka Dialog
+// Open the dialog for ordering
 const openDialog = (menu) => {
   selectedMenu.value = menu;
-  selectedvariant.value = null;
-  quantity.value = 1;
+  selectedVariant.value = null;
   note.value = "";
   visible.value = true;
 };
 
-// Show dialog for adding another variant of the selected menu
-const openAddVariantDialog = (menu) => {
-  selectedMenu.value = menu; // Ensure selectedMenu is set
-  addVariantDialogVisible.value = true;
-  quantity.value = 1; // Reset quantity to 1 when adding a new variant
-  selectedvariant.value = null; // Reset variant selection
-};
-
-const deleteCartItem = async (cartItemId) => {
-  try {
-    const { error } = await supabase.from("cart").delete().eq("id", cartItemId);
-
-    if (error) throw error;
-
-    toast.add({
-      severity: "success",
-      summary: "Success",
-      detail: "Item deleted from cart successfully!",
-      life: 3000,
-    });
-
-    // Refresh cart data
-    await fetchCart();
-  } catch (error) {
-    toast.add({
-      severity: "error",
-      summary: "Error",
-      detail: error.message,
-      life: 3000,
-    });
-    console.error("Error deleting cart item:", error);
-  }
-};
-
-// Save order into the cart
 const saveOrder = async () => {
-  if (!selectedMenu.value || !selectedvariant.value) {
+  if (!selectedMenu.value || !selectedVariant.value) {
     toast.add({
       severity: "warn",
       summary: "Warning",
-      detail: "Please select a menu and variant.",
+      detail: "Tolong pilih salah satu menu atau varian.",
       life: 3000,
     });
     return;
   }
 
   try {
+    isLoading.value = true;
+    let customerId = null;
+
+    if (customerName.value.trim() !== "") {
+      const { data: newCustomer, error: insertError } = await supabase
+        .from("customer")
+        .insert([{ customer: customerName.value }])
+        .select();
+
+      // Check for insertion error
+      if (insertError) {
+        console.error("Error inserting new customer:", insertError);
+        toast.add({
+          severity: "error",
+          summary: "Error",
+          detail: `Gagal memasukkan pelanggan baru: ${insertError.message}`,
+          life: 3000,
+        });
+        return;
+      }
+
+      // Get the new customer ID
+      customerId = newCustomer[0].id; // Access the first element of the array
+    } else if (selectedCustomer.value) {
+      customerId = selectedCustomer.value.id;
+    } else {
+      // Kirim peringatan kalau tidak ada pelanggan
+      toast.add({
+        severity: "warn",
+        summary: "Warning",
+        detail: "Tolong pilih atau masukkan nama pelanggan.",
+        life: 3000,
+      });
+      return;
+    }
+
+    // Prepare the payload for the cart insertion
     const payload = {
-      menu_detail_id: selectedvariant.value.id, // Make sure this is the correct variant ID
+      menu_detail_id: selectedVariant.value.id,
       quantity: quantity.value,
       note: note.value.trim(),
+      customer_id: customerId,
     };
 
     const { error } = await supabase.from("cart").insert(payload);
 
-    if (error) throw error;
+    if (error) {
+      console.error("Error inserting into cart:", error);
+      toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: `Gagal memasukkan ke keranjaang: ${error.message}`,
+        life: 3000,
+      });
+      return;
+    }
 
     toast.add({
       severity: "success",
       summary: "Success",
-      detail: "Order added to cart successfully!",
+      detail: "Pesanan berhasil dimasukkan ke keranjang!",
       life: 3000,
     });
 
     // Refresh cart data
     await fetchCart();
+    selectedCustomer.value = null;
     visible.value = false;
+    isLoading.value = false;
   } catch (error) {
     toast.add({
       severity: "error",
@@ -137,40 +165,35 @@ const saveOrder = async () => {
       detail: error.message,
       life: 3000,
     });
-    console.error("Error saving order:", error);
   }
 };
-
-// Close drawer and show add variant dialog
-const closeDrawerAndOpenAddVariantDialog = (menu) => {
-  drawerVisible.value = false; // Close the drawer
-  setTimeout(() => {
-    openAddVariantDialog(menu); // Open the add variant dialog after the drawer closes
-  }, 300);
-};
-
 onMounted(() => {
+  fetchCustomers();
   fetchCart();
 });
 </script>
 
 <template>
   <section class="flex flex-col m-4">
-    <div class="grid grid-cols-4 gap-4">
+    <div
+      class="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4"
+    >
       <Card
         v-for="menu in menuList"
         :key="menu.name"
-        class="menu flex flex-col p-0 rounded-lg"
+        class="menu flex flex-col p-0 rounded-lg drop-shadow-xl"
       >
         <template #header>
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover h-48 w-full rounded-t-lg"
+            class="hidden img-menu object-cover w-full h-48 rounded-t-lg border-none md:flex xl:flex"
           />
         </template>
         <template #title>
-          <h3 class="text-xl capitalize font-bold">
+          <h3
+            class="flex justify-center md:justify-start xl:justify-start text-xl capitalize font-bold"
+          >
             {{ menu.name || "No Name" }}
           </h3>
         </template>
@@ -184,26 +207,17 @@ onMounted(() => {
             </template>
           </template>
           <p class="desc">
-            {{ menu.description || "No description available." }}
+            {{ menu.description || "Tidak ada deskripsi." }}
           </p>
         </template>
         <template #footer>
-          <Button
-            v-if="
-              menu.menu_detail.some((detail) =>
-                orderedMenuIds.includes(detail.id)
-              )
-            "
-            label="View Order"
-            class="button w-full"
-            @click="drawerVisible = true"
-          />
-          <Button
-            v-else
-            label="Pesan"
-            class="button w-full"
-            @click="openDialog(menu)"
-          />
+          <div class="flex items-center">
+            <Button
+              label="Pesan"
+              class="button w-full"
+              @click="openDialog(menu)"
+            />
+          </div>
         </template>
       </Card>
     </div>
@@ -213,149 +227,74 @@ onMounted(() => {
   <Dialog
     v-model:visible="visible"
     modal
-    :header="`Order ${selectedMenu?.name}`"
+    :header="`Pesan ${selectedMenu?.name}`"
     :style="{ width: '25rem' }"
   >
-    <div class="flex flex-col gap-4">
+    <div v-if="isLoading">
+      <ProgressSpinner />
+    </div>
+    <div v-else class="flex flex-col gap-4">
+      <InputText
+        v-model="customerName"
+        placeholder="Masukkan nama pelanggan baru"
+        class="text-[var(--text-primary)] bg-[var(--input-primary)]"
+        label="Customer Name"
+      />
       <Select
-        v-model="selectedvariant"
+        v-model="selectedCustomer"
+        :options="customers"
+        optionLabel="customer"
+        placeholder="Pilih pelanggan yang sudah ada"
+        class="custom-select"
+      />
+      <Select
+        v-model="selectedVariant"
         :options="selectedMenu?.menu_detail"
+        class="custom-select text-[var(--text-primary)]"
         optionLabel="menu_variants.name"
-        placeholder="Choose a variant"
+        placeholder="Pilih varian"
       />
       <InputNumber
         v-model="quantity"
-        min="1"
+        :min="1"
+        :max="500"
         placeholder="Quantity"
         label="Quantity"
+        class="text-[var(--text-primary)]"
       />
-      <Textarea v-model="note" rows="3" cols="30" placeholder="Add a note" />
-    </div>
-
-    <div class="flex justify-end mt-4 gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        icon="fa-solid fa-x-mark"
-        severity="secondary"
-        @click="visible = false"
+      <Textarea
+        v-model="note"
+        rows="3"
+        cols="30"
+        placeholder="Tambahkan catatan"
+        class="custom-textarea text-[var(--text-primary)]"
       />
-      <Button
-        type="button"
-        label="Save Order"
-        icon="fa-solid fa-check"
-        severity="success"
-        @click="saveOrder"
-      />
-    </div>
-  </Dialog>
-
-  <!-- Drawer for Cart -->
-  <Drawer
-    v-model:visible="drawerVisible"
-    position="right"
-    header="Your Order"
-    class="bg-[var(--bg-drawer)]"
-    :style="{ 'min-width': '45vw' }"
-  >
-    <div v-if="cartItems.length" class="p-4">
-      <ul>
-        <li v-for="(item, index) in cartItems" :key="index" class="mb-2">
-          <h3 class="text-xl capitalize font-bold">
-            {{ item.menu_detail.menu_id.name }}
-          </h3>
-          <template v-if="item.menu_detail">
-            <h4 class="mb-2 text-sm text-slate-400">
-              {{ item.menu_detail.variant_id.name || "No Variant" }}:
-              {{ formatCurrency(item.menu_detail.price) || "N/A" }}
-            </h4>
-          </template>
-
-          <template v-else>
-            <h4 class="mb-2 text-sm text-slate-400">No Variant: N/A</h4>
-          </template>
-          <div class="button-container flex justify-between gap-6">
-            <p>Quantity : {{ item.quantity }}</p>
-            <Button
-              label="Delete"
-              icon="fa-solid fa-trash"
-              class="button"
-              severity="danger"
-              @click="deleteCartItem(item.id)"
-            />
-            <Button
-              label="Add Another"
-              icon="fa-solid fa-plus"
-              class="button w-fit"
-              @click="closeDrawerAndOpenAddVariantDialog(menuList[0])"
-            />
-          </div>
-          <div class="mb-2">
-            <p>Note : {{ item.note || "No note" }}</p>
-          </div>
-          <hr />
-        </li>
-      </ul>
-    </div>
-
-    <div v-else class="p-4 text-center text-gray-500">No orders yet.</div>
-    <div class="button-container flex justify-end gap-8 mt-16">
-      <RouterLink to="/order">
+      <div class="flex justify-end mt-4 gap-2">
         <Button
           type="button"
-          class="button w-fit"
-          label="Check Out"
-          severity="success"
+          variant="outlined"
+          label="Cancel"
+          icon="fa-solid fa-xmark"
+          severity="secondary"
+          @click="visible = false"
         />
-      </RouterLink>
-    </div>
-  </Drawer>
-
-  <!-- Dialog to Add Another Variant -->
-  <Dialog
-    v-model:visible="addVariantDialogVisible"
-    modal
-    :header="`Add Another Variant for ${selectedMenu?.name}`"
-    :style="{ width: '25rem' }"
-  >
-    <div class="flex flex-col gap-4">
-      <Select
-        v-model="selectedvariant"
-        :options="selectedMenu?.menu_detail"
-        optionLabel="menu_variants.name"
-        placeholder="Choose a variant"
-      />
-      <InputNumber
-        v-model="quantity"
-        min="1"
-        placeholder="Quantity"
-        label="Quantity"
-      />
-    </div>
-
-    <div class="button flex justify-end mt-4 gap-2">
-      <Button
-        type="button"
-        label="Cancel"
-        icon="fa-solid fa-x-mark"
-        severity="secondary"
-        @click="addVariantDialogVisible = false"
-      />
-      <Button
-        type="button"
-        label="Save Variant"
-        icon="fa-solid fa-check"
-        severity="success"
-        @click="saveOrder"
-      />
+        <Button
+          type="button"
+          label="Simpan"
+          icon="fa-solid fa-check"
+          severity="success"
+          @click="saveOrder"
+        />
+      </div>
     </div>
   </Dialog>
 </template>
+
 <style scoped>
 .button {
   background-color: transparent;
-  border: 2px solid var(--border-btn);
-  color: var(--text-secondary);
+  border: 2px solid var(--btn-order);
+  color: var(--btn-order);
   margin-top: 0;
 }
 </style>
