@@ -121,9 +121,11 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="main-section">
+  <section
+    class="main-section max-w-full w-fit flex flex-col md:w-full xl:w-full md:mt-0 xl:mt-0"
+  >
     <h2 class="capitalize font-bold">Tambah harga menu</h2>
-    <div class="flex flex-col card">
+    <div class="flex flex-col">
       <!-- Select Menu -->
       <div class="field">
         <label for="menu">Menu</label>
@@ -182,7 +184,7 @@ onMounted(() => {
 
       <!-- Add Another Variant Field -->
       <Button
-        class="custom-button btn btn-secondary mt-4 p-4"
+        class="custom-button btn btn-secondary mt-4 p-4 w-full"
         @click="addVariantField"
       >
         Tambah Variant Lainnya
@@ -190,7 +192,7 @@ onMounted(() => {
 
       <!-- Submit Button -->
       <Button
-        class="custom-button btn btn-primary mt-4"
+        class="custom-button btn btn-primary mt-4 w-full"
         @click="insertMenuDetail"
       >
         <i class="fa-solid fa-floppy-disk"></i>

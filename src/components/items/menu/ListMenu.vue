@@ -92,85 +92,86 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>List Menu</h2>
-    <div class="card flex-col flex gap-5">
-      <!-- Updated DataTable -->
-      <DataTable
-        :value="menu"
-        paginator
-        :rows="5"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        tableStyle="min-width: 50rem"
-        class="custom-datatable w-ful"
-      >
-        <!-- Menu Name -->
-        <Column
-          field="menu_id.name"
-          header="Nama Menu"
-          :sortable="true"
-          :filter="true"
+    <div class="card flex gap-5 overflow-x-auto md:flex-col xl:flex-col">
+      <div class="min-w-[900px]">
+        <!-- Updated DataTable -->
+        <DataTable
+          :value="menu"
+          paginator
+          :rows="5"
+          :rowsPerPageOptions="[5, 10, 20, 50]"
+          class="w-full"
         >
-          <template #body="slotProps">
-            {{ slotProps.data.menu_id?.name }}
-          </template>
-        </Column>
+          <!-- Menu Name -->
+          <Column
+            field="menu_id.name"
+            header="Nama Menu"
+            :sortable="true"
+            :filter="true"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.menu_id?.name }}
+            </template>
+          </Column>
 
-        <!-- Category -->
-        <Column
-          field="menu_id.kategori_id.kategori"
-          header="Kategori"
-          :sortable="true"
-          :filter="true"
-        >
-          <template #body="slotProps">
-            {{ slotProps.data.menu_id?.kategori_id?.kategori }}
-          </template>
-        </Column>
+          <!-- Category -->
+          <Column
+            field="menu_id.kategori_id.kategori"
+            header="Kategori"
+            :sortable="true"
+            :filter="true"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.menu_id?.kategori_id?.kategori }}
+            </template>
+          </Column>
 
-        <!-- Variant -->
-        <Column
-          field="variant_id.name"
-          header="Varian"
-          :sortable="true"
-          :filter="true"
-        >
-          <template #body="slotProps">
-            {{ slotProps.data.variant_id?.name || "No Variant" }}
-          </template>
-        </Column>
+          <!-- Variant -->
+          <Column
+            field="variant_id.name"
+            header="Varian"
+            :sortable="true"
+            :filter="true"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.variant_id?.name || "No Variant" }}
+            </template>
+          </Column>
 
-        <!-- Price -->
-        <Column field="price" header="Harga" :sortable="true" :filter="true">
-          <template #body="slotProps"
-            >{{ formatCurrency(slotProps.data.price) }}
-          </template>
-        </Column>
+          <!-- Price -->
+          <Column field="price" header="Harga" :sortable="true" :filter="true">
+            <template #body="slotProps"
+              >{{ formatCurrency(slotProps.data.price) }}
+            </template>
+          </Column>
 
-        <!-- Actions -->
-        <Column header="Aksi" class="flex justify-center">
-          <template #body="slotProps">
-            <div class="flex justify-center gap-2">
-              <Button
-                label="Edit"
-                as="router-link"
-                icon="fa fa-pencil"
-                class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
-                :to="{
-                  name: 'EditMenu',
-                  params: { id: slotProps.data.menu_id.id },
-                }"
-              />
+          <!-- Actions -->
+          <Column header="Aksi" class="flex justify-center">
+            <template #body="slotProps">
+              <div class="flex justify-center gap-2">
+                <Button
+                  label="Edit"
+                  as="router-link"
+                  icon="fa fa-pencil"
+                  class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
+                  :to="{
+                    name: 'EditMenu',
+                    params: { id: slotProps.data.menu_id.id },
+                  }"
+                />
 
-              <Button
-                label="Delete"
-                icon="fa fa-trash"
-                class="p-button rounded-xl p-button-danger"
-                @click="deleteMenuByMenuId(slotProps.data?.menu_id?.id)"
-              />
-            </div>
-          </template>
-        </Column>
-        <template #empty> Tidak ada Menu! </template>
-      </DataTable>
+                <Button
+                  label="Delete"
+                  icon="fa fa-trash"
+                  class="p-button rounded-xl p-button-danger"
+                  @click="deleteMenuByMenuId(slotProps.data?.menu_id?.id)"
+                />
+              </div>
+            </template>
+          </Column>
+          <template #empty> Tidak ada Menu! </template>
+        </DataTable>
+      </div>
     </div>
   </section>
 </template>

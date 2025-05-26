@@ -187,11 +187,13 @@ onMounted(() => {
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover w-full h-48 rounded-t-lg border-none"
+            class="hidden img-menu object-cover w-full h-48 rounded-t-lg border-none md:flex xl:flex"
           />
         </template>
         <template #title>
-          <h3 class="text-xl capitalize font-bold">
+          <h3
+            class="flex justify-center md:justify-start xl:justify-start text-xl capitalize font-bold"
+          >
             {{ menu.name || "No Name" }}
           </h3>
         </template>

@@ -139,7 +139,9 @@ onMounted(fetchCategories);
 </script>
 
 <template>
-  <section class="main-section">
+  <section
+    class="main-section mt-20 max-w-full w-fit flex flex-col md:w-full xl:w-full md:mt-0 xl:mt-0"
+  >
     <h2 class="font-bold text-2xl capitalize">Tambah menu</h2>
     <div class="flex flex-col md:flex-row gap-5 mt-5 items-center rounded-xl">
       <div class="flex flex-col md:flex-row items-center gap-5">
@@ -151,7 +153,7 @@ onMounted(fetchCategories);
           accept="image/*"
           :maxFileSize="150000"
           severity="secondary"
-          class="rounded-xl text-[var(--text-primary)] border border-white p-button-outlined p-10 z-0 m-5 ml-20"
+          class="rounded-xl text-[var(--text-primary)] border border-white p-button-outlined p-10 z-0 m-5 md:ml-20 xl:ml-20"
         />
         <img
           v-if="croppedImage"
@@ -184,7 +186,7 @@ onMounted(fetchCategories);
         <InputText
           id="menu-name"
           v-model="menuName"
-          class="custom-input p-6 md:w-auto"
+          class="custom-input w-full p-6 md:w-auto"
         />
         <label for="menu-name" class="custom-label">Nama menu</label>
       </FloatLabel>
@@ -202,18 +204,18 @@ onMounted(fetchCategories);
         cols="30"
         placeholder="Masukkan Deskripsi menu"
         style="resize: none"
-        class="custom-textarea p-2 w-full border-none"
+        class="custom-textarea p-2 w-full md:w-full border-none"
       />
-    </div>
-    <div>
-      <Button
-        label="Save"
-        icon="fa fa-check"
-        iconPos="left"
-        @click="uploadImageAndSaveMenu"
-        :loading="isLoading"
-        class="custom-button p-4 mt-4 w-full"
-      />
+      <div>
+        <Button
+          label="Save"
+          icon="fa fa-check"
+          iconPos="left"
+          @click="uploadImageAndSaveMenu"
+          :loading="isLoading"
+          class="custom-button p-4 mt-4 w-full"
+        />
+      </div>
     </div>
 
     <!-- Form lainnya -->
