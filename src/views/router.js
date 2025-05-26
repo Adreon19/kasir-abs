@@ -25,7 +25,7 @@ const routes = [
     path: "/add",
     name: "Add",
     component: Add,
-    meta: { requiresAuth: true, layout: true },
+    meta: { requiresAuth: true, layout: true, requiresAdmin: true },
   },
   {
     path: "/history",
@@ -44,7 +44,7 @@ const routes = [
     path: "/money",
     name: "Money",
     component: Money,
-    meta: { requiresAuth: true, layout: true },
+    meta: { requiresAuth: true, layout: true, requiresAdmin: true }, // Added requiresAdmin
   },
   {
     path: "/login",
@@ -94,7 +94,7 @@ const routes = [
     path: "/profile/edit",
     name: "Edit",
     component: Edit,
-    meta: { requiresAuth: true, layout: true },
+    meta: { requiresAuth: true, layout: true, requiresAdmin: true },
   },
 ];
 
@@ -111,11 +111,39 @@ router.beforeEach(async (to, from, next) => {
   if (to.name === "login" && session) {
     return next({ name: "Home" });
   }
+
   if (to.meta.requiresAuth && !session) {
     return next({ name: "login" });
   }
 
-  next();
+  if (to.meta.requiresAdmin) {
+    if (!session) {
+      return next({ name: "login" });
+    }
+
+    try {
+      const { data: user, error } = await supabase
+        .from("user")
+        .select("role_id")
+        .eq("user_id", session.user.id)
+        .single();
+      if (error) {
+        console.error("Error fetching user role:", error);
+        return next({ name: "Home" });
+      }
+
+      if (user && user.role_id === 1) {
+        next();
+      } else {
+        return next({ name: "Home" });
+      }
+    } catch (err) {
+      console.error("Unexpected error during admin check:", err);
+      return next({ name: "Home" });
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
