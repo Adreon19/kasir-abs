@@ -158,6 +158,15 @@ const fetchUserData = async () => {
 };
 
 const printReceipt = () => {
+  if (!selectedPaymentMethod.value) {
+    toast.add({
+      severity: "warn",
+      summary: "Peringatan",
+      detail: "Silakan pilih metode pembayaran terlebih dahulu.",
+      life: 3000,
+    });
+    return;
+  }
   const receiptData = cartItems.value.map((item) => ({
     name: item.menu_detail.menu_id.name,
     qty: item.quantity,
