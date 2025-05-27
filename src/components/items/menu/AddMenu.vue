@@ -139,12 +139,10 @@ onMounted(fetchCategories);
 </script>
 
 <template>
-  <section
-    class="main-section mt-20 max-w-full w-fit flex flex-col md:w-full xl:w-full md:mt-0 xl:mt-0"
-  >
+  <section class="main-section w-full mt-16">
     <h2 class="font-bold text-2xl capitalize">Tambah menu</h2>
     <div class="flex flex-col md:flex-row gap-5 mt-5 items-center rounded-xl">
-      <div class="flex flex-col md:flex-row items-center gap-5">
+      <div class="flex flex-col md:flex-row">
         <FileUpload
           mode="basic"
           @select="onFileSelect"
@@ -153,7 +151,7 @@ onMounted(fetchCategories);
           accept="image/*"
           :maxFileSize="150000"
           severity="secondary"
-          class="rounded-xl text-[var(--text-primary)] border border-white p-button-outlined p-10 z-0 m-5 md:ml-20 xl:ml-20"
+          class="rounded-xl text-[var(--text-primary)] border border-white p-button-outlined z-0 p-10 md:ml-20 xl:ml-20"
         />
         <img
           v-if="croppedImage"
@@ -181,7 +179,7 @@ onMounted(fetchCategories);
         </div>
       </div>
     </div>
-    <div class="flex flex-col md:flex-row gap-5 mt-8">
+    <div class="flex flex-col md:flex-row gap-5 mt-8 w-full">
       <FloatLabel class="w-full md:w-auto">
         <InputText
           id="menu-name"

@@ -7,7 +7,7 @@ import AddVariants from "../components/items/variants/Variants.vue";
 // import Discount from "../components/items/discount/Discount.vue";
 </script>
 <template>
-  <div class="flex flex-col gap-4 p-4 max-w-full min-w-96 container">
+  <div class="flex flex-col gap-4">
     <Add />
     <AddPrice />
     <!-- <Discount /> -->

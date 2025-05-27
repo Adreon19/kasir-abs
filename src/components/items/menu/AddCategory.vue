@@ -105,7 +105,7 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <section class="main-section max-w-full container">
+  <section class="main-section w-full container">
     <h2>Tambah Kategori</h2>
     <div class="card flex flex-col gap-5">
       <div class="flex gap-5">
@@ -127,41 +127,45 @@ onMounted(initializeData);
       </div>
     </div>
     <h2>List Kategori</h2>
-    <div class="card flex gap-5">
-      <DataTable
-        :value="categories"
-        stripedRows
-        paginator
-        :rows="5"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        tableStyle="min-width: 50rem"
-        class="w-full"
-      >
-        <Column field="kategori" header="Nama Kategori"> </Column>
-        <Column header="Aksi" class="flex justify-center">
-          <template #body="slotProps">
-            <div class="flex justify-center gap-2">
-              <Button
-                label="Edit"
-                icon="fa fa-pencil"
-                class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
-                as="router-link"
-                :to="{
-                  name: 'EditCategory',
-                  params: { id: slotProps.data.id },
-                }"
-              />
-              <Button
-                label="Delete"
-                icon="fa fa-trash"
-                class="p-button rounded-xl p-button-danger"
-                @click="deleteCategories(slotProps.data.kategori)"
-              />
-            </div>
-          </template>
-        </Column>
-        <template #empty> Tidak ada kategori! </template>
-      </DataTable>
+    <div
+      class="card w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible flex gap-5"
+    >
+      <div class="max-w-[350px] md:max-w-full xl:max-w-full">
+        <DataTable
+          :value="categories"
+          stripedRows
+          paginator
+          :rows="5"
+          :rowsPerPageOptions="[5, 10, 20, 50]"
+          tableStyle="min-width: 50rem"
+          class="w-full"
+        >
+          <Column field="kategori" header="Nama Kategori"> </Column>
+          <Column header="Aksi" class="flex justify-center">
+            <template #body="slotProps">
+              <div class="flex justify-center gap-2">
+                <Button
+                  label="Edit"
+                  icon="fa fa-pencil"
+                  class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
+                  as="router-link"
+                  :to="{
+                    name: 'EditCategory',
+                    params: { id: slotProps.data.id },
+                  }"
+                />
+                <Button
+                  label="Delete"
+                  icon="fa fa-trash"
+                  class="p-button rounded-xl p-button-danger"
+                  @click="deleteCategories(slotProps.data.kategori)"
+                />
+              </div>
+            </template>
+          </Column>
+          <template #empty> Tidak ada kategori! </template>
+        </DataTable>
+      </div>
     </div>
   </section>
 </template>

@@ -108,52 +108,56 @@ onMounted(initializeData);
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text-[var(--text-secondary)] font-bold" style="font-size: 30px">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:mb-0 xl:ml-0">
       Riwayat Keuangan
     </h1>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
     <div v-else class="flex flex-col gap-6">
-      <section class="main-section">
-        <h1 class="text-4xl">
+      <section class="main-section w-full">
+        <h1 class="text-lg md:text-4xl xl:text-4xl">
           Total keuangan: {{ formatCurrency(totalFinance) }}
         </h1>
       </section>
-      <section class="main-section">
-        <div class="container flex flex-col gap-4">
-          <DataTable
-            :value="finance"
-            stripedRows
-            paginator
-            :rows="5"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 50rem"
-          >
-            <Column header="Total Masuk">
-              <template #body="slotProps">
-                <div class="text-[var(--text-primary)]">
-                  {{ formatCurrency(slotProps.data.paid) }}
-                </div>
-              </template>
-            </Column>
-            <Column header="Kembalian">
-              <template #body="slotProps">
-                <div class="text-[var(--text-primary)]">
-                  {{ formatCurrency(slotProps.data.change) }}
-                </div>
-              </template>
-            </Column>
-            <template #empty> Tidak ada Catatan keuangan! </template>
-          </DataTable>
+      <section class="main-section w-full">
+        <div
+          class="container flex flex-col gap-4 overflow-x-auto md:overflow-x-visible xl:overflow-x-visible"
+        >
+          <div class="max-w-[350px] md:max-w-full xl:max-w-full">
+            <DataTable
+              :value="finance"
+              stripedRows
+              paginator
+              :rows="5"
+              :rowsPerPageOptions="[5, 10, 20, 50]"
+              class="w-full"
+            >
+              <Column header="Total Masuk">
+                <template #body="slotProps">
+                  <div class="text-[var(--text-primary)]">
+                    {{ formatCurrency(slotProps.data.paid) }}
+                  </div>
+                </template>
+              </Column>
+              <Column header="Kembalian">
+                <template #body="slotProps">
+                  <div class="text-[var(--text-primary)]">
+                    {{ formatCurrency(slotProps.data.change) }}
+                  </div>
+                </template>
+              </Column>
+              <template #empty> Tidak ada Catatan keuangan! </template>
+            </DataTable>
+          </div>
         </div>
       </section>
 
       <section class="main-section flex flex-col gap-10">
         <div
-          class="flex flex-row bg-[var(--striped-row)] rounded-lg justify-between item-center gap-3 p-5"
+          class="flex flex-col md:flex-row xl:flex-row bg-[var(--striped-row)] rounded-lg justify-between item-center gap-3 p-5 w-full"
         >
-          <div class="flex flex-col gap-3">
+          <div class="flex flex-col gap-3 w-full">
             <label for="outcome" class="text-[var(--text-secondary)]">
               Pengeluaran
             </label>
@@ -190,27 +194,39 @@ onMounted(initializeData);
             />
           </div>
         </div>
-        <div class="border-b-2"></div>
-        <div class="container flex flex-col gap-4">
-          <DataTable
-            :value="outcomeData"
-            stripedRows
-            paginator
-            :rows="5"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
-            tableStyle="min-width: 50rem"
+        <hr />
+        <div
+          class="w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible"
+        >
+          <div
+            class="max-w-[350px] flex flex-col gap-4 md:max-w-full xl:max-w-full"
           >
-            <Column header="Pengeluaran">
-              <template #body="slotProps">
-                {{ formatCurrency(slotProps.data.pengeluaran) }}
-              </template>
-            </Column>
-            <Column field="catatan" header="Detail Pengeluaran" />
-            <template #empty> Tidak ada pengeluaran! </template>
-          </DataTable>
+            <DataTable
+              :value="outcomeData"
+              stripedRows
+              paginator
+              :rows="5"
+              :rowsPerPageOptions="[5, 10, 20, 50]"
+              class="w-full"
+            >
+              <Column header="Pengeluaran">
+                <template #body="slotProps">
+                  {{ formatCurrency(slotProps.data.pengeluaran) }}
+                </template>
+              </Column>
+              <Column field="catatan" header="Detail Pengeluaran" />
+              <template #empty> Tidak ada pengeluaran! </template>
+            </DataTable>
+          </div>
         </div>
       </section>
     </div>
   </div>
   <Toast />
 </template>
+
+<style scoped>
+.text {
+  color: var(--text-secondary);
+}
+</style>

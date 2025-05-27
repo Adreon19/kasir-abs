@@ -92,13 +92,16 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>List Menu</h2>
-    <div class="card flex gap-5 overflow-x-auto md:flex-col xl:flex-col">
-      <div class="min-w-[900px]">
+    <div
+      class="card flex gap-5 w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible md:flex-col xl:flex-col"
+    >
+      <div class="max-w-[350px] md:max-w-full xl:max-w-full">
         <!-- Updated DataTable -->
         <DataTable
           :value="menu"
           paginator
           :rows="5"
+          tableStyle="min-width: 50rem"
           :rowsPerPageOptions="[5, 10, 20, 50]"
           class="w-full"
         >

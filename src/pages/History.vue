@@ -318,7 +318,7 @@ onMounted(fetchOrder);
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text-[var(--text-secondary)] font-bold" style="font-size: 30px">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:mb-0 xl:-0">
       Riwayat Pesanan
     </h1>
     <div v-if="isLoading" class="flex justify-center">
@@ -377,7 +377,7 @@ onMounted(fetchOrder);
             </div>
           </template>
 
-          <Column expander icon="pi pi-chevron-right" style="width: 5rem" />
+          <!-- <Column expander icon="pi pi-chevron-right" style="width: 5rem" /> -->
           <Column field="customer_name" header="Customer Name" />
           <Column field="paid" header="Paid">
             <template #body="slotProps">
@@ -416,3 +416,9 @@ onMounted(fetchOrder);
     </div>
   </div>
 </template>
+
+<style scoped>
+.text {
+  color: var(--text-secondary);
+}
+</style>
