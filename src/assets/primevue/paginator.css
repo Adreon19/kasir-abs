@@ -35,7 +35,7 @@
 }
 
 .p-paginator-page.p-paginator-page-selected {
-  @apply bg-[var(--btn-search)] font-bold;
+  @apply bg-[var(--btn-search)] text-[var(--text-primary)] font-bold;
 }
 
 .p-paginator-current {

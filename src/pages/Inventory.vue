@@ -273,13 +273,13 @@ onMounted(initializeData);
 </script>
 
 <template>
+  <div class="p-5">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">Inventory</h1>
+  </div>
   <div v-if="isLoading" class="flex justify-center">
     <ProgressSpinner />
   </div>
-  <div
-    v-else
-    class="flex flex-col gap-6 max-w-full mt-16 md:mt-0 xl:mt-0 container"
-  >
+  <div v-else class="flex flex-col gap-6 max-w-full md:mt-0 xl:mt-0 container">
     <section class="main-section w-full">
       <h2 class="text-xl">{{ emptyItemsMessage }}</h2>
       <!-- Display the message here -->
@@ -456,3 +456,9 @@ onMounted(initializeData);
   </Dialog>
   <Toast />
 </template>
+
+<style scoped>
+.text {
+  color: var(--text-secondary);
+}
+</style>

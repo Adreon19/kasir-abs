@@ -7,6 +7,11 @@ import AddVariants from "../components/items/variants/Variants.vue";
 // import Discount from "../components/items/discount/Discount.vue";
 </script>
 <template>
+  <div class="p-5">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">
+      Tambah Menu
+    </h1>
+  </div>
   <div class="flex flex-col gap-4">
     <Add />
     <AddPrice />
@@ -17,3 +22,9 @@ import AddVariants from "../components/items/variants/Variants.vue";
   </div>
   <Toast />
 </template>
+
+<style scoped>
+.text {
+  color: var(--text-secondary);
+}
+</style>

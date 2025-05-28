@@ -318,7 +318,7 @@ onMounted(fetchOrder);
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text text-xl font-bold mb-4 ml-14 md:mb-0 xl:-0">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0 md:mb-0 xl:-0">
       Riwayat Pesanan
     </h1>
     <div v-if="isLoading" class="flex justify-center">

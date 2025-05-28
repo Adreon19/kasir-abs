@@ -293,3 +293,49 @@ button:focus-visible {
     font-size: 0.7rem;
   }
 }
+
+/* responsive untuk paginator */
+@media (max-width: 640px) {
+  .p-paginator {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: center !important;
+    gap: 0.5rem;
+  }
+
+  .p-paginator-content {
+    font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1px;
+  }
+
+  .p-paginator .p-dropdown,
+  .p-paginator .p-paginator-current {
+    width: 100%;
+    text-align: center;
+  }
+
+  .p-paginator .p-paginator-pages {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .p-paginator .p-paginator-page,
+  .p-paginator .p-paginator-next,
+  .p-paginator .p-paginator-prev,
+  .p-paginator .p-paginator-first,
+  .p-paginator .p-paginator-last {
+    padding: 8px;
+    min-width: 1rem;
+  }
+}
+
+/* paginator dropdown */
+.p-paginator .p-select-label,
+.p-select-dropdown {
+  background-color: var(--btn-search);
+  color: var(--text-primary);
+}

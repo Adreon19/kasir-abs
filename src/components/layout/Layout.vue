@@ -264,7 +264,6 @@ onMounted(() => {
                   Inventory
                 </li>
               </RouterLink>
-
               <div class="flex justify-center mt-6">
                 <Button
                   label="Log Out"

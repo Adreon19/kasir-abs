@@ -107,7 +107,7 @@ onMounted(initializeData);
 <template>
   <section class="main-section w-full container">
     <h2>Tambah Kategori</h2>
-    <div class="card flex flex-col gap-5">
+    <div class="flex flex-col gap-5">
       <div class="flex gap-5">
         <FloatLabel>
           <InputText
@@ -126,9 +126,9 @@ onMounted(initializeData);
         />
       </div>
     </div>
-    <h2>List Kategori</h2>
+    <h2 class="mt-5">List Kategori</h2>
     <div
-      class="card w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible flex gap-5"
+      class="w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible flex gap-5"
     >
       <div class="max-w-[350px] md:max-w-full xl:max-w-full">
         <DataTable
@@ -137,7 +137,6 @@ onMounted(initializeData);
           paginator
           :rows="5"
           :rowsPerPageOptions="[5, 10, 20, 50]"
-          tableStyle="min-width: 50rem"
           class="w-full"
         >
           <Column field="kategori" header="Nama Kategori"> </Column>

@@ -616,7 +616,7 @@ onMounted(() => {
           />
 
           <div v-if="paidAmount > 0 && selectedPaymentMethod === 1">
-            <h2 class="text-white mt-2">
+            <h2 class="text-white mt-2 text-sm md:text-xl xl:text-xl">
               Change: {{ formatCurrency(changeAmount) }}
             </h2>
           </div>

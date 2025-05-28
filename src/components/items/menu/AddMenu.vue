@@ -139,7 +139,7 @@ onMounted(fetchCategories);
 </script>
 
 <template>
-  <section class="main-section w-full mt-16">
+  <section class="main-section max-w-full">
     <h2 class="font-bold text-2xl capitalize">Tambah menu</h2>
     <div class="flex flex-col md:flex-row gap-5 mt-5 items-center rounded-xl">
       <div class="flex flex-col md:flex-row">
@@ -179,14 +179,14 @@ onMounted(fetchCategories);
         </div>
       </div>
     </div>
-    <div class="flex flex-col md:flex-row gap-5 mt-8 w-full">
-      <FloatLabel class="w-full md:w-auto">
+    <div class="flex flex-col md:flex-row gap-5 mt-8">
+      <FloatLabel>
         <InputText
           id="menu-name"
           v-model="menuName"
-          class="custom-input w-full p-6 md:w-auto"
+          class="custom-input p-6 w-full"
         />
-        <label for="menu-name" class="custom-label">Nama menu</label>
+        <label for="menu-name" class="text-sm">Nama menu</label>
       </FloatLabel>
       <Select
         v-model="selectedCategory"
@@ -194,7 +194,7 @@ onMounted(fetchCategories);
         optionLabel="kategori"
         optionValue="id"
         placeholder="Pilih Kategori"
-        class="custom-select w-full md:w-auto p-4"
+        class="custom-select p-4"
       />
       <Textarea
         v-model="descriptionForm"
@@ -202,7 +202,7 @@ onMounted(fetchCategories);
         cols="30"
         placeholder="Masukkan Deskripsi menu"
         style="resize: none"
-        class="custom-textarea p-2 w-full md:w-full border-none"
+        class="custom-textarea p-2 md:w-full border-none"
       />
       <div>
         <Button
@@ -211,7 +211,7 @@ onMounted(fetchCategories);
           iconPos="left"
           @click="uploadImageAndSaveMenu"
           :loading="isLoading"
-          class="custom-button p-4 mt-4 w-full"
+          class="custom-button p-4 mt-4"
         />
       </div>
     </div>

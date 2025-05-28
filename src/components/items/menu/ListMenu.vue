@@ -93,7 +93,7 @@ onMounted(initializeData);
   <section class="main-section">
     <h2>List Menu</h2>
     <div
-      class="card flex gap-5 w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible md:flex-col xl:flex-col"
+      class="gap-5 w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible md:flex-col xl:flex-col"
     >
       <div class="max-w-[350px] md:max-w-full xl:max-w-full">
         <!-- Updated DataTable -->
@@ -101,7 +101,6 @@ onMounted(initializeData);
           :value="menu"
           paginator
           :rows="5"
-          tableStyle="min-width: 50rem"
           :rowsPerPageOptions="[5, 10, 20, 50]"
           class="w-full"
         >
@@ -149,7 +148,7 @@ onMounted(initializeData);
           </Column>
 
           <!-- Actions -->
-          <Column header="Aksi" class="flex justify-center">
+          <Column header="Aksi" class="flex justify-center align-center">
             <template #body="slotProps">
               <div class="flex justify-center gap-2">
                 <Button
