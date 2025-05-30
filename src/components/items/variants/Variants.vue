@@ -207,6 +207,7 @@ onMounted(initializeData);
           paginator
           :rows="5"
           :rowsPerPageOptions="[5, 10, 20, 50]"
+          v-if="!isLoading"
           class="w-full"
         >
           <Column field="name" header="Nama Variant" />
@@ -230,6 +231,7 @@ onMounted(initializeData);
           </Column>
           <template #empty> Belum ada variant baru! </template>
         </DataTable>
+        <div v-else>Loading Data...</div>
       </div>
     </div>
   </section>

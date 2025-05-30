@@ -137,6 +137,7 @@ onMounted(initializeData);
           paginator
           :rows="5"
           :rowsPerPageOptions="[5, 10, 20, 50]"
+          v-if="!isLoading"
           class="w-full"
         >
           <Column field="kategori" header="Nama Kategori"> </Column>
@@ -164,6 +165,7 @@ onMounted(initializeData);
           </Column>
           <template #empty> Tidak ada kategori! </template>
         </DataTable>
+        <div v-else>Loading Data...</div>
       </div>
     </div>
   </section>

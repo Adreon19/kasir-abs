@@ -131,6 +131,7 @@ onMounted(initializeData);
               paginator
               :rows="5"
               :rowsPerPageOptions="[5, 10, 20, 50]"
+              v-if="!isLoading"
               class="w-full"
             >
               <Column header="Total Masuk">
@@ -149,6 +150,7 @@ onMounted(initializeData);
               </Column>
               <template #empty> Tidak ada Catatan keuangan! </template>
             </DataTable>
+            <div v-else>Loading Data...</div>
           </div>
         </div>
       </section>
@@ -207,6 +209,7 @@ onMounted(initializeData);
               paginator
               :rows="5"
               :rowsPerPageOptions="[5, 10, 20, 50]"
+              v-if="!isLoading"
               class="w-full"
             >
               <Column header="Pengeluaran">
@@ -217,6 +220,7 @@ onMounted(initializeData);
               <Column field="catatan" header="Detail Pengeluaran" />
               <template #empty> Tidak ada pengeluaran! </template>
             </DataTable>
+             <div v-else>Loading Data...</div>
           </div>
         </div>
       </section>

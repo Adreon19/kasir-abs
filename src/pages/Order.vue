@@ -41,7 +41,7 @@ onMounted(fetchCustomers);
       <div v-if="customers.length === 0" class="text text-center">
         <p>Belum ada yang memesan, silahkan pesan</p>
         <RouterLink to="/">
-          <Button label="Pesan disini" class="mt-4 text-" />
+          <Button label="Pesan di sini" class="mt-4 text-" />
         </RouterLink>
       </div>
       <div

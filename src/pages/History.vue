@@ -2,13 +2,16 @@
 import { ref, onMounted } from "vue";
 import { supabase } from "../supabase";
 import { formatCurrency } from "../utils/formatter/currency";
-import jsPDF from "jspdf";
+import { printReceiptHtml } from "../utils/print-history-receipt";
 
 const expandedRows = ref([]);
 const order = ref([]);
+const unpaidOrders = ref([]);
 const isLoading = ref(false);
 const filteredOrders = ref([]);
 const selectedDateFilter = ref(null);
+const printFrame = ref(null);
+const dt = ref();
 
 const dateFilterOptions = [
   { label: "Current Date", value: "today" },
@@ -22,7 +25,7 @@ const fetchOrder = async () => {
     isLoading.value = true;
     let { data: order_detail, error } = await supabase.from("order_detail")
       .select(`
-        id, 
+        id,
         order_id(
           id,
           customer_name,
@@ -32,8 +35,8 @@ const fetchOrder = async () => {
           ),
           paid,
           total_price,
-          created_at 
-        ), 
+          created_at
+        ),
         menu_detail_id(
           menu_id(
             id,
@@ -68,7 +71,7 @@ const fetchOrder = async () => {
           quantity: item.quantity,
           total_price: totalPrice,
           created_at: item.order_id.created_at,
-          category: category, // Add category to details
+          category: category,
         });
       } else {
         acc.push({
@@ -76,6 +79,8 @@ const fetchOrder = async () => {
           customer_name: item.order_id.customer_name,
           paid: item.order_id.paid,
           payment_method: item.order_id.payment.name,
+          total_price: item.order_id.total_price,
+          created_at: item.order_id.created_at,
           details: [
             {
               menu_name: menuName,
@@ -83,7 +88,7 @@ const fetchOrder = async () => {
               quantity: item.quantity,
               total_price: totalPrice,
               created_at: item.order_id.created_at,
-              category: category, // Add category to details
+              category: category,
             },
           ],
         });
@@ -95,34 +100,104 @@ const fetchOrder = async () => {
     console.log("error fetching order:", error);
   } finally {
     isLoading.value = false;
-    filteredOrders.value = order.value;
+    filterOrders();
+  }
+};
+
+const fetchCarts = async () => {
+  try {
+    isLoading.value = true;
+    let { data, error } = await supabase.from("cart").select(`
+        id,
+        quantity,
+        note,
+        menu_detail:menu_detail_id (
+          id,
+          price,
+          menu_id (
+            name,
+            kategori_id (
+              kategori
+            )
+          )
+        ),
+        customer:customer!cart_customer_id_fkey (
+        id,
+        customer
+          ),
+          timestamp
+      `);
+    if (error) throw error;
+
+    const groupedCarts = data.reduce((acc, item) => {
+      const customerName = item.customer?.customer || "Unknown Customer";
+      const customerId = item.customer?.id || "unknown";
+
+      if (!acc[customerId]) {
+        acc[customerId] = {
+          customer_id: customerId,
+          customer_name: customerName,
+          items: [],
+          total_unpaid_amount: 0,
+        };
+      }
+
+      const itemPrice = item.menu_detail?.price || 0;
+      const subtotal = item.quantity * itemPrice;
+
+      acc[customerId].items.push({
+        cart_id: item.id,
+        menu_name: item.menu_detail?.menu_id?.name || "Menu dihapus",
+        quantity: item.quantity,
+        subtotal: subtotal,
+        note: item.note,
+      });
+
+      acc[customerId].total_unpaid_amount += subtotal;
+
+      return acc;
+    }, {});
+    unpaidOrders.value = Object.values(groupedCarts);
+  } catch (error) {
+    console.log("error fetching cart items:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
 const filterOrders = () => {
   const today = new Date();
+  today.setHours(23, 59, 59, 999);
+
   const sevenDaysAgo = new Date();
   sevenDaysAgo.setDate(today.getDate() - 7);
+  sevenDaysAgo.setHours(0, 0, 0, 0);
+
   const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  firstDayOfMonth.setHours(0, 0, 0, 0);
 
   if (selectedDateFilter.value === "today") {
     filteredOrders.value = order.value.filter((order) => {
-      const orderDate = new Date(order.details[0].created_at);
+      const orderDate = new Date(order.created_at);
       return orderDate.toDateString() === today.toDateString();
     });
   } else if (selectedDateFilter.value === "last7days") {
     filteredOrders.value = order.value.filter((order) => {
-      const orderDate = new Date(order.details[0].created_at);
+      const orderDate = new Date(order.created_at);
       return orderDate >= sevenDaysAgo && orderDate <= today;
     });
   } else if (selectedDateFilter.value === "thisMonth") {
     filteredOrders.value = order.value.filter((order) => {
-      const orderDate = new Date(order.details[0].created_at);
+      const orderDate = new Date(order.created_at);
       return orderDate >= firstDayOfMonth && orderDate <= today;
     });
   } else {
     filteredOrders.value = order.value;
   }
+  filteredOrders.value.sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
 };
 
 const formatDate = (dateString) => {
@@ -142,178 +217,107 @@ const formatDate = (dateString) => {
 };
 
 const expandAll = () => {
-  expandedRows.value = order.value.reduce(
+  if (filteredOrders.value.length === 0) {
+    alert("Tidak ada data untuk diperluas!");
+    return;
+  }
+  expandedRows.value = filteredOrders.value.reduce(
     (acc, p) => (acc[p.id] = true) && acc,
     {}
   );
 };
 
 const collapseAll = () => {
+  if (filteredOrders.value.length === 0) {
+    alert("Tidak ada data untuk dikecilkan!");
+    return;
+  }
   expandedRows.value = [];
 };
 
-// Download Struk
-const downloadPDF = () => {
-  const pageWidth = 58;
-  const marginLeft = 5;
-  let currentY = 8;
-  let estimatedHeight = 100;
-
-  filteredOrders.value.forEach((order) => {
-    order.details.forEach((detail) => {
-      estimatedHeight += 6;
-      if (detail.note && detail.note.trim()) {
-        estimatedHeight += 3;
-      }
-    });
-  });
-
-  const doc = new jsPDF({
-    unit: "mm",
-    format: [pageWidth, estimatedHeight],
-  });
-
-  const centerX = pageWidth / 2;
-
-  // Title
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "bold");
-  const title = "Artisan Beverage Studio";
-  const titleWidth = doc.getTextWidth(title);
-  doc.text(title, (pageWidth - titleWidth) / 2, currentY);
-  currentY += 3;
-
-  // Address
-  doc.setFontSize(6);
-  doc.setFont("helvetica", "bold");
-  const addressText =
-    "Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820";
-  const addressLines = doc.splitTextToSize(
-    addressText,
-    pageWidth - marginLeft * 2
-  );
-  doc.text(addressLines, centerX, currentY, { align: "center" });
-  currentY += addressLines.length * 2;
-
-  // Separator line
-  doc.setDrawColor(0);
-  doc.setLineWidth(0.2);
-  doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
-  currentY += 4;
-
-  // Customer details
-  const now = new Date();
-  const formattedDate = new Intl.DateTimeFormat("id-ID", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    timeZone: "Asia/Jakarta",
-  }).format(now);
-
-  doc.setFontSize(6);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Date: ${formattedDate}`, marginLeft, currentY);
-  currentY += 8;
-
-  // Table Header
-  doc.setFont("helvetica", "bold");
-  doc.text("Name", marginLeft, currentY);
-  doc.text("Menu", marginLeft + 13, currentY);
-  doc.text("Price", marginLeft + 30, currentY);
-  doc.text("Qty", marginLeft + 47, currentY, { align: "right" });
-  currentY += 5;
-
-  // Total sold by category
-  const totalSoldByCategory = {};
-  const totalSoldByMenu = {};
-
-  // Table Body
-  filteredOrders.value.forEach((order) => {
-    order.details.forEach((detail) => {
-      const categoryName = detail.category;
-
-      // Update total sold by category
-      totalSoldByCategory[categoryName] =
-        (totalSoldByCategory[categoryName] || 0) + detail.quantity;
-
-      const menuName = detail.menu_name;
-
-      totalSoldByMenu[menuName] =
-        (totalSoldByMenu[menuName] || 0) + detail.quantity;
-
-      doc.setFont("helvetica", "normal");
-      doc.text(order.customer_name || "Unknown", marginLeft, currentY);
-      doc.setFontSize(5);
-      doc.text(detail.menu_name || "Unknown", marginLeft + 13, currentY);
-      doc.setFontSize(6);
-      doc.text(
-        formatCurrency(detail.menu_price) || "0",
-        marginLeft + 30,
-        currentY
-      );
-      doc.text(detail.quantity.toString() || "0", marginLeft + 47, currentY, {
-        align: "right",
-      });
-      currentY += 4;
-
-      // Note
-      if (detail.note && detail.note.trim()) {
-        doc.setFontSize(5);
-        doc.setFont("helvetica", "italic");
-        doc.text(`*${detail.note}`, marginLeft + 10, currentY);
-        currentY += 3;
-        doc.setFontSize(6);
-        doc.setFont("helvetica", "normal");
-      }
-    });
-  });
-
-  // Separator line
-  currentY += 4;
-  doc.setDrawColor(0);
-  doc.setLineWidth(0.2);
-  doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
-  currentY += 6;
-
-  // Total amount
-  doc.setFontSize(7);
-  doc.setFont("helvetica", "bold");
-  const totalAmount = filteredOrders.value.reduce((sum, order) => {
-    return (
-      sum +
-      order.details.reduce((subSum, detail) => subSum + detail.total_price, 0)
+const printFilteredOrders = async () => {
+  if (filteredOrders.value.length === 0 && unpaidOrders.value.length === 0) {
+    alert("Tidak ada data transaksi atau pesanan belum dibayar untuk dicetak.");
+    return;
+  }
+  try {
+    await printReceiptHtml(
+      filteredOrders.value,
+      printFrame,
+      unpaidOrders.value
     );
-  }, 0);
-  doc.text(`Total: ${formatCurrency(totalAmount)}`, marginLeft, currentY);
-  currentY += 4;
-
-  // Total Category yang di pesan
-  doc.setFont("helvetica", "normal");
-  for (const [category, quantity] of Object.entries(totalSoldByCategory)) {
-    doc.text(`Total ${category} sold: ${quantity}`, marginLeft, currentY);
-    currentY += 4;
+  } catch (error) {
+    console.error("Error printing filtered receipts:", error);
+    alert(`Gagal mencetak struk: ${error.message}`);
   }
-  currentY += 4;
-  doc.setDrawColor(0);
-  doc.setLineWidth(0.2);
-  doc.line(marginLeft, currentY, pageWidth - marginLeft, currentY);
-  currentY += 4;
-
-  // Total Category yang di pesan
-  doc.setFont("helvetica", "normal");
-  for (const [menu, quantity] of Object.entries(totalSoldByMenu)) {
-    doc.text(`Total ${menu} sold: ${quantity}`, marginLeft, currentY);
-    currentY += 4;
-  }
-
-  // Download PDF
-  doc.save(`order_${Date.now()}.pdf`);
 };
 
-onMounted(fetchOrder);
+const exportCSV = () => {
+  if (filteredOrders.value.length === 0) {
+    alert("Tidak ada data untuk di-export!");
+    return;
+  }
+  const exportData = [];
+
+  exportData.push([
+    "Customer Name",
+    "Paid",
+    "Payment Method",
+    "Total Price",
+    "Order Date",
+    "Menu Name",
+    "Unit Price",
+    "Quantity",
+    "Item Total Price",
+    "Category",
+  ]);
+
+  filteredOrders.value.forEach((order) => {
+    order.details.forEach((detail) => {
+      exportData.push([
+        order.customer_name,
+        order.paid,
+        order.payment_method,
+        order.total_price,
+        formatDate(order.created_at),
+        detail.menu_name,
+        detail.menu_price,
+        detail.quantity,
+        detail.total_price,
+        detail.category,
+      ]);
+    });
+  });
+
+  let csvContent = "";
+  exportData.forEach((row) => {
+    csvContent +=
+      row
+        .map((e) => {
+          const val = String(e);
+          return `"${val.replace(/"/g, '""')}"`;
+        })
+        .join(",") + "\n";
+  });
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "order_history.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
+
+onMounted(() => {
+  fetchOrder();
+  fetchCarts();
+  selectedDateFilter.value = "today";
+});
 </script>
 
 <template>
@@ -325,7 +329,46 @@ onMounted(fetchOrder);
       <progressSpinner />
     </div>
 
-    <div v-else>
+    <div v-else class="flex flex-col gap-3">
+      <section class="main-section overflow-x-auto flex flex-col gap-2">
+        <h2>Pesanan yang belum dibayar:</h2>
+        <div v-if="unpaidOrders.length === 0" class="text-white">
+          <p>Tidak ada yang belum dibayar!</p>
+        </div>
+        <div v-else>
+          <DataTable
+            :value="unpaidOrders"
+            stripedRows
+            :rows="5"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+            v-if="!isLoading"
+            class="w-full text-white"
+          >
+            <Column field="customer_name" header="Nama pelanggan" class="p-3" />
+            <Column header="Pesanan">
+              <template #body="slotProps">
+                <ul>
+                  <li v-for="item in slotProps.data.items" :key="item.cart_id">
+                    {{ item.menu_name }} ({{ item.quantity }}x) -
+                    {{ formatCurrency(item.subtotal) }}
+                    <span v-if="item.note"> (Catatan: {{ item.note }})</span>
+                  </li>
+                </ul>
+              </template>
+            </Column>
+            <Column header="Total">
+              <template #body="slotProps">
+                {{ formatCurrency(slotProps.data.total_unpaid_amount) }}
+              </template>
+            </Column>
+          </DataTable>
+          <div v-else>Loading Data...</div>
+          <RouterLink to="/order" class="text-white hover:text-white">
+            <Button label="Check di sini!" class="mt-4 text-" />
+          </RouterLink>
+        </div>
+      </section>
+
       <section class="main-section overflow-x-auto">
         <div class="flex justify-between mb-4">
           <Select
@@ -339,9 +382,10 @@ onMounted(fetchOrder);
           />
 
           <Button
-            label="Download PDF"
-            class="text-[--text-primary]"
-            @click="downloadPDF"
+
+            label="Cetak Struk Sesuai Filter"
+            class="text-[--text-secondary]"
+            @click="printFilteredOrders"
           />
         </div>
 
@@ -349,14 +393,14 @@ onMounted(fetchOrder);
           :value="filteredOrders"
           :expandedRows="expandedRows"
           paginator
+          ref="dt"
           :rows="5"
           :rowsPerPageOptions="[5, 10, 20, 50]"
           @update:expandedRows="expandedRows = $event"
           dataKey="id"
           stripedRows
+          v-if="!isLoading"
         >
-          <!-- Row Expander -->
-
           <template #header>
             <div class="flex flex-wrap justify-content-end gap-2">
               <Button
@@ -366,13 +410,18 @@ onMounted(fetchOrder);
                 class="text-[var(--text-primary)]"
                 @click="expandAll"
               />
-
               <Button
                 text
                 icon="pi pi-minus"
                 label="Kecilkan semua"
                 class="text-[var(--text-primary)]"
                 @click="collapseAll"
+              />
+              <Button
+                icon="pi pi-external-link"
+                label="Export"
+                class="text-[var(--text-secondary)]"
+                @click="exportCSV()"
               />
             </div>
           </template>
@@ -385,24 +434,23 @@ onMounted(fetchOrder);
             </template>
           </Column>
 
-          <!-- Expanded Content -->
           <template #expansion="slotProps">
             <div>
               <p>Pesanan dari {{ slotProps.data.customer_name }}</p>
               <DataTable :value="slotProps.data.details">
                 <Column field="menu_name" header="Menu Name" />
-                <Column field="menu_price" header="Total">
+                <Column field="menu_price" header="Harga Satuan">
                   <template #body="detailsSlotProps">
                     {{ formatCurrency(detailsSlotProps.data.menu_price) }}
                   </template>
                 </Column>
-                <Column field="quantity" header="Quantity" />
+                <Column field="quantity" header="Jumlah" />
                 <Column field="total_price" header="Total">
                   <template #body="detailsSlotProps">
                     {{ formatCurrency(detailsSlotProps.data.total_price) }}
                   </template>
                 </Column>
-                <Column field="created_at" header="Order Date">
+                <Column field="created_at" header="Tanggal Pesan">
                   <template #body="detailsSlotProps">
                     {{ formatDate(detailsSlotProps.data.created_at) }}
                   </template>
@@ -412,12 +460,30 @@ onMounted(fetchOrder);
           </template>
           <template #empty> Tidak ada Riwayat pesanan! </template>
         </DataTable>
+        <div v-else>Loading Data...</div>
+        <span>
+          *Peringatan: untuk performa yang optimal, ketika data yang ada sudah
+          menyentuh 40 hari, maka akan secara otomatis terhapus. HARAP EXPORT
+          data melalui tombol yang sudah disediakan.
+        </span>
+        <p>*terdapat logo expander di sebelah kiri nama pemesan</p>
       </section>
     </div>
+    <iframe ref="printFrame" style="display: none"></iframe>
   </div>
 </template>
 
 <style scoped>
+.button {
+  background-color: transparent;
+  border: 2px solid var(--sidebar-color);
+  color: var(--sidebar-color);
+}
+
+.button:hover {
+  background-color: var(--sidebar-color);
+  color: #fff;
+  transition: 0.3s;
 .text {
   color: var(--text-secondary);
 }

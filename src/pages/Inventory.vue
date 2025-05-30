@@ -357,6 +357,7 @@ onMounted(initializeData);
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
             ref="dt"
+            v-if="!isLoading"
             class="w-full"
           >
             <template #header>
@@ -396,6 +397,7 @@ onMounted(initializeData);
               </template>
             </Column>
           </DataTable>
+          <div v-else>Loading Data...</div>
         </div>
       </div>
     </section>
