@@ -322,7 +322,7 @@ onMounted(() => {
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text-[var(--text-secondary)] font-bold" style="font-size: 30px">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0 md:mb-0 xl:-0">
       Riwayat Pesanan
     </h1>
     <div v-if="isLoading" class="flex justify-center">
@@ -382,6 +382,7 @@ onMounted(() => {
           />
 
           <Button
+
             label="Cetak Struk Sesuai Filter"
             class="text-[--text-secondary]"
             @click="printFilteredOrders"
@@ -406,14 +407,14 @@ onMounted(() => {
                 text
                 icon="pi pi-plus"
                 label="Lebarkan semua"
-                class="text-[var(--text-secondary)]"
+                class="text-[var(--text-primary)]"
                 @click="expandAll"
               />
               <Button
                 text
                 icon="pi pi-minus"
                 label="Kecilkan semua"
-                class="text-[var(--text-secondary)]"
+                class="text-[var(--text-primary)]"
                 @click="collapseAll"
               />
               <Button
@@ -425,7 +426,7 @@ onMounted(() => {
             </div>
           </template>
 
-          <Column expander icon="pi pi-chevron-right" style="width: 5rem" />
+          <!-- <Column expander icon="pi pi-chevron-right" style="width: 5rem" /> -->
           <Column field="customer_name" header="Customer Name" />
           <Column field="paid" header="Paid">
             <template #body="slotProps">
@@ -483,5 +484,7 @@ onMounted(() => {
   background-color: var(--sidebar-color);
   color: #fff;
   transition: 0.3s;
+.text {
+  color: var(--text-secondary);
 }
 </style>

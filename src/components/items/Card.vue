@@ -191,11 +191,13 @@ onMounted(() => {
           <img
             :alt="menu.name || 'Menu Image'"
             :src="menu.image || 'placeholder.jpg'"
-            class="img-menu object-cover w-full h-48 rounded-t-lg border-none"
+            class="hidden img-menu object-cover w-full h-48 rounded-t-lg border-none md:flex xl:flex"
           />
         </template>
         <template #title>
-          <h3 class="text-xl capitalize font-bold">
+          <h3
+            class="flex justify-center md:justify-start xl:justify-start text-xl capitalize font-bold"
+          >
             {{ menu.name || "No Name" }}
           </h3>
         </template>
@@ -239,7 +241,7 @@ onMounted(() => {
       <InputText
         v-model="customerName"
         placeholder="Masukkan nama pelanggan baru"
-        class="text-[var(--text-secondary)] bg-[var(--input-search)]"
+        class="text-[var(--text-primary)] bg-[var(--input-primary)]"
         label="Customer Name"
       />
       <Select
@@ -252,7 +254,7 @@ onMounted(() => {
       <Select
         v-model="selectedVariant"
         :options="selectedMenu?.menu_detail"
-        class="custom-select"
+        class="custom-select text-[var(--text-primary)]"
         optionLabel="menu_variants.name"
         placeholder="Pilih varian"
       />
@@ -262,19 +264,21 @@ onMounted(() => {
         :max="500"
         placeholder="Quantity"
         label="Quantity"
+        class="text-[var(--text-primary)]"
       />
       <Textarea
         v-model="note"
         rows="3"
         cols="30"
         placeholder="Tambahkan catatan"
+        class="custom-textarea text-[var(--text-primary)]"
       />
       <div class="flex justify-end mt-4 gap-2">
         <Button
           type="button"
+          variant="outlined"
           label="Cancel"
           icon="fa-solid fa-xmark"
-          style="color: #000000"
           severity="secondary"
           @click="visible = false"
         />

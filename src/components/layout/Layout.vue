@@ -93,9 +93,9 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-row min-h-screen">
-    <div class="max-w-fit mt-8">
+    <div class="absolute z-10 md:relative max-w-fit mt-8">
       <Button
-        class="burger-button xl:hidden text-[var(text-secondary)] ml-8"
+        class="burger-button xl:hidden text-[var(text-secondary)] bg-[var(--btn-secondary)] ml-8"
         icon="pi pi-bars"
         @click="toggleDrawer"
       />
@@ -106,8 +106,12 @@ onMounted(() => {
     >
       <div>
         <div class="logo flex items-center m-4">
-          <img src="/images/logoABS.png" alt="ABS Logo" class="w-8 h-8 mr-4" />
-          <h1 class="text-sm font-semibold text-[var(--text-secondary)]">
+          <img
+            src="../../assets/Logo Abs.png"
+            alt="ABS Logo"
+            class="w-10 mr-1"
+          />
+          <h1 class="text-base font-semibold text-[var(--text-primary)]">
             Artisan Beverage Studio
           </h1>
         </div>
@@ -172,7 +176,7 @@ onMounted(() => {
           </ul>
         </div>
       </div>
-      <div class="flex justify-center mb-4">
+      <div class="flex justify-start mb-4">
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
@@ -195,7 +199,7 @@ onMounted(() => {
           <Button
             label="Log Out"
             icon="fa-solid fa-sign-out-alt"
-            class="btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
+            class="hidden md:flex xl:flex btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
             @click="handleLogout"
           />
         </div>
@@ -203,20 +207,31 @@ onMounted(() => {
       <div
         class="sidebar-mobile text-black flex flex-col justify-between overflow-y-auto"
       >
-        <div class="flex flex-col gap-1 justify-center items-center">
-          <div class="logo flex justify-center items-center m-4">
+        <div
+          class="flex flex-col gap-1 md:justify-center xl:justify-center md:items-center xl:items-center"
+        >
+          <!-- Center items -->
+          <div class="logo flex md:justify-center md:items-center m-4">
             <img
               src="/images/logoABS.png"
               alt="ABS Logo"
-              class="w-8 h-8 mr-4"
+              class="w-12 md:w-8 md:h-8 mr-4"
             />
-            <h1 class="text-sm font-semibold text-[var(--text-secondary)]">
+            <h1
+              class="text-xl flex justify-center items-center md:text-sm font-semibold text-[var(--text-primary)]"
+            >
               Artisan Beverage Studio
             </h1>
           </div>
 
           <div class="flex flex-col justify-between relative top-10">
             <ul class="flex flex-col">
+              <RouterLink to="/profile" @click="closeDrawer">
+                <li>
+                  <i class="fa-solid fa-user ease-in duration-300"></i>
+                  {{ nama }}
+                </li>
+              </RouterLink>
               <div class="m-3">
                 <ToggleSwitch v-model="checked" @click="toggleDarkMode()">
                   <template #handle="{ checked }">
@@ -229,12 +244,7 @@ onMounted(() => {
                   </template>
                 </ToggleSwitch>
               </div>
-              <RouterLink to="/profile" @click="closeDrawer">
-                <li>
-                  <i class="fa-solid fa-user ease-in duration-300"></i>
-                  {{ nama }}
-                </li>
-              </RouterLink>
+
               <RouterLink to="/" @click="closeDrawer">
                 <li>
                   <i class="fa-solid fa-house ease-in duration-300"></i> Halaman
@@ -279,13 +289,21 @@ onMounted(() => {
                   Inventory
                 </li>
               </RouterLink>
+              <div class="flex justify-center mt-6">
+                <Button
+                  label="Log Out"
+                  icon="fa-solid fa-sign-out-alt"
+                  class="md:hidden xl:hidden btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
+                  @click="handleLogout"
+                />
+              </div>
             </ul>
           </div>
         </div>
       </div>
     </Drawer>
 
-    <div class="flex-grow flex flex-col">
+    <div class="relative z-0 flex-grow flex flex-col">
       <main class="main flex-grow">
         <slot />
       </main>
@@ -317,11 +335,10 @@ onMounted(() => {
 .sidebar-mobile li {
   padding: 1rem;
   font-size: 20px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .sidebar-mobile li:hover {
-  color: #fff;
   background: var(--hover-primary);
   transition: 0.5s;
 }
@@ -335,11 +352,10 @@ onMounted(() => {
 .sidebar li {
   padding: 1rem;
   font-size: 20px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .sidebar li:hover {
-  color: #fff;
   background: var(--hover-primary);
   transition: 0.5s;
 }

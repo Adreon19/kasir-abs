@@ -208,7 +208,7 @@
 
 .p-datatable-header {
   @apply py-3 px-4 border-b border-surface-200 dark:border-surface-700
-        bg-[var(--bg-datable)]
+        bg-transparent
         text-surface-700 dark:text-surface-0;
 }
 
@@ -221,7 +221,8 @@
 .p-datatable-header-cell {
   @apply py-3 px-4 font-normal text-start transition-colors duration-200
         border-b border-surface-200 dark:border-surface-700
-        bg-[var(--bg-datable)] 
+        bg-transparent
+        text-white
          dark:text-surface-0;
 }
 
@@ -230,11 +231,11 @@
 }
 
 .p-datatable-tbody > tr {
-  @apply bg-[var(--bg-datable)] text-[var(--text-primary)] transition-colors duration-200;
+  @apply bg-transparent text-white transition-colors duration-200;
 }
 
 .p-datatable-tbody > tr > td {
-  @apply text-[var(--text-secondary)] py-3 px-4 border-b border-surface-200 dark:border-surface-800;
+  @apply text-white py-3 px-4 border-b border-surface-200 dark:border-surface-800;
 }
 
 .p-datatable-hoverable
@@ -376,7 +377,7 @@
 }
 
 .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
-  @apply bg-[var(--striped-row)]  text-[var(--text-primary)];
+  @apply text-[var(--text-primary)];
 }
 
 .p-datatable.p-datatable-striped
@@ -441,8 +442,4 @@
 
 .p-datatable-row-toggle-icon:dir(rtl) {
   @apply rotate-180;
-}
-
-.custom-databale {
-  @apply w-full;
 }

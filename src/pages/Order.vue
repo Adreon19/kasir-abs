@@ -30,8 +30,10 @@ const selectCustomer = (customerId) => {
 onMounted(fetchCustomers);
 </script>
 <template>
-  <section class="p-5">
-    <h1 class="text text-xl font-bold mb-4">Pilih pelanggan</h1>
+  <section class="min-h-screen p-5">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">
+      Pilih pelanggan
+    </h1>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
@@ -42,11 +44,14 @@ onMounted(fetchCustomers);
           <Button label="Pesan di sini" class="mt-4 text-" />
         </RouterLink>
       </div>
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div
+        v-else
+        class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-9 md:mt-6 xl:mt-6"
+      >
         <Card
           v-for="customer in customers"
           :key="customer.id"
-          class="p-1 cursor-pointer border"
+          class="cursor-pointer border flex items-center"
           @click="selectCustomer(customer.id)"
         >
           <template #title>{{ customer.customer }}</template>

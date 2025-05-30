@@ -400,67 +400,74 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="isLoading">
+  <div v-if="isLoading" class="flex justify-center">
     <ProgressSpinner />
   </div>
   <div v-else>
-    <section class="main-section p-5">
+    <div class="main-section mt-24">
       <h1 class="text-xl font-bold text-white mb-4">Detail Pesanan</h1>
-      <div class="flex flex-col gap-10">
-        <div class="flex flex-col gap-2">
-          <label for="customer"> Nama Pembeli </label>
-          <InputText
-            v-model="customerName"
-            placeholder="Nama Pembeli"
-            class="custom-input max-w-fit"
-            disabled
-          />
+      <div class="flex flex-col md:gap-2 xl:gap-2">
+        <label for="customer"> Nama Pembeli </label>
+        <InputText
+          v-model="customerName"
+          placeholder="Nama Pembeli"
+          class="custom-input max-w-fit"
+          disabled
+        />
+      </div>
+      <div
+        class="w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible"
+      >
+        <div class="max-w-[350px] md:max-w-full xl:max-w-full">
+          <DataTable
+            :value="cartItems"
+            class="w-full text-white rounded-lg"
+            stripedRows
+          >
+            <Column
+              field="menu_detail.menu_id.name"
+              header="Menu"
+              class="p-3"
+            />
+            <Column
+              field="menu_detail.variant_id.name"
+              header="Varian"
+              class="p-3"
+            />
+            <Column
+              field="menu_detail.price"
+              header="Harga"
+              class="p-3"
+              :body="formatCurrency"
+            />
+            <Column field="quantity" header="Kuantitas" class="p-3" />
+            <Column
+              field="note"
+              header="Catatan"
+              class="p-3"
+              :body="(item) => item.note || '-'"
+            />
+            <Column header="Aksi" class="p-3">
+              <template #body="slotProps">
+                <div class="flex flex-row gap-2">
+                  <Button
+                    label="Edit"
+                    icon="fa-solid fa-pencil"
+                    severity="edit"
+                    @click="fetchMenuById(slotProps.data.id)"
+                  />
+                  <Button
+                    label="Delete"
+                    icon="fa-solid fa-trash"
+                    severity="danger"
+                    @click="deleteCartItem(slotProps.data.id)"
+                  />
+                </div>
+              </template>
+            </Column>
+            <template #empty> Tidak ada Pesanan! Silahkan pesan </template>
+          </DataTable>
         </div>
-
-        <DataTable
-          :value="cartItems"
-          class="w-full text-white rounded-lg overflow-hidden"
-          stripedRows
-        >
-          <Column field="menu_detail.menu_id.name" header="Menu" class="p-3" />
-          <Column
-            field="menu_detail.variant_id.name"
-            header="Varian"
-            class="p-3"
-          />
-          <Column
-            field="menu_detail.price"
-            header="Harga"
-            class="p-3"
-            :body="formatCurrency"
-          />
-          <Column field="quantity" header="Kuantitas" class="p-3" />
-          <Column
-            field="note"
-            header="Catatan"
-            class="p-3"
-            :body="(item) => item.note || '-'"
-          />
-          <Column header="Aksi" class="p-3">
-            <template #body="slotProps">
-              <div class="flex flex-row gap-2">
-                <Button
-                  label="Edit"
-                  icon="fa-solid fa-pencil"
-                  severity="edit"
-                  @click="fetchMenuById(slotProps.data.id)"
-                />
-                <Button
-                  label="Delete"
-                  icon="fa-solid fa-trash"
-                  severity="danger"
-                  @click="deleteCartItem(slotProps.data.id)"
-                />
-              </div>
-            </template>
-          </Column>
-          <template #empty> Tidak ada Pesanan! Silahkan pesan </template>
-        </DataTable>
       </div>
       <div class="container mt-2">
         <RouterLink to="/">
@@ -481,9 +488,9 @@ onMounted(() => {
             placeholder="Pilih Metode Pembayaran"
             class="custom-select text-[var(--text-secondary)]"
           />
-          <div class="flex gap-2">
-            <h2>Total:</h2>
-            <h2 class="text-white">
+          <div class="flex gap-2 items-center">
+            <h2 class="text-sm md:text-xl xl:text-xl">Total:</h2>
+            <h2 class="text-white text-sm md:text-xl xl:text-xl">
               {{ formatCurrency(totalAmount) }}
             </h2>
           </div>
@@ -510,7 +517,7 @@ onMounted(() => {
           />
 
           <div v-if="paidAmount > 0 && selectedPaymentMethod === 1">
-            <h2 class="text-white mt-2">
+            <h2 class="text-white mt-2 text-sm md:text-xl xl:text-xl">
               Change: {{ formatCurrency(changeAmount) }}
             </h2>
           </div>
@@ -519,7 +526,7 @@ onMounted(() => {
           </div>
         </div>
       </div>
-      <div class="flex justify-end mt-5 gap-3">
+      <div class="flex justify-start mt-5 gap-3">
         <Button
           label="Cetak Struk"
           icon="fa-solid fa-print"
@@ -535,7 +542,7 @@ onMounted(() => {
           @click="finishOrder"
         />
       </div>
-    </section>
+    </div>
 
     <iframe ref="printFrame" style="display: none"></iframe>
 

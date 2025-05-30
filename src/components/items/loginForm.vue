@@ -67,13 +67,13 @@ onMounted(() => {
     <img src="/images/logoABS.png" alt="ABS Logo" class="w-36 mb-10" />
     <form class="flex flex-col" @submit.prevent="handleLogin">
       <div
-        class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md"
+        class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md bg-[var(--bg-form-login)]/20 backdrop-brightness-75"
       >
         <FloatLabel>
           <InputText
             type="text"
             v-model="email"
-            class="text-lg rounded-md bg-white text-black focus:outline-none border-none shadow-none min-w-64 w-full"
+            class="Email text-lg rounded-md text-black focus:outline-none border-none shadow-none min-w-64 bg-[var(--input-text-login)] backdrop-brightness-75"
           />
           <label style="color: black">Email</label>
         </FloatLabel>
@@ -98,7 +98,11 @@ onMounted(() => {
           </ToggleSwitch>
         </div>
         <div class="btn-login flex justify-center">
-          <Button label="Login" type="submit" class="btn-inlogin" />
+          <Button
+            label="Login"
+            type="submit"
+            class="btn-inlogin bg-[var(--btn-login)]"
+          />
         </div>
       </div>
     </form>
@@ -106,27 +110,10 @@ onMounted(() => {
   <Toast />
 </template>
 
-<style>
-.input-container {
-  background-color: #634f2b;
-  opacity: 50%;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
-}
-
+<style scoped>
 .btn-login {
   border: none;
   padding: 1rem;
-}
-
-.btn-login Button {
-  background-color: #b99043;
-  text-transform: uppercase;
-}
-
-.btn-inlogin:hover {
-  background-color: #9f782f;
-  border: none;
 }
 
 .password {
