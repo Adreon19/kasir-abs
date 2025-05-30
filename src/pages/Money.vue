@@ -128,6 +128,7 @@ onMounted(initializeData);
             paginator
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
+            v-if="!isLoading"
             tableStyle="min-width: 50rem"
           >
             <Column header="Total Masuk">
@@ -146,6 +147,7 @@ onMounted(initializeData);
             </Column>
             <template #empty> Tidak ada Catatan keuangan! </template>
           </DataTable>
+          <div v-else>Loading Data...</div>
         </div>
       </section>
 
@@ -199,6 +201,7 @@ onMounted(initializeData);
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
             tableStyle="min-width: 50rem"
+            v-if="!isLoading"
           >
             <Column header="Pengeluaran">
               <template #body="slotProps">
@@ -208,6 +211,7 @@ onMounted(initializeData);
             <Column field="catatan" header="Detail Pengeluaran" />
             <template #empty> Tidak ada pengeluaran! </template>
           </DataTable>
+          <div v-else>Loading Data...</div>
         </div>
       </section>
     </div>

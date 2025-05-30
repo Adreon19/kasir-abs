@@ -338,10 +338,11 @@ onMounted(() => {
         <div v-else>
           <DataTable
             :value="unpaidOrders"
-            class="w-full text-white"
             stripedRows
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
+            v-if="!isLoading"
+            class="w-full text-white"
           >
             <Column field="customer_name" header="Nama pelanggan" class="p-3" />
             <Column header="Pesanan">
@@ -361,6 +362,7 @@ onMounted(() => {
               </template>
             </Column>
           </DataTable>
+          <div v-else>Loading Data...</div>
           <RouterLink to="/order" class="text-white hover:text-white">
             <Button label="Check di sini!" class="mt-4 text-" />
           </RouterLink>
@@ -396,6 +398,7 @@ onMounted(() => {
           @update:expandedRows="expandedRows = $event"
           dataKey="id"
           stripedRows
+          v-if="!isLoading"
         >
           <template #header>
             <div class="flex flex-wrap justify-content-end gap-2">
@@ -456,6 +459,7 @@ onMounted(() => {
           </template>
           <template #empty> Tidak ada Riwayat pesanan! </template>
         </DataTable>
+        <div v-else>Loading Data...</div>
         <span>
           *Peringatan: untuk performa yang optimal, ketika data yang ada sudah
           menyentuh 40 hari, maka akan secara otomatis terhapus. HARAP EXPORT
