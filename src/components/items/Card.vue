@@ -159,6 +159,7 @@ const saveOrder = async () => {
 
     // Refresh cart data
     await fetchCart();
+    customerName.value = null;
     selectedCustomer.value = null;
     visible.value = false;
     isLoading.value = false;
