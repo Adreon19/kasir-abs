@@ -382,7 +382,6 @@ onMounted(() => {
           />
 
           <Button
-
             label="Cetak Struk Sesuai Filter"
             class="text-[--text-secondary]"
             @click="printFilteredOrders"
@@ -484,6 +483,7 @@ onMounted(() => {
   background-color: var(--sidebar-color);
   color: #fff;
   transition: 0.3s;
+}
 .text {
   color: var(--text-secondary);
 }
