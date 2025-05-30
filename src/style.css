@@ -12,33 +12,38 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  /* background: #eaeaea; */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --body-bg: conic-gradient(#fff, #96724d, #fff);
-  --sidebar-bg: #f5f5dc;
-  /* #81684f */
+  --body-bg: conic-gradient(#fff, #ff8a32, #fff);
+  --sidebar-bg: #ed8437;
   --components-bg: #634f2b;
   --component-secondary: #634f2b;
   --text-primary: #ffffff;
   --text-secondary: #000000;
-  --hover-primary: #634f2b;
+  --hover-primary: #f8bf89;
   --card-bg: rgba(0, 0, 0, 0.7);
   --border-btn: #ffffff;
-  --btn-order: #c8a241;
-  --btn-secondary: #634f2b;
-  --input-search: #dfc3a1;
-  --btn-search: #d8ae7e;
+  --btn-order: #fff;
+  --btn-secondary: #ff7006;
+  --input-search: #ff7006;
+  --btn-search: #ff7006;
   --text-order: #ffffff;
   --bg-drawer: rgba(0, 0, 0, 0.5);
   --section-bg: rgb(0, 0, 0, 0.5);
-  --bg-switch: #e5bb90;
-  --input-primary: #dfc3a1;
+  --btn-login: #a67b5b;
+  --bg-form-login: #ffffff;
+  --input-text-login: #988571;
+  --bg-switch: #ff7006;
+  --searchbar-comp: #ff7006;
+  --bg-icon-switch: #ff8a32;
+  --input-primary: #7d5b3e;
   --striped-row: #d8ae7e;
   --bg-datable: #dfc3a1;
-  --outline: #000000;
+  --switch-icon-color: #ffff;
+  --btn-outline-primary: #fffff;
+  --input-addMenu: #7d5b3e;
 }
 
 :root[class="my-app-dark"] {
@@ -54,10 +59,10 @@
   --view-order: #957836;
   --border-btn: #ffffff;
   --btn-order: #c8a241;
-  --btn-secondary: #c8a241;
+  --btn-secondary: #453721;
   --input-search: #453721;
   /* --btn-search: rgb(72, 66, 66); */
-  --btn-search: #2e1605;
+  --btn-search: #453721;
   --text-order: #c8a241;
   --bg-drawer: rgba(149, 120, 54, 0.2);
   --section-bg: rgb(0, 0, 0, 0.5);
@@ -65,10 +70,16 @@
   --striped-row: #2e1605;
   --bg-datable: rgb(72, 66, 66);
   --bg-switch: #130b03;
+  --searchbar-comp: #453721;
+  --bg-form-login: #634f2b;
+  --input-text-login: #f5f5dc;
+  --btn-login: #634f2b;
   --bg-icon-switch: #776024;
   --switch-icon-color: #c8a241;
   --outline: #ffffff;
   --promp-bg: rgb(32, 25, 7);
+  --btn-outline-primary: #c8a241;
+  --input-addMenu: #373230;
 }
 
 body {
@@ -106,8 +117,9 @@ body {
 .btn-inlogin {
   padding: 0.75rem 1rem;
   font-size: 1.125rem;
-  background-color: #634f2b;
+  /* background-color: #634f2b; */
   color: white;
+  border: none;
   border-radius: 0.375rem;
   transition: background-color 0.7s ease, color 0.7s ease;
   min-width: 12rem;
@@ -280,4 +292,50 @@ button:focus-visible {
   .custom-label {
     font-size: 0.7rem;
   }
+}
+
+/* responsive untuk paginator */
+@media (max-width: 640px) {
+  .p-paginator {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: center !important;
+    gap: 0.5rem;
+  }
+
+  .p-paginator-content {
+    font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1px;
+  }
+
+  .p-paginator .p-dropdown,
+  .p-paginator .p-paginator-current {
+    width: 100%;
+    text-align: center;
+  }
+
+  .p-paginator .p-paginator-pages {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .p-paginator .p-paginator-page,
+  .p-paginator .p-paginator-next,
+  .p-paginator .p-paginator-prev,
+  .p-paginator .p-paginator-first,
+  .p-paginator .p-paginator-last {
+    padding: 8px;
+    min-width: 1rem;
+  }
+}
+
+/* paginator dropdown */
+.p-paginator .p-select-label,
+.p-select-dropdown {
+  background-color: var(--btn-search);
+  color: var(--text-primary);
 }

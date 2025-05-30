@@ -197,37 +197,42 @@ onMounted(initializeData);
       </div>
     </div>
     <h2>List Kategori</h2>
-    <div class="card flex gap-5">
-      <DataTable
-        :value="variants"
-        stripedRows
-        paginator
-        :rows="5"
-        :rowsPerPageOptions="[5, 10, 20, 50]"
-        tableStyle="min-width: 50rem"
-        class="w-full"
-      >
-        <Column field="name" header="Nama Variant" />
-        <Column header="Aksi" class="flex justify-center">
-          <template #body="slotProps">
-            <div class="flex justify-center gap-2">
-              <Button
-                label="Edit"
-                icon="fa fa-pencil"
-                class="p-button-rounded p-button-info"
-                @click="fetchVariantById(slotProps.data.id)"
-              />
-              <Button
-                label="Delete"
-                icon="fa fa-trash"
-                class="p-button-rounded p-button-danger"
-                @click="deleteVariant(slotProps.data.id)"
-              />
-            </div>
-          </template>
-        </Column>
-        <template #empty> Belum ada variant baru! </template>
-      </DataTable>
+    <div
+      class="w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible flex gap-5"
+    >
+      <div class="max-w-[350px] md:max-w-full xl:max-w-full">
+        <DataTable
+          :value="variants"
+          stripedRows
+          paginator
+          :rows="5"
+          :rowsPerPageOptions="[5, 10, 20, 50]"
+          v-if="!isLoading"
+          class="w-full"
+        >
+          <Column field="name" header="Nama Variant" />
+          <Column header="Aksi" class="flex justify-center">
+            <template #body="slotProps">
+              <div class="flex justify-center gap-2">
+                <Button
+                  label="Edit"
+                  icon="fa fa-pencil"
+                  class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
+                  @click="fetchVariantById(slotProps.data.id)"
+                />
+                <Button
+                  label="Delete"
+                  icon="fa fa-trash"
+                  class="p-button rounded-lg p-button-danger"
+                  @click="deleteVariant(slotProps.data.id)"
+                />
+              </div>
+            </template>
+          </Column>
+          <template #empty> Belum ada variant baru! </template>
+        </DataTable>
+        <div v-else>Loading Data...</div>
+      </div>
     </div>
   </section>
 
