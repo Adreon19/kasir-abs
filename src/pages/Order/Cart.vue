@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
-import { useRoute, useRouter } from "vue-router"; // Import useRoute to access route parameters
+import { useRoute, useRouter } from "vue-router";
 import { supabase } from "../../supabase";
 import { ProgressSpinner, Textarea, useToast } from "primevue";
 import { formatCurrency } from "../../utils/formatter/currency";
+import { printReceipt } from "../../utils/receiptPrinter"; // Import the new function
 
 const toast = useToast();
 const nama = ref("");
@@ -59,13 +60,12 @@ const fetchCarts = async () => {
         )
       `
       )
-      .eq("customer_id", customerId); // Filter by customer_id
+      .eq("customer_id", customerId);
 
     if (error) throw error;
 
     cartItems.value = data;
 
-    // Fetch the customer name based on customerId
     const { data: customerData, error: customerError } = await supabase
       .from("customer")
       .select("customer")
@@ -74,7 +74,7 @@ const fetchCarts = async () => {
 
     if (customerError) throw customerError;
 
-    customerName.value = customerData.customer; // Set the customer name
+    customerName.value = customerData.customer;
   } catch (error) {
     toast.add({
       severity: "error",
@@ -116,7 +116,6 @@ const deleteCartItem = async (cartItemId) => {
       life: 3000,
     });
 
-    // Refresh cart data
     await fetchCarts();
   } catch (error) {
     toast.add({
@@ -157,16 +156,7 @@ const fetchUserData = async () => {
   }
 };
 
-const printReceipt = () => {
-  if (!selectedPaymentMethod.value) {
-    toast.add({
-      severity: "warn",
-      summary: "Peringatan",
-      detail: "Silakan pilih metode pembayaran terlebih dahulu.",
-      life: 3000,
-    });
-    return;
-  }
+const handlePrintReceipt = async () => {
   const receiptData = cartItems.value.map((item) => ({
     name: item.menu_detail.menu_id.name,
     qty: item.quantity,
@@ -174,7 +164,7 @@ const printReceipt = () => {
     note: item.note || "",
   }));
 
-  const paymentMethod =
+  const paymentMethodLabel =
     paymethod.value.find(
       (method) => method.value === selectedPaymentMethod.value
     )?.label || "Unknown";
@@ -185,135 +175,36 @@ const printReceipt = () => {
     total: totalAmount.value,
     paid: paidAmount.value || 0,
     change: changeAmount.value || 0,
-    paymentMethod: paymentMethod,
+    paymentMethodLabel: paymentMethodLabel,
     items: receiptData,
   };
 
-  // Create the HTML content for the receipt
-  let receiptHTML = `
-    <html lang="id">
-      <head>
-        <title>Struk Pembelian</title>
-        <style>
-          body {
-            width: 58mm; 
-            font-family: Arial, sans-serif;
-            font-size: 10px; 
-            text-align: left;
-            margin: 0;
-            padding: 3px; 
-            background-color: white;
-          }
-          h2 {
-            margin: 2px 0; 
-            text-align: center;
-            font-size: 12px; 
-          }
-          .alamat {
-            font-size: 9px; 
-            margin-bottom: 2px;
-            text-align: center;
-          }
-          hr {
-            border: 1px dashed black;
-            margin: 2px 0; 
-          }
-          .items {
-            text-align: left;
-            margin-bottom: 5px; 
-          }
-          .items table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-          .items td {
-            font-size: 10px; 
-            padding: 1px 0; 
-          }
-          .note {
-            font-size: 8px; 
-            color: gray;
-          }
-          .total {
-            font-weight: bold;
-            font-size: 12px;
-          }
-          .footer {
-            font-size: 8px; 
-            margin-top: 5px;
-            text-align: center;
-          }
-          @page {
-          size: auto; 
-          margin: 0; 
-        }
-        </style>
-      </head>
-      <body>
-        <img src="images/logoABS.png" alt="Logo Artisan Beverage Studio" style="width: 40%; max-width: 50mm; height: auto; display: block; margin: 0 auto;" />
-        <h2>ARTISAN BEVERAGE STUDIO</h2>
-        <div class="alamat">Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat</div>
-        <hr />
-        <div class="info">Customer: ${receiptInfo.customer}</div>
-        <div class="info">Cashier: ${receiptInfo.cashier}</div>
-        <hr />
-        <div class="items">
-          <table>
-            ${receiptData
-              .map(
-                (item) => `
-              <tr>
-                <td style="text-align: left;">${item.name}</td>
-                <td>x${item.qty}</td>
-                <td>Rp${(item.price * item.qty).toLocaleString("id-ID")}</td>
-              </tr>
-              ${
-                item.note
-                  ? `<tr><td colspan="3" class="note">${item.note}</td></tr>`
-                  : ""
-              }
-            `
-              )
-              .join("")}
-          </table>
-        </div>
-        <hr />
-        <div class="payment-info">
-          <div class="total">TOTAL: Rp${receiptInfo.total.toLocaleString(
-            "id-ID"
-          )}</div>
-          <div>Paid: Rp${receiptInfo.paid.toLocaleString("id-ID")}</div>
-          <div>Change: Rp${receiptInfo.change.toLocaleString("id-ID")}</div>
-          <div>Method: ${paymentMethod}</div>
-        </div>
-        <hr />
-        <div class="footer">
-          Terima kasih telah berbelanja!<br />
-          Semoga harimu menyenangkan<br />
-          Powered by: PPLG
-        </div>
-      </body>
-    </html>
-  `;
-
-  // Write the content to the iframe
-  const frameDoc =
-    printFrame.value.contentWindow ||
-    printFrame.value.contentDocument.document ||
-    printFrame.value.contentDocument;
-  frameDoc.document.open();
-  frameDoc.document.write(receiptHTML);
-  frameDoc.document.close();
-
-  // Wait for the content to load and then print
-  printFrame.value.onload = function () {
-    printFrame.value.contentWindow.print();
+  try {
+    await printReceipt(receiptInfo, printFrame.value);
     isPrinted.value = true;
-  };
+  } catch (error) {
+    console.error("Error printing receipt:", error);
+    toast.add({
+      severity: "error",
+      summary: "Error Printing",
+      detail: "Failed to print receipt.",
+      life: 3000,
+    });
+  }
 };
 
 const finishOrder = async () => {
   try {
+    if (!selectedPaymentMethod.value) {
+      toast.add({
+        severity: "warn",
+        summary: "Peringatan",
+        detail: "Silakan pilih metode pembayaran terlebih dahulu.",
+        life: 3000,
+      });
+      return;
+    }
+
     if (paidAmount.value < totalAmount.value) {
       toast.add({
         severity: "warn",
@@ -331,7 +222,6 @@ const finishOrder = async () => {
     isLoading.value = true;
     const generatedOrderId = Date.now();
 
-    // Step 1: Insert a new order record into the 'order' table with the generated ID
     const { error: orderError } = await supabase.from("order").insert([
       {
         id: generatedOrderId,
@@ -407,6 +297,8 @@ const finishOrder = async () => {
       life: 3000,
     });
     console.error("Error finishing order:", error);
+  } finally {
+    isLoading.value = false; // Ensure loading state is reset
   }
 };
 
@@ -633,7 +525,7 @@ onMounted(() => {
           icon="fa-solid fa-print"
           class="button33 custom-button"
           severity="save"
-          @click="printReceipt"
+          @click="handlePrintReceipt"
         />
         <Button
           label="Tutup Pesanan"
@@ -647,7 +539,6 @@ onMounted(() => {
 
     <iframe ref="printFrame" style="display: none"></iframe>
 
-    <!-- DIALOG EDIT -->
     <Dialog
       v-model:visible="dialogVisible"
       header="Edit Pesanan"
