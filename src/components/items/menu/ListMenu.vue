@@ -92,14 +92,17 @@ onMounted(initializeData);
 <template>
   <section class="main-section">
     <h2>List Menu</h2>
-    <div class="card flex gap-5 overflow-x-auto md:flex-col xl:flex-col">
-      <div class="min-w-[900px]">
+    <div
+      class="gap-5 w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible md:flex-col xl:flex-col"
+    >
+      <div class="max-w-[350px] md:max-w-full xl:max-w-full">
         <!-- Updated DataTable -->
         <DataTable
           :value="menu"
           paginator
           :rows="5"
           :rowsPerPageOptions="[5, 10, 20, 50]"
+          v-if="!isLoading"
           class="w-full"
         >
           <!-- Menu Name -->
@@ -146,7 +149,7 @@ onMounted(initializeData);
           </Column>
 
           <!-- Actions -->
-          <Column header="Aksi" class="flex justify-center">
+          <Column header="Aksi" class="flex justify-center align-center">
             <template #body="slotProps">
               <div class="flex justify-center gap-2">
                 <Button
@@ -171,6 +174,7 @@ onMounted(initializeData);
           </Column>
           <template #empty> Tidak ada Menu! </template>
         </DataTable>
+        <div v-else>Loading Data...</div>
       </div>
     </div>
   </section>

@@ -122,7 +122,7 @@ onMounted(() => {
 
 <template>
   <section
-    class="main-section max-w-full w-fit flex flex-col md:w-full xl:w-full md:mt-0 xl:mt-0"
+    class="main-section max-w-full flex flex-col md:w-full xl:w-full md:mt-0 xl:mt-0"
   >
     <h2 class="capitalize font-bold">Tambah harga menu</h2>
     <div class="flex flex-col">
