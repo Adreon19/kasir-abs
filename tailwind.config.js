@@ -21,4 +21,5 @@ export default {
     },
   },
   plugins: [require("tailwindcss-primeui")],
+  // safelist: ['min-w-[800px]', 'overflow-x-auto'],
 };

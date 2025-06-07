@@ -273,19 +273,21 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <div class="p-6">
-    <div v-if="isLoading" class="flex justify-center">
-      <ProgressSpinner />
-    </div>
-    <div v-else class="flex flex-col gap-6 max-w-full container">
-      <section class="main-section">
-        <h2>{{ emptyItemsMessage }}</h2>
-        <!-- Display the message here -->
-      </section>
-      <section class="main-section flex flex-col gap-4">
-        <div class="flex flex-row items-center justify-between">
-          <h2>Inventory</h2>
-          <!-- <Button
+  <div class="p-5">
+    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">Inventory</h1>
+  </div>
+  <div v-if="isLoading" class="flex justify-center">
+    <ProgressSpinner />
+  </div>
+  <div v-else class="flex flex-col gap-6 max-w-full md:mt-0 xl:mt-0 container">
+    <section class="main-section w-full">
+      <h2 class="text-xl">{{ emptyItemsMessage }}</h2>
+      <!-- Display the message here -->
+    </section>
+    <section class="main-section flex flex-col gap-4">
+      <div class="flex flex-row items-center justify-between">
+        <h2>Inventory</h2>
+        <!-- <Button
             label="Simpan"
             icon="fa fa-check"
             iconPos="left"
@@ -293,54 +295,61 @@ onMounted(initializeData);
             :loading="isLoading"
             class="custom-button w-fit h-fit mt-6"
           /> -->
-        </div>
-        <div class="flex justify-between item-center gap-3 flex-col">
-          <div class="flex justify-between item-center gap-3">
-            <div class="flex flex-col gap-3">
-              <label for="itemName"> Nama Barang </label>
-              <InputText
-                v-model="itemName"
-                id="itemName"
-                class="custom-input h-full text-lg max-w-fit"
-                placeholder="Masukkan Nama Barang"
-              />
-            </div>
-
-            <div class="flex flex-col gap-2">
-              <label for="itemQuantity"> Jumlah </label>
-              <InputNumber
-                v-model="itemQuantity"
-                id="itemQuantity"
-                :min="0"
-                :max="999"
-                class="h-full text-lg max-w-fit"
-                placeholder="Masukkan Jumlah Barang"
-              />
-            </div>
-            <div class="flex flex-col gap-2">
-              <label for="itemUnit"> Jumlah </label>
-              <Select
-                v-model="selectedUnit"
-                :options="units"
-                optionLabel="Name"
-                optionValue="id"
-                placeholder="Pilih Satuan"
-                class="custom-select w-full md:w-auto p-4"
-              />
-            </div>
+      </div>
+      <div class="flex justify-between item-center gap-3 flex-col">
+        <div
+          class="flex flex-col md:flex-row xl:flex-row justify-between item-center gap-3"
+        >
+          <div class="flex flex-col gap-3">
+            <label for="itemName"> Nama Barang </label>
+            <InputText
+              v-model="itemName"
+              id="itemName"
+              class="custom-input h-full text-lg max-w-fit"
+              placeholder="Masukkan Nama Barang"
+            />
           </div>
-          <div class="">
-            <Button
-              label="Simpan"
-              icon="fa fa-check"
-              iconPos="left"
-              @click="insertInventory"
-              :loading="isLoading"
-              class="custom-button w-full h-fit mt-6"
+
+          <div class="flex flex-col gap-2 w-full">
+            <label for="itemQuantity"> Jumlah </label>
+            <InputNumber
+              v-model="itemQuantity"
+              id="itemQuantity"
+              :min="0"
+              :max="999"
+              class="h-full text-lg max-w-fit"
+              placeholder="Masukkan Jumlah Barang"
+            />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="itemUnit"> Jumlah </label>
+            <Select
+              v-model="selectedUnit"
+              :options="units"
+              optionLabel="Name"
+              optionValue="id"
+              placeholder="Pilih Satuan"
+              class="custom-select w-full md:w-auto p-4"
             />
           </div>
         </div>
-        <div class="container flex flex-col gap-4">
+        <div class="">
+          <Button
+            label="Simpan"
+            icon="fa fa-check"
+            iconPos="left"
+            @click="insertInventory"
+            :loading="isLoading"
+            class="custom-button w-full h-fit mt-6"
+          />
+        </div>
+      </div>
+      <div
+        class="w-full overflow-x-auto md:overflow-x-visible xl:overflow-x-visible"
+      >
+        <div
+          class="container flex flex-col gap-4 max-w-[350px] md:max-w-full xl:max-w-full"
+        >
           <DataTable
             :value="inventories"
             stripedRows
@@ -348,6 +357,8 @@ onMounted(initializeData);
             :rows="5"
             :rowsPerPageOptions="[5, 10, 20, 50]"
             ref="dt"
+            v-if="!isLoading"
+            class="w-full"
           >
             <template #header>
               <div class="text-end pb-4 text-white">
@@ -373,22 +384,23 @@ onMounted(initializeData);
                   <Button
                     label="Edit"
                     icon="fa fa-pencil"
-                    class="p-button-rounded p-button-info"
+                    class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
                     @click="fetchItemById(slotProps.data.id)"
                   />
                   <Button
                     label="Delete"
                     icon="fa fa-trash"
-                    class="p-button-rounded p-button-danger"
+                    class="p-button rounded-xl p-button-danger"
                     @click="deleteItem(slotProps.data.id)"
                   />
                 </div>
               </template>
             </Column>
           </DataTable>
+          <div v-else>Loading Data...</div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </div>
 
   <Dialog
@@ -446,3 +458,9 @@ onMounted(initializeData);
   </Dialog>
   <Toast />
 </template>
+
+<style scoped>
+.text {
+  color: var(--text-secondary);
+}
+</style>

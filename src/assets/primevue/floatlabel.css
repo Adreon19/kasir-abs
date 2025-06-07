@@ -4,7 +4,7 @@
 
 .p-floatlabel label {
   @apply absolute pointer-events-none top-1/2 -translate-y-1/2 transition-all duration-200 ease-out leading-none font-medium
-        start-3 text-[var(--text-secondary)];
+        start-3 text-[var(--text-primary)];
 }
 
 .p-floatlabel:has(.p-textarea) label {
