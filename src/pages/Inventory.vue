@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import { supabase } from "../supabase";
 import { useToast } from "primevue";
+import Burger from "../components/header.vue";
 
 const toast = useToast();
 const isLoading = ref(false);
@@ -65,18 +66,18 @@ const fetchInventory = async () => {
 };
 
 const emptyItems = computed(() => {
-  return inventories.value.filter((item) => item.quantity === 0);
+  return inventories.value.filter(item => item.quantity === 0);
 });
 
 const emptyItemsMessage = computed(() => {
   if (emptyItems.value.length > 0) {
-    const itemNames = emptyItems.value.map((item) => item.Name).join(", ");
+    const itemNames = emptyItems.value.map(item => item.Name).join(", ");
     return `Barang yang kosong: ${itemNames}`;
   }
   return "Stock semua barang masih ada!";
 });
 
-const fetchItemById = async (id) => {
+const fetchItemById = async id => {
   dialogVisible.value = true;
   try {
     isLoading.value = true;
@@ -219,7 +220,7 @@ const updateItem = async () => {
   }
 };
 
-const deleteItem = async (itemId) => {
+const deleteItem = async itemId => {
   try {
     const { error } = await supabase
       .from("inventory")
@@ -246,7 +247,7 @@ const deleteItem = async (itemId) => {
   }
 };
 
-const formatDate = (timestamp) => {
+const formatDate = timestamp => {
   return new Intl.DateTimeFormat("id-ID", {
     year: "numeric",
     month: "long",
@@ -273,9 +274,14 @@ onMounted(initializeData);
 </script>
 
 <template>
-  <div class="p-5">
-    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">Inventory</h1>
-  </div>
+  <Burger>
+    <slot>
+      <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">
+        Inventory
+      </h1>
+    </slot>
+  </Burger>
+
   <div v-if="isLoading" class="flex justify-center">
     <ProgressSpinner />
   </div>

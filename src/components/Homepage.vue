@@ -2,6 +2,7 @@
 import Card from "./items/Card.vue";
 import { ref, watch, onMounted } from "vue";
 import { supabase } from "../supabase";
+import Burger from "../components/header.vue";
 
 const menuList = ref([]);
 const categories = ref([]);
@@ -28,7 +29,7 @@ const fetchCategories = async () => {
   }
 };
 
-watch(selectedCategory, async (newCategory) => {
+watch(selectedCategory, async newCategory => {
   isLoading.value = true;
   menuList.value = await fetchMenuList(newCategory);
   isLoading.value = false;
@@ -46,7 +47,7 @@ const handleSearch = async () => {
   if (normalizedQuery === "") {
     menuList.value = [...originalMenuList.value]; // Kembalikan ke data asli
   } else {
-    menuList.value = originalMenuList.value.filter((menu) =>
+    menuList.value = originalMenuList.value.filter(menu =>
       menu.name.toLowerCase().includes(normalizedQuery)
     );
   }
@@ -113,12 +114,14 @@ onMounted(initializeData);
       <div class="flex items-center gap-2">
         <h1
           style="font-size: 30px"
-          class="hidden xl:flex md:flex text-[var(--text-secondary)] font-bold"
+          class="xl:flex md:flex text-[var(--text-secondary)] font-bold"
         >
           MENU
         </h1>
       </div>
       <div class="flex flex-col gap-8 xl:flex-row md:flex-row xl:gap-5">
+        <Burger />
+
         <div class="search flex">
           <InputText
             v-model="searchQuery"
@@ -135,22 +138,14 @@ onMounted(initializeData);
             @click="handleSearch"
           />
         </div>
-        <div class="flex justify-between items-center">
-          <h1
-            style="font-size: 20px; margin-left: -110px"
-            class="m-0 font-bold text-black md:hidden xl:hidden"
-          >
-            MENU
-          </h1>
-          <Select
-            v-model="selectedCategory"
-            :options="categories"
-            option-value="id"
-            option-label="kategori"
-            placeholder="Pilih Kategori"
-            class="p-select w-40 font-sm md:w-56 bg-[var(--input-search)] xl:w-full"
-          />
-        </div>
+        <Select
+          v-model="selectedCategory"
+          :options="categories"
+          option-value="id"
+          option-label="kategori"
+          placeholder="Pilih Kategori"
+          class="p-select w-40 font-sm md:w-56 bg-[var(--input-search)] xl:w-full"
+        />
       </div>
     </div>
     <div v-if="isLoading" class="flex justify-center">
