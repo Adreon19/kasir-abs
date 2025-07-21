@@ -107,45 +107,52 @@ onMounted(initializeData);
 
 <template>
   <div class="relative min-h-screen">
-    <div
-      class="searchBar m-5 z-0"
-      style="display: flex; justify-content: space-between"
-    >
+    <div class="block md:flex md:justify-between">
       <div class="flex items-center gap-2">
         <h1
           style="font-size: 30px"
-          class="xl:flex md:flex text-[var(--text-secondary)] font-bold"
+          class="hidden md:block xl:flex md:flex text-[var(--text-secondary)] font-bold"
         >
           MENU
         </h1>
       </div>
       <div class="flex flex-col gap-8 xl:flex-row md:flex-row xl:gap-5">
-        <Burger />
+        <div class="flex flex-row justify-between">
+          <Burger />
 
-        <div class="search flex">
-          <InputText
-            v-model="searchQuery"
-            style="border-radius: 10px 0 0 10px"
-            class="custom-search w-48 p-3 font-bold rounded-none focus:outline-none lg:w-64 xl:w-96"
-            placeholder="Cari..."
-            @keydown.enter="handleSearch"
-          />
-          <Button
-            style="border-radius: 0 10px 10px 0"
-            icon="fas fa-search"
-            iconPos="top"
-            class="button-search color-white bg-[var(--btn-secondary)] rounded-none"
-            @click="handleSearch"
+          <div class="search flex mt-3 md:mt-0">
+            <InputText
+              v-model="searchQuery"
+              style="border-radius: 10px 0 0 10px"
+              class="custom-search w-48 p-3 font-bold rounded-none focus:outline-none lg:w-64 xl:w-96"
+              placeholder="Cari..."
+              @keydown.enter="handleSearch"
+            />
+            <Button
+              style="border-radius: 0 10px 10px 0"
+              icon="fas fa-search"
+              iconPos="top"
+              class="button-search color-white bg-[var(--btn-secondary)] rounded-none"
+              @click="handleSearch"
+            />
+          </div>
+        </div>
+        <div class="flex justify-between">
+          <span
+            style="font-size: 30px"
+            class="block md:hidden xl:flex md:flex text-[var(--text-secondary)] font-bold"
+          >
+            MENU
+          </span>
+          <Select
+            v-model="selectedCategory"
+            :options="categories"
+            option-value="id"
+            option-label="kategori"
+            placeholder="Pilih Kategori"
+            class="p-select w-40 font-sm md:w-56 bg-[var(--input-search)] xl:w-full"
           />
         </div>
-        <Select
-          v-model="selectedCategory"
-          :options="categories"
-          option-value="id"
-          option-label="kategori"
-          placeholder="Pilih Kategori"
-          class="p-select w-40 font-sm md:w-56 bg-[var(--input-search)] xl:w-full"
-        />
       </div>
     </div>
     <div v-if="isLoading" class="flex justify-center">
