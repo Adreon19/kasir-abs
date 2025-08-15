@@ -1,4 +1,5 @@
 <script setup>
+import Burger from "../components/header.vue";
 import { ref, onMounted } from "vue";
 import { supabase } from "../supabase";
 import { formatCurrency } from "../utils/formatter/currency";
@@ -52,7 +53,7 @@ const fetchOrder = async () => {
     if (error) throw error;
 
     order.value = order_detail.reduce((acc, item) => {
-      const existingOrder = acc.find((o) => o.id === item.order_id.id);
+      const existingOrder = acc.find(o => o.id === item.order_id.id);
 
       const menuName = item.menu_detail_id
         ? item.menu_detail_id.menu_id.name
@@ -177,17 +178,17 @@ const filterOrders = () => {
   firstDayOfMonth.setHours(0, 0, 0, 0);
 
   if (selectedDateFilter.value === "today") {
-    filteredOrders.value = order.value.filter((order) => {
+    filteredOrders.value = order.value.filter(order => {
       const orderDate = new Date(order.created_at);
       return orderDate.toDateString() === today.toDateString();
     });
   } else if (selectedDateFilter.value === "last7days") {
-    filteredOrders.value = order.value.filter((order) => {
+    filteredOrders.value = order.value.filter(order => {
       const orderDate = new Date(order.created_at);
       return orderDate >= sevenDaysAgo && orderDate <= today;
     });
   } else if (selectedDateFilter.value === "thisMonth") {
-    filteredOrders.value = order.value.filter((order) => {
+    filteredOrders.value = order.value.filter(order => {
       const orderDate = new Date(order.created_at);
       return orderDate >= firstDayOfMonth && orderDate <= today;
     });
@@ -200,7 +201,7 @@ const filterOrders = () => {
   );
 };
 
-const formatDate = (dateString) => {
+const formatDate = dateString => {
   if (!dateString) return "Invalid Date";
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "Invalid Date";
@@ -272,8 +273,8 @@ const exportCSV = () => {
     "Category",
   ]);
 
-  filteredOrders.value.forEach((order) => {
-    order.details.forEach((detail) => {
+  filteredOrders.value.forEach(order => {
+    order.details.forEach(detail => {
       exportData.push([
         order.customer_name,
         order.paid,
@@ -290,10 +291,10 @@ const exportCSV = () => {
   });
 
   let csvContent = "";
-  exportData.forEach((row) => {
+  exportData.forEach(row => {
     csvContent +=
       row
-        .map((e) => {
+        .map(e => {
           const val = String(e);
           return `"${val.replace(/"/g, '""')}"`;
         })
@@ -321,10 +322,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0 md:mb-0 xl:-0">
-      Riwayat Pesanan
-    </h1>
+  <Burger>
+    <slot>
+      <h1 class="text text-xl font-bold mb-4 ml-14 xl:ml-0 xl:-0">
+        Riwayat Pesanan
+      </h1>
+    </slot>
+  </Burger>
+  <div class="xl:p-6 sm:p-0 flex flex-col gap-6 max-w-full container">
     <div v-if="isLoading" class="flex justify-center">
       <progressSpinner />
     </div>

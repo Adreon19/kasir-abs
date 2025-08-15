@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { supabase } from "../supabase";
 import { Card, ProgressSpinner } from "primevue";
+import Burger from "../components/header.vue";
 
 const customers = ref([]);
 const router = useRouter();
@@ -23,17 +24,21 @@ const fetchCustomers = async () => {
   }
 };
 
-const selectCustomer = (customerId) => {
+const selectCustomer = customerId => {
   router.push({ name: "Cart", query: { customerId } });
 };
 
 onMounted(fetchCustomers);
 </script>
 <template>
+  <Burger>
+    <slot>
+      <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">
+        Pilih pelanggan
+      </h1>
+    </slot>
+  </Burger>
   <section class="min-h-screen p-5">
-    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">
-      Pilih pelanggan
-    </h1>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>

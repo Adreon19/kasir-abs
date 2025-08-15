@@ -71,7 +71,7 @@ const fetchCart = async () => {
 };
 
 // Open the dialog for ordering
-const openDialog = (menu) => {
+const openDialog = menu => {
   selectedMenu.value = menu;
   selectedVariant.value = null;
   note.value = "";
@@ -186,35 +186,83 @@ onMounted(() => {
       <Card
         v-for="menu in menuList"
         :key="menu.name"
-        class="menu flex flex-col p-0 rounded-lg drop-shadow-xl"
+        class="menu flex flex-col p-0 rounded-lg drop-shadow-xl h-full"
       >
         <template #header>
-          <img
-            :alt="menu.name || 'Menu Image'"
-            :src="menu.image || 'placeholder.jpg'"
-            class="hidden img-menu object-cover w-full h-48 rounded-t-lg border-none md:flex xl:flex"
-          />
-        </template>
-        <template #title>
-          <h3
-            class="flex justify-center md:justify-start xl:justify-start text-xl capitalize font-bold"
+          <div
+            class="grid grid-cols-[auto_1fr] gap-4 items-start md:hidden p-3"
           >
-            {{ menu.name || "No Name" }}
-          </h3>
+            <img
+              :alt="menu.name || 'Menu Image'"
+              :src="menu.image || 'placeholder.jpg'"
+              class="w-24 h-24 object-cover rounded-md"
+            />
+
+            <div class="flex flex-col justify-between">
+              <h3
+                class="text-base font-bold capitalize text-[var(--text-primary)]"
+              >
+                {{ menu.name || "No Name" }}
+              </h3>
+              <div
+                v-if="menu.menu_detail.length"
+                class="flex flex-col gap-1 text-sm text-gray-500 mt-2"
+              >
+                <div
+                  v-for="detail in menu.menu_detail"
+                  :key="detail.id"
+                  class="text-sm"
+                >
+                  {{ detail.menu_variants?.name || "No Variant" }}:
+                  {{ formatCurrency(detail.price) || "N/A" }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hidden md:block">
+            <img
+              :alt="menu.name || 'Menu Image'"
+              :src="menu.image || 'placeholder.jpg'"
+              class="w-full h-48 object-cover rounded-t-lg"
+            />
+          </div>
         </template>
+
         <template #content>
-          <template v-if="menu.menu_detail.length">
-            <template v-for="detail in menu.menu_detail" :key="detail.id">
-              <h4 class="mb-2 text-sm text-slate-400">
-                {{ detail.menu_variants?.name || "No Variant" }}:
-                {{ formatCurrency(detail.price) || "N/A" }}
-              </h4>
-            </template>
-          </template>
-          <p class="desc">
-            {{ menu.description || "Tidak ada deskripsi." }}
-          </p>
+          <div class="md:hidden px-3 pb-2">
+            <p class="text-sm text-white">
+              {{ menu.description || "Tidak ada deskripsi." }}
+            </p>
+          </div>
+          <div class="hidden md:flex flex-col justify-between flex-1 p-4">
+            <div>
+              <h3
+                class="text-xl font-bold capitalize text-[var(--text-primary)]"
+              >
+                {{ menu.name || "No Name" }}
+              </h3>
+              <div
+                v-if="menu.menu_detail.length"
+                class="flex flex-col gap-1 text-sm text-gray-600 mt-2"
+              >
+                <div
+                  v-for="detail in menu.menu_detail"
+                  :key="detail.id"
+                  class="text-sm"
+                >
+                  {{ detail.menu_variants?.name || "No Variant" }}:
+                  {{ formatCurrency(detail.price) || "N/A" }}
+                </div>
+              </div>
+            </div>
+
+            <p class="text-sm text-white mt-4">
+              {{ menu.description || "Tidak ada deskripsi." }}
+            </p>
+          </div>
         </template>
+
         <template #footer>
           <div class="flex items-center">
             <Button
@@ -228,7 +276,6 @@ onMounted(() => {
     </div>
   </section>
 
-  <!-- Dialog to Order -->
   <Dialog
     v-model:visible="visible"
     modal

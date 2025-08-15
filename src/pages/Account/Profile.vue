@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { supabase } from "../../supabase";
+import Burger from "../../components/header.vue";
 
 const isLoading = ref(true);
 const nama = ref("");
@@ -49,49 +50,90 @@ const resetPassword = async () => {
 onMounted(fetchUserData);
 </script>
 <template>
-  <div class="p-6">
-    <div v-if="isLoading" class="flex justify-center">
+  <Burger />
+  <div class="mt-20 md:mt-0 p-4 md:p-8">
+    <div
+      v-if="isLoading"
+      class="flex justify-center items-center min-h-[200px]"
+    >
       <ProgressSpinner />
     </div>
-    <div v-else class="flex flex-col gap-6 max-w-full container">
+
+    <div v-else class="flex flex-col gap-6 max-w-full md:max-w-4xl mx-auto">
       <section class="main-section flex flex-col gap-6">
-        <h2>Halo, {{ nama }}!</h2>
-        <div class="flex flex-row gap-4">
-          <div class="flex flex-col gap-3">
-            <label for="telfon"> Email </label>
+        <h2
+          class="text-xl md:text-2xl font-semibold text-[var(--text-primary)]"
+        >
+          Halo, {{ nama }}!
+        </h2>
+
+        <div class="flex flex-col md:flex-row md:gap-6 gap-4">
+          <!-- Email -->
+          <div class="flex flex-col gap-2 w-full">
+            <label for="email" class="text-sm font-medium text-gray-700"
+              >Email</label
+            >
             <InputText
+              id="email"
               v-model="email"
               disabled
-              class="custom-input h-full text-lg max-w-fit"
+              class="custom-input text-base w-full"
               placeholder="Email"
             />
           </div>
-          <div class="flex flex-col gap-3">
-            <label for="telfon"> Nama </label>
+
+          <!-- Nama -->
+          <div class="flex flex-col gap-2 w-full">
+            <label for="nama" class="text-sm font-medium text-gray-700"
+              >Nama</label
+            >
             <InputText
+              id="nama"
               v-model="nama"
               disabled
-              class="custom-input h-full text-lg max-w-fit"
-              placeholder="Username"
-            />
-          </div>
-          <div class="flex justify-center items-center">
-            <Button
-              label="Edit Password"
-              icon="fa fa-pencil"
-              iconPos="left"
-              @click="resetPassword"
-              class="custom-button w-fit h-fit mt-6"
+              class="custom-input text-base w-full"
+              placeholder="Nama"
             />
           </div>
         </div>
-        <Button
-          as="router-link"
-          to="/register"
-          label="Bikin Akun baru"
-          class="custom-button last:max-w-fit"
-        />
+
+        <!-- Tombol Edit Password -->
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <Button
+            label="Edit Password"
+            icon="fa fa-pencil"
+            iconPos="left"
+            @click="resetPassword"
+            class="custom-button w-full sm:w-fit"
+          />
+          <Button
+            as="router-link"
+            to="/register"
+            label="Bikin Akun Baru"
+            class="custom-button w-full sm:w-fit"
+          />
+        </div>
       </section>
     </div>
   </div>
 </template>
+
+<style scoped>
+.custom-input {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.custom-button {
+  background-color: var(--btn-secondary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.custom-button:hover {
+  background-color: var(--btn-secondary-hover);
+}
+</style>
