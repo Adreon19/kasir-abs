@@ -53,7 +53,7 @@ const fetchOrder = async () => {
     if (error) throw error;
 
     order.value = order_detail.reduce((acc, item) => {
-      const existingOrder = acc.find(o => o.id === item.order_id.id);
+      const existingOrder = acc.find((o) => o.id === item.order_id.id);
 
       const menuName = item.menu_detail_id
         ? item.menu_detail_id.menu_id.name
@@ -178,17 +178,17 @@ const filterOrders = () => {
   firstDayOfMonth.setHours(0, 0, 0, 0);
 
   if (selectedDateFilter.value === "today") {
-    filteredOrders.value = order.value.filter(order => {
+    filteredOrders.value = order.value.filter((order) => {
       const orderDate = new Date(order.created_at);
       return orderDate.toDateString() === today.toDateString();
     });
   } else if (selectedDateFilter.value === "last7days") {
-    filteredOrders.value = order.value.filter(order => {
+    filteredOrders.value = order.value.filter((order) => {
       const orderDate = new Date(order.created_at);
       return orderDate >= sevenDaysAgo && orderDate <= today;
     });
   } else if (selectedDateFilter.value === "thisMonth") {
-    filteredOrders.value = order.value.filter(order => {
+    filteredOrders.value = order.value.filter((order) => {
       const orderDate = new Date(order.created_at);
       return orderDate >= firstDayOfMonth && orderDate <= today;
     });
@@ -201,7 +201,7 @@ const filterOrders = () => {
   );
 };
 
-const formatDate = dateString => {
+const formatDate = (dateString) => {
   if (!dateString) return "Invalid Date";
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return "Invalid Date";
@@ -273,8 +273,8 @@ const exportCSV = () => {
     "Category",
   ]);
 
-  filteredOrders.value.forEach(order => {
-    order.details.forEach(detail => {
+  filteredOrders.value.forEach((order) => {
+    order.details.forEach((detail) => {
       exportData.push([
         order.customer_name,
         order.paid,
@@ -291,10 +291,10 @@ const exportCSV = () => {
   });
 
   let csvContent = "";
-  exportData.forEach(row => {
+  exportData.forEach((row) => {
     csvContent +=
       row
-        .map(e => {
+        .map((e) => {
           const val = String(e);
           return `"${val.replace(/"/g, '""')}"`;
         })
@@ -468,7 +468,6 @@ onMounted(() => {
           menyentuh 40 hari, maka akan secara otomatis terhapus. HARAP EXPORT
           data melalui tombol yang sudah disediakan.
         </span>
-        <p>*terdapat logo expander di sebelah kiri nama pemesan</p>
       </section>
     </div>
     <iframe ref="printFrame" style="display: none"></iframe>

@@ -24,7 +24,7 @@ const fetchCustomers = async () => {
   }
 };
 
-const selectCustomer = customerId => {
+const selectCustomer = (customerId) => {
   router.push({ name: "Cart", query: { customerId } });
 };
 
@@ -44,7 +44,10 @@ onMounted(fetchCustomers);
       <div v-if="customers.length === 0" class="text text-center">
         <p>Belum ada yang memesan, silahkan pesan</p>
         <RouterLink to="/">
-          <Button label="Pesan di sini" class="mt-4 text-" />
+          <Button
+            label="Pesan di sini"
+            class="btn-log bg-[var(--btn-secondary)] text-white rounded-md shadow-custom-dark"
+          />
         </RouterLink>
       </div>
       <div

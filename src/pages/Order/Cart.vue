@@ -5,6 +5,7 @@ import { supabase } from "../../supabase";
 import { ProgressSpinner, Textarea, useToast } from "primevue";
 import { formatCurrency } from "../../utils/formatter/currency";
 import { printReceipt } from "../../utils/receiptPrinter"; // Import the new function
+import Burger from "../../components/header.vue";
 
 const toast = useToast();
 const nama = ref("");
@@ -404,6 +405,11 @@ onMounted(() => {
     <ProgressSpinner />
   </div>
   <div v-else>
+    <div
+      class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+    >
+      <Burger />
+    </div>
     <div class="main-section mt-24">
       <h1 class="text-xl font-bold text-white mb-4">Detail Pesanan</h1>
       <div class="flex flex-col md:gap-2 xl:gap-2">
