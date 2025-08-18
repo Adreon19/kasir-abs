@@ -89,7 +89,7 @@ onMounted(() => {
   <header class="flex gap-3 items-center py-3 sticky top-0 z-40">
     <!-- Tombol burger (muncul hanya di mobile/tablet) -->
     <Button
-      class="xl:hidden text-[var(text-secondary)] bg-[var(--btn-secondary)]"
+      class="xl:hidden text-[var(--text-secondary)] bg-[var(--btn-secondary)]"
       icon="pi pi-bars"
       @click="toggleDrawer"
     />
@@ -99,13 +99,8 @@ onMounted(() => {
       <slot />
     </div>
 
-    <!-- Tombol logout (muncul hanya di desktop) -->
-    <Button
-      label="Log Out"
-      icon="fa-solid fa-sign-out-alt"
-      class="hidden xl:flex btn-log bg-[var(--btn-secondary)] text-base px-4 rounded-md shadow-custom-dark"
-      @click="handleLogout"
-    />
+    <!-- Tombol logout (hilang di semua layar) -->
+    <!-- HAPUS yang hidden xl:flex -->
   </header>
 
   <!-- DRAWER MENU (hanya mobile & tablet) -->
@@ -155,11 +150,12 @@ onMounted(() => {
           <li><i class="fa-solid fa-boxes-stacked"></i> Inventory</li>
         </RouterLink>
 
-        <div class="flex justify-center mt-6">
+        <!-- Tombol logout hanya mobile/tablet -->
+        <div class="flex justify-center mt-6 xl:hidden">
           <Button
             label="Log Out"
             icon="fa-solid fa-sign-out-alt"
-            class="md:hidden btn-log bg-[var(--btn-secondary)] text-lg px-5 rounded-md shadow-custom-dark"
+            class="btn-log bg-[var(--btn-secondary)] text-lg px-5 rounded-md shadow-custom-dark"
             @click="handleLogout"
           />
         </div>
