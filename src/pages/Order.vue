@@ -33,9 +33,7 @@ onMounted(fetchCustomers);
 <template>
   <Burger>
     <slot>
-      <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">
-        Pilih pelanggan
-      </h1>
+      <h1 class="text text-xl font-bold md:ml-0 xl:ml-0">Pilih pelanggan</h1>
     </slot>
   </Burger>
   <section class="min-h-screen p-5">

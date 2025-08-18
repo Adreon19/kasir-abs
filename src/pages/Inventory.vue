@@ -276,9 +276,7 @@ onMounted(initializeData);
 <template>
   <Burger>
     <slot>
-      <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0">
-        Inventory
-      </h1>
+      <h1 class="text text-xl font-bold md:ml-0 xl:ml-0">Inventory</h1>
     </slot>
   </Burger>
 
@@ -307,7 +305,7 @@ onMounted(initializeData);
           class="flex flex-col md:flex-row xl:flex-row justify-between item-center gap-3"
         >
           <div class="flex flex-col gap-3">
-            <label for="itemName"> Nama Barang </label>
+            <label for="itemName" class="text-white"> Nama Barang </label>
             <InputText
               v-model="itemName"
               id="itemName"
@@ -317,7 +315,7 @@ onMounted(initializeData);
           </div>
 
           <div class="flex flex-col gap-2 w-full">
-            <label for="itemQuantity"> Jumlah </label>
+            <label for="itemQuantity" class="text-white"> Jumlah </label>
             <InputNumber
               v-model="itemQuantity"
               id="itemQuantity"
@@ -328,14 +326,14 @@ onMounted(initializeData);
             />
           </div>
           <div class="flex flex-col gap-2">
-            <label for="itemUnit"> Jumlah </label>
+            <label for="itemUnit" class="text-white"> Jumlah </label>
             <Select
               v-model="selectedUnit"
               :options="units"
               optionLabel="Name"
               optionValue="id"
               placeholder="Pilih Satuan"
-              class="custom-select w-full md:w-auto p-4"
+              class="custom-select w-full md:w-auto p-4 bg-[--btn-secondary]"
             />
           </div>
         </div>
@@ -346,7 +344,7 @@ onMounted(initializeData);
             iconPos="left"
             @click="insertInventory"
             :loading="isLoading"
-            class="custom-button w-full h-fit mt-6"
+            class="custom-button w-full h-fit mt-6 bg-[--btn-secondary]"
           />
         </div>
       </div>
@@ -371,6 +369,7 @@ onMounted(initializeData);
                 <Button
                   icon="pi pi-external-link"
                   label="Export"
+                  class="bg-[--btn-secondary]"
                   @click="exportCSV"
                 />
               </div>
@@ -390,7 +389,7 @@ onMounted(initializeData);
                   <Button
                     label="Edit"
                     icon="fa fa-pencil"
-                    class="p-button rounded-xl bg-[var(--input-addMenu)] text-white"
+                    class="p-button rounded-xl text-white"
                     @click="fetchItemById(slotProps.data.id)"
                   />
                   <Button

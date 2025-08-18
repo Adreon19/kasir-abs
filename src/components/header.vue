@@ -30,18 +30,15 @@ const fetchUserData = async () => {
       if (data) {
         nama.value = data.name;
         userRoleId.value = data.role_id;
-        console.log("Fetched name:", nama.value);
       } else {
-        console.log("No user data found in 'user' table.");
         userRoleId.value = null;
       }
     } else {
       nama.value = "";
       userRoleId.value = null;
-      console.log("No authenticated user session.");
     }
   } catch (error) {
-    console.error("Error fetching user data and role:", error);
+    console.error("Error fetching user data:", error);
     nama.value = "";
     userRoleId.value = null;
   }
@@ -79,53 +76,47 @@ onMounted(() => {
     document.documentElement.classList.add("my-app-dark");
   }
   fetchUserData();
-  supabase.auth.onAuthStateChange((event, session) => {
-    if (
-      event === "SIGNED_IN" ||
-      event === "SIGNED_OUT" ||
-      event === "USER_UPDATED"
-    ) {
+  supabase.auth.onAuthStateChange(event => {
+    if (["SIGNED_IN", "SIGNED_OUT", "USER_UPDATED"].includes(event)) {
       fetchUserData();
     }
   });
 });
 </script>
+
 <template>
-  <!-- Tombol hamburger berada di atas semua -->
-  <div class="absolute z-50 top-4 left-4 xl:hidden">
+  <!-- HEADER BAR -->
+  <header class="flex gap-3 items-center py-3 sticky top-0 z-40">
+    <!-- Tombol burger (muncul hanya di mobile/tablet) -->
     <Button
-      class="burger-button text-[var(text-secondary)] bg-[var(--btn-secondary)]"
+      class="xl:hidden text-[var(text-secondary)] bg-[var(--btn-secondary)]"
       icon="pi pi-bars"
       @click="toggleDrawer"
     />
-  </div>
 
-  <!-- Konten utama -->
-  <div class="relative z-0">
-    <slot />
-  </div>
+    <!-- Slot untuk judul/heading -->
+    <div class="flex items-center">
+      <slot />
+    </div>
 
-  <!-- Drawer menu -->
+    <!-- Tombol logout (muncul hanya di desktop) -->
+    <Button
+      label="Log Out"
+      icon="fa-solid fa-sign-out-alt"
+      class="hidden xl:flex btn-log bg-[var(--btn-secondary)] text-base px-4 rounded-md shadow-custom-dark"
+      @click="handleLogout"
+    />
+  </header>
+
+  <!-- DRAWER MENU (hanya mobile & tablet) -->
   <Drawer
     v-model:visible="drawerVisible"
     :modal="true"
     :closable="true"
     :style="{ width: '100%' }"
     @hide="closeDrawer"
-    class="bg-[var(--sidebar-bg)]"
+    class="bg-[var(--sidebar-bg)] xl:hidden"
   >
-    <!-- Drawer content -->
-    <template #header>
-      <div class="flex justify-end">
-        <Button
-          label="Log Out"
-          icon="fa-solid fa-sign-out-alt"
-          class="hidden md:flex xl:flex btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
-          @click="handleLogout"
-        />
-      </div>
-    </template>
-
     <div class="sidebar-mobile flex flex-col justify-between overflow-y-auto">
       <ul class="flex flex-col">
         <RouterLink to="/profile" @click="closeDrawer">
@@ -168,7 +159,7 @@ onMounted(() => {
           <Button
             label="Log Out"
             icon="fa-solid fa-sign-out-alt"
-            class="md:hidden xl:hidden btn-log bg-[var(--btn-secondary)] text-xl px-5 rounded-md shadow-custom-dark"
+            class="md:hidden btn-log bg-[var(--btn-secondary)] text-lg px-5 rounded-md shadow-custom-dark"
             @click="handleLogout"
           />
         </div>
@@ -189,12 +180,12 @@ onMounted(() => {
 
 .sidebar-mobile li {
   padding: 1rem;
-  font-size: 20px;
+  font-size: 18px;
   color: var(--text-primary);
 }
 
 .sidebar-mobile li:hover {
   background: var(--hover-primary);
-  transition: 0.5s;
+  transition: 0.3s;
 }
 </style>

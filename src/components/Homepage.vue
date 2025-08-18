@@ -132,7 +132,7 @@ onMounted(initializeData);
               style="border-radius: 0 10px 10px 0"
               icon="fas fa-search"
               iconPos="top"
-              class="button-search color-white bg-[var(--btn-secondary)] rounded-none"
+              class="button-search color-white bg-[var(--btn-secondary)] text-white rounded-none"
               @click="handleSearch"
             />
           </div>
@@ -140,7 +140,7 @@ onMounted(initializeData);
         <div class="flex justify-between">
           <span
             style="font-size: 30px"
-            class="block md:hidden xl:flex md:flex text-[var(--text-secondary)] font-bold"
+            class="block md:hidden text-[var(--text-secondary)] font-bold"
           >
             MENU
           </span>
