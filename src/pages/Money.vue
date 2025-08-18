@@ -4,6 +4,7 @@ import { supabase } from "../supabase";
 import { formatCurrency } from "../utils/formatter/currency";
 import { DataTable, Toast } from "primevue";
 import { useToast } from "primevue/usetoast";
+import Burger from "../components/header.vue";
 
 const toast = useToast();
 const isLoading = ref(false);
@@ -108,9 +109,12 @@ onMounted(initializeData);
 
 <template>
   <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 md:mb-0 xl:ml-0">
-      Riwayat Keuangan
-    </h1>
+    <Burger>
+      <h1 class="text-lg md:text-2xl font-bold text-[var(--text-secondary)]">
+        Riwayat Keuangan
+      </h1>
+    </Burger>
+
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
     </div>
@@ -220,7 +224,7 @@ onMounted(initializeData);
               <Column field="catatan" header="Detail Pengeluaran" />
               <template #empty> Tidak ada pengeluaran! </template>
             </DataTable>
-             <div v-else>Loading Data...</div>
+            <div v-else>Loading Data...</div>
           </div>
         </div>
       </section>

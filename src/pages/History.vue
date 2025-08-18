@@ -324,9 +324,7 @@ onMounted(() => {
 <template>
   <Burger>
     <slot>
-      <h1 class="text text-xl font-bold mb-4 ml-14 xl:ml-0 xl:-0">
-        Riwayat Pesanan
-      </h1>
+      <h1 class="text text-xl font-bold xl:ml-0 xl:-0">Riwayat Pesanan</h1>
     </slot>
   </Burger>
   <div class="xl:p-6 sm:p-0 flex flex-col gap-6 max-w-full container">
@@ -369,7 +367,7 @@ onMounted(() => {
           </DataTable>
           <div v-else>Loading Data...</div>
           <RouterLink to="/order" class="text-white hover:text-white">
-            <Button label="Check di sini!" class="mt-4 text-" />
+            <Button label="Check di sini!" class="mt-4 bg-[--btn-secondary]" />
           </RouterLink>
         </div>
       </section>
@@ -382,13 +380,13 @@ onMounted(() => {
             optionLabel="label"
             optionValue="value"
             placeholder="Filter Tanggal"
-            class="custom-select"
+            class="custom-select bg-[--btn-secondary]"
             @change="filterOrders"
           />
 
           <Button
             label="Cetak Struk Sesuai Filter"
-            class="text-[--text-secondary]"
+            class="text-[--text-secondary] bg-[--btn-secondary]"
             @click="printFilteredOrders"
           />
         </div>
@@ -411,20 +409,20 @@ onMounted(() => {
                 text
                 icon="pi pi-plus"
                 label="Lebarkan semua"
-                class="text-[var(--text-primary)]"
+                class="text-[var(--text-primary)] bg-[--btn-secondary]"
                 @click="expandAll"
               />
               <Button
                 text
                 icon="pi pi-minus"
                 label="Kecilkan semua"
-                class="text-[var(--text-primary)]"
+                class="text-[var(--text-primary)] bg-[--btn-secondary]"
                 @click="collapseAll"
               />
               <Button
                 icon="pi pi-external-link"
                 label="Export"
-                class="text-[var(--text-secondary)]"
+                class="text-[var(--text-secondary)] bg-[--btn-secondary]"
                 @click="exportCSV()"
               />
             </div>

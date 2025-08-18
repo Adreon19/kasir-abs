@@ -176,7 +176,7 @@ onMounted(() => {
           </ul>
         </div>
       </div>
-      <div class="flex justify-start mb-4">
+      <div class="flex justify-center mb-4">
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"
