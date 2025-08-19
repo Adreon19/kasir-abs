@@ -93,13 +93,13 @@ onMounted(() => {
 
 <template>
   <div class="flex flex-row min-h-screen">
-    <div class="absolute z-10 md:relative max-w-fit mt-8">
+    <!-- <div class="absolute z-10 md:relative max-w-fit mt-8">
       <Button
         class="burger-button xl:hidden text-[var(text-secondary)] bg-[var(--btn-secondary)] ml-8"
         icon="pi pi-bars"
         @click="toggleDrawer"
       />
-    </div>
+    </div> -->
 
     <aside
       class="sidebar text-black xl:max-w-64 xl:min-w-64 lg:max-w-64 lg:min-w-64 flex flex-col justify-between overflow-y-auto"
@@ -176,7 +176,7 @@ onMounted(() => {
           </ul>
         </div>
       </div>
-      <div class="flex justify-start mb-4">
+      <div class="flex justify-center mb-4">
         <Button
           label="Log Out"
           icon="fa-solid fa-sign-out-alt"

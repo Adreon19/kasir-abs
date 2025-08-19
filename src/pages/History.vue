@@ -1,4 +1,5 @@
 <script setup>
+import Burger from "../components/header.vue";
 import { ref, onMounted } from "vue";
 import { supabase } from "../supabase";
 import { formatCurrency } from "../utils/formatter/currency";
@@ -321,10 +322,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-6 flex flex-col gap-6 max-w-full container">
-    <h1 class="text text-xl font-bold mb-4 ml-14 md:ml-0 xl:ml-0 md:mb-0 xl:-0">
-      Riwayat Pesanan
-    </h1>
+  <Burger>
+    <slot>
+      <h1 class="text text-xl font-bold xl:ml-0 xl:-0">Riwayat Pesanan</h1>
+    </slot>
+  </Burger>
+  <div class="xl:p-6 sm:p-0 flex flex-col gap-6 max-w-full container">
     <div v-if="isLoading" class="flex justify-center">
       <progressSpinner />
     </div>
@@ -364,7 +367,7 @@ onMounted(() => {
           </DataTable>
           <div v-else>Loading Data...</div>
           <RouterLink to="/order" class="text-white hover:text-white">
-            <Button label="Check di sini!" class="mt-4 text-" />
+            <Button label="Check di sini!" class="mt-4 bg-[--btn-secondary]" />
           </RouterLink>
         </div>
       </section>
@@ -377,13 +380,13 @@ onMounted(() => {
             optionLabel="label"
             optionValue="value"
             placeholder="Filter Tanggal"
-            class="custom-select"
+            class="custom-select bg-[--btn-secondary]"
             @change="filterOrders"
           />
 
           <Button
             label="Cetak Struk Sesuai Filter"
-            class="text-[--text-secondary]"
+            class="text-[--text-secondary] bg-[--btn-secondary]"
             @click="printFilteredOrders"
           />
         </div>
@@ -406,20 +409,20 @@ onMounted(() => {
                 text
                 icon="pi pi-plus"
                 label="Lebarkan semua"
-                class="text-[var(--text-primary)]"
+                class="text-[var(--text-primary)] bg-[--btn-secondary]"
                 @click="expandAll"
               />
               <Button
                 text
                 icon="pi pi-minus"
                 label="Kecilkan semua"
-                class="text-[var(--text-primary)]"
+                class="text-[var(--text-primary)] bg-[--btn-secondary]"
                 @click="collapseAll"
               />
               <Button
                 icon="pi pi-external-link"
                 label="Export"
-                class="text-[var(--text-secondary)]"
+                class="text-[var(--text-secondary)] bg-[--btn-secondary]"
                 @click="exportCSV()"
               />
             </div>
@@ -465,7 +468,6 @@ onMounted(() => {
           menyentuh 40 hari, maka akan secara otomatis terhapus. HARAP EXPORT
           data melalui tombol yang sudah disediakan.
         </span>
-        <p>*terdapat logo expander di sebelah kiri nama pemesan</p>
       </section>
     </div>
     <iframe ref="printFrame" style="display: none"></iframe>
