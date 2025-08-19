@@ -154,15 +154,9 @@ onMounted(() => {
 
 <template>
   <div class="button-container p-6">
-    <Button
-      as="router-link"
-      label="Kembali"
-      icon="fa-solid fa-arrow-left"
-      class="custom-button maw-w-fit"
-      to="/add"
-    />
+    <Button as="router-link" label="Kembali" icon="fa-solid fa-arrow-left" class="custom-button maw-w-fit" to="/add" />
   </div>
-  <div class="p-6">
+  <div>
     <h2 class="text-[var(--text-secondary)]">Menu Editor</h2>
     <div v-if="isLoading" class="flex justify-center">
       <ProgressSpinner />
@@ -171,64 +165,37 @@ onMounted(() => {
       <section class="main-section">
         <div v-for="menuItem in menu" :key="menuItem.id" class="flex">
           <div class="flex-shrink-0 m-auto">
-            <img
-              :src="imagePreviews[menuItem.id] || menuItem.image"
-              alt="Menu Image"
-              class="img-menu shadow-md max-w-64 rounded-xl z-10 h-64"
-            />
-            <FileUpload
-              class="mt-4"
-              mode="basic"
-              accept="image/*"
-              :maxFileSize="9000000"
-              auto
-              @select="(e) => handleFileSelect(menuItem, e.files[0])"
-            />
+            <img :src="imagePreviews[menuItem.id] || menuItem.image" alt="Menu Image"
+              class="img-menu shadow-md max-w-64 rounded-xl z-10 h-64" />
+            <FileUpload class="mt-4" mode="basic" accept="image/*" :maxFileSize="9000000" auto
+              @select="(e) => handleFileSelect(menuItem, e.files[0])" />
           </div>
           <div class="ml-4 flex-grow">
             <div class="form grid grid-cols-1 gap-4">
               <div>
                 <h2 for="name">Nama Menu</h2>
-                <InputText
-                  v-model="menuItem.name"
-                  id="name"
-                  placeholder="Enter name"
-                  class="custom-textarea w-full"
+                <InputText v-model="menuItem.name" id="name" placeholder="Enter name" class="custom-textarea w-full"
                   @input="
                     (e) => handleInputChange(menuItem, 'name', e.target.value)
-                  "
-                />
+                  " />
               </div>
               <div>
                 <h2>Deskripsi Menu</h2>
-                <TextArea
-                  v-model="menuItem.description"
-                  rows="5"
-                  cols="30"
-                  class="custom-textarea w-full resize-none"
+                <TextArea v-model="menuItem.description" rows="5" cols="30" class="custom-textarea w-full resize-none"
                   @input="
                     (e) =>
                       handleInputChange(menuItem, 'description', e.target.value)
-                  "
-                />
+                  " />
               </div>
               <div>
                 <h2>Harga Menu</h2>
                 <div v-for="menuDetail in menuDetails" :key="menuDetail.id">
                   <div class="flex flex-col gap-2">
                     <label for="price">{{ menuDetail.variant_id.name }}</label>
-                    <InputNumber
-                      v-model="menuDetail.price"
-                      id="price"
-                      placeholder="Enter price"
-                      class="w-full"
-                      :min="0"
-                      mode="currency"
-                      currency="IDR"
-                      @input="
+                    <InputNumber v-model="menuDetail.price" id="price" placeholder="Enter price"
+                      class="md:w-full overflow-auto max-w-screen" :min="0" mode="currency" currency="IDR" @input="
                         (e) => handleDetailChange(menuDetail, e.target.value)
-                      "
-                    />
+                      " />
                   </div>
                 </div>
               </div>
@@ -236,12 +203,7 @@ onMounted(() => {
           </div>
         </div>
       </section>
-      <Button
-        label="Save"
-        icon="fa-solid fa-save"
-        class="p-button-success mt-4 float-end"
-        @click="saveChanges"
-      />
+      <Button label="Save" icon="fa-solid fa-save" class="p-button-success mt-4 float-end" @click="saveChanges" />
     </div>
   </div>
   <Toast />
