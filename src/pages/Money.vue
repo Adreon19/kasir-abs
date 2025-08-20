@@ -21,7 +21,7 @@ const fetchFinance = async () => {
       paid,
       total_price,
       change
-      `);
+    `);
     if (error) throw error;
     finance.value = order_detail;
   } catch (error) {
@@ -35,8 +35,9 @@ const fetchOutcome = async () => {
   try {
     isLoading.value = true;
     let { data: outcome, error } = await supabase.from("outcome").select(`
-    pengeluaran,
-    catatan
+      pengeluaran,
+      catatan,
+      created_at
     `);
     if (error) throw error;
     outcomeData.value = outcome;
@@ -92,6 +93,18 @@ const totalFinance = computed(() => {
   );
   return totalPaid - (totalChange + totalOutcome);
 });
+
+const formatDate = (dateString) => {
+  if (!dateString) return "Tanggal tidak tersedia"; // Handle null or undefined
+  const options = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return new Date(dateString).toLocaleDateString("id-ID", options);
+};
 
 const initializeData = async () => {
   try {
@@ -222,6 +235,11 @@ onMounted(initializeData);
                 </template>
               </Column>
               <Column field="catatan" header="Detail Pengeluaran" />
+              <Column field="created_at" header="Tanggal">
+                <template #body="slotProps">
+                  {{ formatDate(slotProps.data.created_at) }}
+                </template>
+              </Column>
               <template #empty> Tidak ada pengeluaran! </template>
             </DataTable>
             <div v-else>Loading Data...</div>
