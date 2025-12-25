@@ -90,7 +90,6 @@ export const printReceipt = (receiptInfo, printFrame) => {
         </style>
       </head>
       <body>
-        <img src="images/Logo.png" alt="Logo" style="width: 40%; max-width: 50mm; height: auto; display: block; margin: 0 auto;" />
         <h2>Stay High Coffee</h2>
         <div class="alamat">Metland sektor 7 Blok GA3 No.16, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat</div>
         <hr />
