@@ -331,6 +331,7 @@ onMounted(() => {
           :max="500"
           showButtons
           class="w-full"
+          inputClass="text-white bg-[var(--input-primary)]"
         />
       </div>
 
