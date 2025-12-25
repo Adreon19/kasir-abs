@@ -64,7 +64,7 @@ onMounted(() => {
 
 <template>
   <section class="flex flex-col items-center gap-8 mb-10 mt-10">
-    <img src="/images/logoABS.png" alt="ABS Logo" class="w-36 mb-10" />
+    <!-- <img src="src\assets\Logo.png" alt="Logo" class="w-36 mb-10" /> -->
     <form class="flex flex-col" @submit.prevent="handleLogin">
       <div
         class="input-container flex flex-col gap-6 p-11 rounded-t-lg shadow-md bg-[var(--bg-form-login)]/20 backdrop-brightness-75"

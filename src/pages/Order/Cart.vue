@@ -4,7 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 import { supabase } from "../../supabase";
 import { ProgressSpinner, Textarea, useToast } from "primevue";
 import { formatCurrency } from "../../utils/formatter/currency";
-import { printReceipt } from "../../utils/receiptPrinter"; // Import the new function
+import { printReceipt } from "../../utils/receiptPrinter";
 import Burger from "../../components/header.vue";
 
 const toast = useToast();
@@ -191,6 +191,57 @@ const handlePrintReceipt = async () => {
       detail: "Failed to print receipt.",
       life: 3000,
     });
+  }
+};
+
+// --- FUNGSI BARU: CANCEL ORDER ---
+const cancelOrder = async () => {
+  if (
+    !confirm(
+      "Apakah Anda yakin ingin membatalkan pesanan ini? Semua data pesanan ini akan dihapus."
+    )
+  ) {
+    return;
+  }
+
+  try {
+    isLoading.value = true;
+
+    // 1. Hapus semua item di cart berdasarkan customerId
+    const { error: cartError } = await supabase
+      .from("cart")
+      .delete()
+      .eq("customer_id", customerId);
+
+    if (cartError) throw cartError;
+
+    // 2. Hapus data customer
+    const { error: customerError } = await supabase
+      .from("customer")
+      .delete()
+      .eq("id", customerId);
+
+    if (customerError) throw customerError;
+
+    toast.add({
+      severity: "info",
+      summary: "Dibatalkan",
+      detail: "Pesanan berhasil dibatalkan.",
+      life: 3000,
+    });
+
+    // 3. Redirect ke halaman order
+    router.push("/order");
+  } catch (error) {
+    console.error("Error canceling order:", error);
+    toast.add({
+      severity: "error",
+      summary: "Error",
+      detail: "Gagal membatalkan pesanan: " + error.message,
+      life: 3000,
+    });
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -532,7 +583,17 @@ onMounted(() => {
           </div>
         </div>
       </div>
+
       <div class="flex justify-start mt-5 gap-3">
+        <Button
+          label="Batalkan"
+          icon="fa-solid fa-ban"
+          class="button33 custom-button"
+          severity="danger"
+          @click="cancelOrder"
+          :disabled="isLoading"
+        />
+
         <Button
           label="Cetak Struk"
           icon="fa-solid fa-print"

@@ -28,7 +28,7 @@ export async function printReceiptHtml(
 
     // --- START: Bagian untuk pesanan yang belum dibayar ---
     let unpaidOrdersHtml = "";
-    let totalUnpaidAmountOverall = 0; // Total keseluruhan untuk semua unpaid orders
+    let totalUnpaidAmountOverall = 0;
 
     if (unpaidOrders && unpaidOrders.length > 0) {
       unpaidOrdersHtml += `
@@ -42,24 +42,26 @@ export async function printReceiptHtml(
         if (!acc[customerName]) {
           acc[customerName] = {
             customer_name: customerName,
-            timestamp: item.timestamp, // Ambil timestamp pertama sebagai representasi tanggal
+            timestamp: item.timestamp,
             details: [],
             total_unpaid_for_customer: 0,
           };
         }
 
         const menuName = item.menu_detail?.menu_id?.name || "N/A";
-        const price = item.menu_detail?.price || 0;
-        const totalItemPrice = item.quantity * price;
+
+        const qty = Number(item.quantity) || 0;
+        const price = Number(item.menu_detail?.price) || 0;
+        const totalItemPrice = qty * price;
 
         acc[customerName].details.push({
           menu_name: menuName,
-          quantity: item.quantity,
+          quantity: qty,
           total_price: totalItemPrice,
-          note: item.note, // Tambahkan catatan
+          note: item.note,
         });
         acc[customerName].total_unpaid_for_customer += totalItemPrice;
-        totalUnpaidAmountOverall += totalItemPrice; // Tambahkan ke total keseluruhan
+        totalUnpaidAmountOverall += totalItemPrice;
 
         return acc;
       }, {});
@@ -137,19 +139,25 @@ export async function printReceiptHtml(
 
         // Perbarui grand total
         orderData.details.forEach((detail) => {
-          grandTotalSales += detail.total_price;
-          const categoryName = detail.category;
+          // PROTEKSI NaN
+          const detailTotalPrice = Number(detail.total_price) || 0;
+          const detailQty = Number(detail.quantity) || 0;
+
+          grandTotalSales += detailTotalPrice;
+          const categoryName = detail.category || "Tanpa Kategori";
           grandTotalSoldByCategory[categoryName] =
-            (grandTotalSoldByCategory[categoryName] || 0) + detail.quantity;
-          const menuName = detail.menu_name;
+            (grandTotalSoldByCategory[categoryName] || 0) + detailQty;
+          const menuName = detail.menu_name || "N/A";
           grandTotalSoldByMenu[menuName] =
-            (grandTotalSoldByMenu[menuName] || 0) + detail.quantity;
+            (grandTotalSoldByMenu[menuName] || 0) + detailQty;
         });
 
         // Perbarui total pembayaran per metode
         const paymentMethod = orderData.payment_method || "Tunai"; // Default ke "Tunai" jika tidak ada
+        const paidValue = Number(orderData.paid) || 0;
+
         grandTotalPaidByPaymentMethod[paymentMethod] =
-          (grandTotalPaidByPaymentMethod[paymentMethod] || 0) + orderData.paid;
+          (grandTotalPaidByPaymentMethod[paymentMethod] || 0) + paidValue;
 
         // Perbarui juga jumlah pembelian per metode
         grandCountByPaymentMethod[paymentMethod] =
@@ -276,8 +284,8 @@ export async function printReceiptHtml(
         </head>
         <body>
           <div class="header">
-            <h3>Artisan Beverage Studio</h3>
-            <p class="alamat">Jl. Kota Taman Metropolitan, Cileungsi Kidul,</p>
+            <h3>Stay High Coffee</h3>
+            <p class="alamat">Metland Sektor 7, Blok GA3 No.16</p>
             <p class="alamat">Kec. Cileungsi, Kabupaten Bogor, Jawa Barat 16820</p>
             <hr />
             <p style="font-size: 9pt; font-weight: bold; margin-bottom: 5px;">LAPORAN TRANSAKSI</p>
@@ -343,21 +351,26 @@ function generateOrderSectionHtml(orderData) {
 
   let itemsHtml = "";
   orderData.details.forEach((item) => {
+    // PROTEKSI NaN
+    const qty = Number(item.quantity) || 0;
+    const price = Number(item.menu_price) || 0;
+    const total = Number(item.total_price) || 0;
+
     itemsHtml += `
       <tr>
         <td style="text-align: left;">${item.menu_name}</td>
-        <td>${item.quantity}</td>
-        <td>${formatCurrency(item.menu_price).replace("Rp", "")}</td>
-        <td>${formatCurrency(item.total_price).replace("Rp", "")}</td>
+        <td>${qty}</td>
+        <td>${formatCurrency(price).replace("Rp", "")}</td>
+        <td>${formatCurrency(total).replace("Rp", "")}</td>
       </tr>
     `;
   });
 
   const totalAmount = orderData.details.reduce(
-    (sum, detail) => sum + detail.total_price,
+    (sum, detail) => sum + (Number(detail.total_price) || 0),
     0
   );
-  const paidAmount = orderData.paid || 0;
+  const paidAmount = Number(orderData.paid) || 0;
   const changeAmount = paidAmount - totalAmount;
 
   return `
@@ -412,7 +425,6 @@ function formatDateRange(orders) {
     return "";
   }
 
-  // Sort orders by date to find min and max dates
   const sortedOrders = [...orders].sort(
     (a, b) =>
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
