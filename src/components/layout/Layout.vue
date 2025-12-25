@@ -106,13 +106,9 @@ onMounted(() => {
     >
       <div>
         <div class="logo flex items-center m-4">
-          <img
-            src="../../assets/Logo Abs.png"
-            alt="ABS Logo"
-            class="w-10 mr-1"
-          />
+          <img src="../../assets/Logo.png" alt="Logo" class="w-10 mr-1" />
           <h1 class="text-base font-semibold text-[var(--text-primary)]">
-            Artisan Beverage Studio
+            Stay High Coffee
           </h1>
         </div>
 
@@ -220,7 +216,7 @@ onMounted(() => {
             <h1
               class="text-xl flex justify-center items-center md:text-sm font-semibold text-[var(--text-primary)]"
             >
-              Artisan Beverage Studio
+              Stay High Coffee
             </h1>
           </div>
 

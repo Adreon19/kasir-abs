@@ -17,6 +17,15 @@ export const printReceipt = (receiptInfo, printFrame) => {
   };
   const formattedDate = now.toLocaleDateString("id-ID", dateOptions);
 
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
   //HTML content
   let receiptHTML = `
     <html lang="id">
@@ -26,7 +35,7 @@ export const printReceipt = (receiptInfo, printFrame) => {
           body {
             width: 58mm;
             font-family: Arial, sans-serif;
-            font-size: 10px;
+            font-size: 11px;
             text-align: left;
             margin: 0;
             padding: 3px;
@@ -47,7 +56,7 @@ export const printReceipt = (receiptInfo, printFrame) => {
             margin: 2px 0;
           }
           .info {
-            font-size: 10px; /* Adjust font size for info lines */
+            font-size: 10px;
           }
           .items {
             text-align: left;
@@ -81,9 +90,9 @@ export const printReceipt = (receiptInfo, printFrame) => {
         </style>
       </head>
       <body>
-        <img src="images/logoABS.png" alt="Logo Artisan Beverage Studio" style="width: 40%; max-width: 50mm; height: auto; display: block; margin: 0 auto;" />
-        <h2>ARTISAN BEVERAGE STUDIO</h2>
-        <div class="alamat">Jl. Kota Taman Metropolitan, Cileungsi Kidul, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat</div>
+        <img src="images/Logo.png" alt="Logo" style="width: 40%; max-width: 50mm; height: auto; display: block; margin: 0 auto;" />
+        <h2>Stay High Coffee</h2>
+        <div class="alamat">Metland sektor 7 Blok GA3 No.16, Kec. Cileungsi, Kabupaten Bogor, Jawa Barat</div>
         <hr />
         <div class="info">Customer: ${receiptInfo.customer}</div>
         <div class="info">Cashier: ${receiptInfo.cashier}</div>
@@ -96,7 +105,7 @@ export const printReceipt = (receiptInfo, printFrame) => {
               <tr>
                 <td style="text-align: left;">${item.name}</td>
                 <td>x${item.qty}</td>
-                <td>Rp${(item.price * item.qty).toLocaleString("id-ID")}</td>
+               <td>${formatCurrency(item.price * item.qty)}</td>
               </tr>
               ${
                 item.note
@@ -110,18 +119,16 @@ export const printReceipt = (receiptInfo, printFrame) => {
         </div>
         <hr />
         <div class="payment-info">
-          <div class="total">TOTAL: Rp${receiptInfo.total.toLocaleString(
-            "id-ID"
-          )}</div>
-          <div>Paid: Rp${receiptInfo.paid.toLocaleString("id-ID")}</div>
-          <div>Change: Rp${receiptInfo.change.toLocaleString("id-ID")}</div>
+          <div>TOTAL: ${formatCurrency(receiptInfo.total)}</div>
+          <div>Paid: ${formatCurrency(receiptInfo.paid)}</div>
+          <div>Change: ${formatCurrency(receiptInfo.change)}</div>
           <div>Method: ${receiptInfo.paymentMethodLabel}</div>
         </div>
         <hr />
         <div class="footer">
           Terima kasih telah berbelanja!<br />
           Semoga harimu menyenangkan<br />
-          Powered by: PPLG
+          Powered by: WeTechnov
         </div>
       </body>
     </html>
