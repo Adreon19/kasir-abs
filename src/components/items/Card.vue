@@ -1,6 +1,14 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { useToast, Card } from "primevue";
+import { useToast } from "primevue/usetoast";
+import Card from "primevue/card";
+import Button from "primevue/button";
+import Dialog from "primevue/dialog";
+import InputText from "primevue/inputtext";
+import Select from "primevue/select";
+import InputNumber from "primevue/inputnumber";
+import Textarea from "primevue/textarea";
+import ProgressSpinner from "primevue/progressspinner";
 import { supabase } from "../../supabase";
 import { formatCurrency } from "../../utils/formatter/currency";
 
@@ -21,7 +29,8 @@ const fetchCustomers = async () => {
   try {
     const { data, error } = await supabase
       .from("customer")
-      .select("id, customer");
+      .select("id, customer")
+      .order("customer", { ascending: true });
     if (error) throw error;
     customers.value = data;
   } catch (error) {
@@ -58,7 +67,6 @@ const fetchCart = async () => {
       `);
 
     if (error) throw error;
-
     cartItems.value = data;
   } catch (error) {
     toast.add({
@@ -70,20 +78,34 @@ const fetchCart = async () => {
   }
 };
 
-// Open the dialog for ordering
-const openDialog = menu => {
+const openDialog = (menu) => {
   selectedMenu.value = menu;
   selectedVariant.value = null;
   note.value = "";
+  quantity.value = 1;
+  customerName.value = "";
+  selectedCustomer.value = null;
   visible.value = true;
 };
 
 const saveOrder = async () => {
+  // Validasi Varian
   if (!selectedMenu.value || !selectedVariant.value) {
     toast.add({
       severity: "warn",
       summary: "Warning",
-      detail: "Tolong pilih salah satu menu atau varian.",
+      detail: "Tolong pilih salah satu varian menu.",
+      life: 3000,
+    });
+    return;
+  }
+
+  // Validasi Customer
+  if (!customerName.value.trim() && !selectedCustomer.value) {
+    toast.add({
+      severity: "warn",
+      summary: "Warning",
+      detail: "Tolong pilih atau masukkan nama pelanggan.",
       life: 3000,
     });
     return;
@@ -93,42 +115,33 @@ const saveOrder = async () => {
     isLoading.value = true;
     let customerId = null;
 
+    // Logika Tambah Customer Baru
     if (customerName.value.trim() !== "") {
       const { data: newCustomer, error: insertError } = await supabase
         .from("customer")
-        .insert([{ customer: customerName.value }])
+        .insert([{ customer: customerName.value.trim() }])
         .select();
 
-      // Check for insertion error
-      if (insertError) {
-        console.error("Error inserting new customer:", insertError);
-        toast.add({
-          severity: "error",
-          summary: "Error",
-          detail: `Gagal memasukkan pelanggan baru: ${insertError.message}`,
-          life: 3000,
-        });
-        return;
-      }
+      if (insertError) throw insertError;
 
-      // Get the new customer ID
-      customerId = newCustomer[0].id;
+      if (newCustomer && newCustomer.length > 0) {
+        const createdCustomer = newCustomer[0];
+        customerId = createdCustomer.id;
+
+        // Update list customers di lokal agar langsung muncul di dropdown
+        customers.value.push(createdCustomer);
+        // Urutkan kembali jika perlu
+        customers.value.sort((a, b) => a.customer.localeCompare(b.customer));
+
+        // Set sebagai customer terpilih
+        selectedCustomer.value = createdCustomer;
+      }
     } else if (selectedCustomer.value) {
       customerId = selectedCustomer.value.id;
-    } else {
-      // Kirim peringatan kalau tidak ada pelanggan
-      toast.add({
-        severity: "warn",
-        summary: "Warning",
-        detail: "Tolong pilih atau masukkan nama pelanggan.",
-        life: 3000,
-      });
-      return;
     }
 
     const timestamp = new Date().toISOString();
 
-    // Prepare the payload for the cart insertion
     const payload = {
       menu_detail_id: selectedVariant.value.id,
       quantity: quantity.value,
@@ -138,17 +151,7 @@ const saveOrder = async () => {
     };
 
     const { error } = await supabase.from("cart").insert(payload);
-
-    if (error) {
-      console.error("Error inserting into cart:", error);
-      toast.add({
-        severity: "error",
-        summary: "Error",
-        detail: `Gagal memasukkan ke keranjaang: ${error.message}`,
-        life: 3000,
-      });
-      return;
-    }
+    if (error) throw error;
 
     toast.add({
       severity: "success",
@@ -157,21 +160,25 @@ const saveOrder = async () => {
       life: 3000,
     });
 
-    // Refresh cart data
     await fetchCart();
-    customerName.value = null;
+
+    // Reset state setelah sukses
+    customerName.value = "";
     selectedCustomer.value = null;
     visible.value = false;
-    isLoading.value = false;
   } catch (error) {
+    console.error("Order Error:", error);
     toast.add({
       severity: "error",
       summary: "Error",
       detail: error.message,
       life: 3000,
     });
+  } finally {
+    isLoading.value = false;
   }
 };
+
 onMounted(() => {
   fetchCustomers();
   fetchCart();
@@ -193,11 +200,10 @@ onMounted(() => {
             class="grid grid-cols-[auto_1fr] gap-4 items-start md:hidden p-3"
           >
             <img
-              :alt="menu.name || 'Menu Image'"
+              :alt="menu.name"
               :src="menu.image || 'placeholder.jpg'"
               class="w-24 h-24 object-cover rounded-md"
             />
-
             <div class="flex flex-col justify-between">
               <h3
                 class="text-base font-bold capitalize text-[var(--text-primary)]"
@@ -214,7 +220,7 @@ onMounted(() => {
                   class="text-sm"
                 >
                   {{ detail.menu_variants?.name || "No Variant" }}:
-                  {{ formatCurrency(detail.price) || "N/A" }}
+                  {{ formatCurrency(detail.price) }}
                 </div>
               </div>
             </div>
@@ -222,7 +228,7 @@ onMounted(() => {
 
           <div class="hidden md:block">
             <img
-              :alt="menu.name || 'Menu Image'"
+              :alt="menu.name"
               :src="menu.image || 'placeholder.jpg'"
               class="w-full h-48 object-cover rounded-t-lg"
             />
@@ -252,11 +258,10 @@ onMounted(() => {
                   class="text-sm"
                 >
                   {{ detail.menu_variants?.name || "No Variant" }}:
-                  {{ formatCurrency(detail.price) || "N/A" }}
+                  {{ formatCurrency(detail.price) }}
                 </div>
               </div>
             </div>
-
             <p class="text-sm text-white mt-4">
               {{ menu.description || "Tidak ada deskripsi." }}
             </p>
@@ -282,60 +287,79 @@ onMounted(() => {
     :header="`Pesan ${selectedMenu?.name}`"
     :style="{ width: '25rem' }"
   >
-    <div v-if="isLoading">
-      <ProgressSpinner />
+    <div v-if="isLoading" class="flex justify-center p-4">
+      <ProgressSpinner style="width: 50px; height: 50px" />
     </div>
     <div v-else class="flex flex-col gap-4">
-      <InputText
-        v-model="customerName"
-        placeholder="Masukkan nama pelanggan baru"
-        class="text-[var(--text-primary)] bg-[var(--input-primary)]"
-        label="Customer Name"
-      />
-      <Select
-        v-model="selectedCustomer"
-        :options="customers"
-        optionLabel="customer"
-        placeholder="Pilih pelanggan yang sudah ada"
-        class="custom-select"
-      />
-      <Select
-        v-model="selectedVariant"
-        :options="selectedMenu?.menu_detail"
-        class="custom-select text-[var(--text-primary)]"
-        optionLabel="menu_variants.name"
-        placeholder="Pilih varian"
-      />
-      <InputNumber
-        v-model="quantity"
-        :min="1"
-        :max="500"
-        placeholder="Quantity"
-        label="Quantity"
-        class="text-[var(--text-primary)]"
-      />
-      <Textarea
-        v-model="note"
-        rows="3"
-        cols="30"
-        placeholder="Tambahkan catatan"
-        class="custom-textarea text-[var(--text-primary)]"
-      />
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold">Pelanggan Baru</label>
+        <InputText
+          v-model="customerName"
+          placeholder="Masukkan nama pelanggan baru"
+          class="text-[var(--text-primary)] bg-[var(--input-primary)] w-full"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold">Pilih Pelanggan</label>
+        <Select
+          v-model="selectedCustomer"
+          :options="customers"
+          optionLabel="customer"
+          placeholder="Pilih pelanggan yang sudah ada"
+          class="custom-select w-full"
+          filter
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold">Varian</label>
+        <Select
+          v-model="selectedVariant"
+          :options="selectedMenu?.menu_detail"
+          class="custom-select w-full"
+          optionLabel="menu_variants.name"
+          placeholder="Pilih varian"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold">Jumlah</label>
+        <InputNumber
+          v-model="quantity"
+          :min="1"
+          :max="500"
+          showButtons
+          class="w-full"
+        />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-semibold">Catatan</label>
+        <Textarea
+          v-model="note"
+          rows="3"
+          placeholder="Tambahkan catatan (opsional)"
+          class="custom-textarea w-full"
+        />
+      </div>
+
       <div class="flex justify-end mt-4 gap-2">
         <Button
           type="button"
-          variant="outlined"
-          label="Cancel"
-          icon="fa-solid fa-xmark"
+          label="Batal"
+          icon="pi pi-times"
           severity="secondary"
+          variant="outlined"
           @click="visible = false"
         />
         <Button
           type="button"
           label="Simpan"
-          icon="fa-solid fa-check"
+          icon="pi pi-check"
           severity="success"
           @click="saveOrder"
+          :disabled="isLoading"
         />
       </div>
     </div>
@@ -348,5 +372,16 @@ onMounted(() => {
   border: 2px solid var(--btn-order);
   color: var(--btn-order);
   margin-top: 0;
+}
+
+.button:hover {
+  background-color: var(--btn-order);
+  color: white;
+}
+
+/* Memastikan Select dan Input memiliki style yang konsisten */
+:deep(.p-select),
+:deep(.p-inputtext) {
+  width: 100%;
 }
 </style>
